@@ -18,5 +18,20 @@ services:
       retries: 10
       start_period: 10s
 
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgres://autoapp:${POSTGRES_PASSWORD:-autoapp}@db:5432/autoapp
+      PORT: "3000"
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "npm run migrate:up && node dist/main"
+
 volumes:
   db_data:
