@@ -1,0 +1,19 @@
+{
+  "name": "autoapp-backend",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "migrate": "node-pg-migrate",
+    "migrate:up": "node-pg-migrate up",
+    "migrate:down": "node-pg-migrate down"
+  },
+  "dependencies": {
+    "pg": "^8.21.0"
+  },
+  "devDependencies": {
+    "node-pg-migrate": "^7.9.1"
+  }
+}

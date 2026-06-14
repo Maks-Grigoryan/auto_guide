@@ -1,2 +1,16 @@
 # GSD planning docs kept local-only
 .planning/
+
+# Environment secrets — never commit real .env
+.env
+
+# Node
+node_modules/
+dist/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
