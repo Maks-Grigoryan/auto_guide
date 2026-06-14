@@ -1,0 +1,99 @@
+make_name,model_name,generation_name,year_from,year_to
+Toyota,Camry,XV70,2017,2024
+Toyota,Camry,XV50,2011,2017
+Toyota,Corolla,E210,2018,2024
+Toyota,Corolla,E170,2013,2018
+Toyota,Land Cruiser,300,2021,2024
+Toyota,Land Cruiser,200,2007,2021
+Toyota,RAV4,XA50,2018,2024
+Toyota,RAV4,XA40,2012,2018
+Toyota,Prado,J150,2009,2024
+Toyota,Prius,XW50,2015,2024
+Toyota,Highlander,XU70,2019,2024
+Toyota,Yaris,XP210,2020,2024
+Hyundai,Tucson,NX4,2020,2024
+Hyundai,Tucson,TL,2015,2020
+Hyundai,Elantra,CN7,2020,2024
+Hyundai,Elantra,AD,2015,2020
+Hyundai,Santa Fe,TM,2018,2024
+Hyundai,Sonata,DN8,2019,2024
+Hyundai,Creta,SU2,2021,2024
+Hyundai,Accent,HC,2017,2024
+Hyundai,ix35,EL,2009,2017
+Kia,Sportage,NQ5,2021,2024
+Kia,Sportage,QL,2015,2021
+Kia,Sorento,MQ4,2020,2024
+Kia,Cerato,BD,2018,2024
+Kia,Rio,YB,2017,2024
+Kia,K5,DL3,2020,2024
+Kia,Stinger,CK,2017,2024
+Mercedes-Benz,E-Class,W213,2016,2024
+Mercedes-Benz,E-Class,W212,2009,2016
+Mercedes-Benz,C-Class,W206,2021,2024
+Mercedes-Benz,C-Class,W205,2014,2021
+Mercedes-Benz,GLE,V167,2018,2024
+Mercedes-Benz,GLC,X253,2015,2024
+Mercedes-Benz,S-Class,W223,2020,2024
+BMW,3 Series,G20,2018,2024
+BMW,3 Series,F30,2011,2019
+BMW,5 Series,G30,2016,2024
+BMW,X5,G05,2018,2024
+BMW,X5,F15,2013,2018
+BMW,X3,G01,2017,2024
+BMW,7 Series,G11,2015,2024
+Audi,A4,B9,2015,2024
+Audi,A6,C8,2018,2024
+Audi,Q5,FY,2016,2024
+Audi,Q7,4M,2015,2024
+Volkswagen,Passat,B8,2014,2024
+Volkswagen,Tiguan,AD1,2016,2024
+Volkswagen,Polo,AW,2017,2024
+Volkswagen,Golf,Mk8,2019,2024
+Volkswagen,Touareg,CR7,2018,2024
+Nissan,Qashqai,J12,2021,2024
+Nissan,Qashqai,J11,2013,2021
+Nissan,X-Trail,T33,2021,2024
+Nissan,X-Trail,T32,2013,2021
+Nissan,Patrol,Y62,2010,2024
+Nissan,Juke,F16,2019,2024
+Mazda,CX-5,KF,2017,2024
+Mazda,6,GJ,2012,2024
+Mazda,3,BP,2019,2024
+Subaru,Outback,BT,2020,2024
+Subaru,Outback,BS,2014,2020
+Subaru,Forester,SK,2018,2024
+Honda,CR-V,RW,2016,2024
+Honda,Civic,FE,2021,2024
+Honda,Accord,CV,2017,2024
+Mitsubishi,Outlander,GF,2012,2024
+Mitsubishi,Pajero,V80,2006,2024
+Mitsubishi,L200,KL2T,2019,2024
+Lexus,RX,AL20,2015,2024
+Lexus,ES,XZ10,2018,2024
+Lexus,LX,J200,2007,2021
+Ford,Focus,Mk4,2018,2024
+Ford,Explorer,U625,2019,2024
+Chevrolet,Captiva,C140,2011,2018
+Chevrolet,Cruze,J300,2008,2016
+Opel,Astra,K,2015,2022
+Opel,Insignia,B,2017,2024
+Skoda,Octavia,A8,2020,2024
+Skoda,Kodiaq,NS7,2016,2024
+Renault,Duster,HM,2017,2024
+Renault,Logan,LS1,2018,2024
+Renault,Sandero,BS,2012,2024
+Peugeot,3008,P84,2016,2024
+Peugeot,508,R8,2018,2024
+Volvo,XC60,246,2017,2024
+Volvo,XC90,256,2014,2024
+Jeep,Grand Cherokee,WL,2021,2024
+Land Rover,Discovery,L462,2016,2024
+Land Rover,Range Rover,L460,2021,2024
+Porsche,Cayenne,PO536,2017,2024
+Infiniti,QX60,L50,2021,2024
+Infiniti,FX,S51,2008,2017
+Acura,MDX,YD3,2021,2024
+Genesis,GV80,RS4,2020,2024
+Haval,F7,F7,2018,2024
+Chery,Tiggo 8,T1C,2018,2024
+Geely,Atlas,NL3,2016,2024
