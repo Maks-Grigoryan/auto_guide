@@ -24,13 +24,19 @@ BEGIN
     )
     RETURNING id INTO v_id;
 
-    -- Capture EXPLAIN (no ANALYZE to avoid side-effects on test data)
-    SELECT string_agg(plan_line, E'\n')
-    INTO plan_text
-    FROM (
-        EXPLAIN
-        SELECT * FROM search_parts(40.1872, 44.5152, 50000, NULL, NULL, NULL, NULL, NULL)
-    ) AS explain_output(plan_line);
+    -- Capture EXPLAIN (no ANALYZE to avoid side-effects on test data).
+    -- EXPLAIN cannot appear in a FROM subquery; run it via EXECUTE and
+    -- aggregate the returned plan lines.
+    DECLARE
+        rec text;
+    BEGIN
+        plan_text := '';
+        FOR rec IN
+            EXECUTE 'EXPLAIN SELECT * FROM search_parts(40.1872, 44.5152, 50000, NULL, NULL, NULL, NULL, NULL)'
+        LOOP
+            plan_text := plan_text || rec || E'\n';
+        END LOOP;
+    END;
 
     -- Assert GiST index scan is present
     IF plan_text NOT ILIKE '%Index Scan%vendors_location_gist%'

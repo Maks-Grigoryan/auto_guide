@@ -6,9 +6,9 @@
     "node": ">=20"
   },
   "scripts": {
-    "migrate": "node-pg-migrate",
-    "migrate:up": "node-pg-migrate up",
-    "migrate:down": "node-pg-migrate down",
+    "migrate": "node-pg-migrate -m ../db/migrations",
+    "migrate:up": "node-pg-migrate up -m ../db/migrations",
+    "migrate:down": "node-pg-migrate down -m ../db/migrations",
     "build": "nest build",
     "start": "node dist/main",
     "start:dev": "nest start --watch",
