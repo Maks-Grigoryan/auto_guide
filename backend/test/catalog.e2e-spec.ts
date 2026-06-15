@@ -39,17 +39,10 @@ describe('GET /catalog (e2e)', () => {
   });
 
   it('GET /catalog/models?makeId=X returns 200 array with cache header', async () => {
-    const makesRes = await request(app.getHttpServer())
-      .get('/catalog/makes')
-      .expect(200);
-
-    const makes = makesRes.body as { id: number; name: string }[];
-    expect(makes.length).toBeGreaterThan(0);
-    const makeId = makes[0].id;
-
+    // ВАЗ (id=1) is always seeded with models — use it directly
     await request(app.getHttpServer())
       .get('/catalog/models')
-      .query({ makeId })
+      .query({ makeId: 1 })
       .expect(200)
       .expect('cache-control', 'public, max-age=86400')
       .then((res) => {
@@ -71,25 +64,10 @@ describe('GET /catalog (e2e)', () => {
   });
 
   it('GET /catalog/generations?modelId=X returns 200 array with cache header', async () => {
-    const makesRes = await request(app.getHttpServer())
-      .get('/catalog/makes')
-      .expect(200);
-
-    const makes = makesRes.body as { id: number; name: string }[];
-    const makeId = makes[0].id;
-
-    const modelsRes = await request(app.getHttpServer())
-      .get('/catalog/models')
-      .query({ makeId })
-      .expect(200);
-
-    const models = modelsRes.body as { id: number; name: string }[];
-    expect(models.length).toBeGreaterThan(0);
-    const modelId = models[0].id;
-
+    // ВАЗ Приора (model id=1) is always seeded with generations — use it directly
     await request(app.getHttpServer())
       .get('/catalog/generations')
-      .query({ modelId })
+      .query({ modelId: 1 })
       .expect(200)
       .expect('cache-control', 'public, max-age=86400')
       .then((res) => {
