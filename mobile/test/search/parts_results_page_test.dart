@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -36,14 +38,19 @@ Widget _buildPage({
   String? categoryName,
   String? query,
 }) {
+  // For loading state: use a Completer that never completes so no timer is left.
+  final completer = Completer<List<VendorResult>>();
+
   return ProviderScope(
     overrides: [
-      partsSearchProvider.overrideWith((_) async {
+      partsSearchProvider.overrideWith((_) {
         final v = searchValue;
-        if (v is AsyncData<List<VendorResult>>) return v.value;
-        if (v is AsyncError<List<VendorResult>>) throw v.error;
-        await Future<void>.delayed(const Duration(days: 1));
-        return [];
+        if (v is AsyncData<List<VendorResult>>) return Future.value(v.value);
+        if (v is AsyncError<List<VendorResult>>) {
+          return Future<List<VendorResult>>.error(v.error, v.stackTrace);
+        }
+        // Loading: return a future that never resolves (no timer involved).
+        return completer.future;
       }),
     ],
     child: MaterialApp(
