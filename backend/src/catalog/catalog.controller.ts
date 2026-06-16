@@ -1,11 +1,17 @@
 import { Controller, Get, Header, Query } from '@nestjs/common';
-import { CatalogService, CarMake, CarModel, CarGeneration } from './catalog.service';
+import { CatalogService, CarMake, CarModel, CarGeneration, PartCategory } from './catalog.service';
 import { GetModelsDto } from './dto/get-models.dto';
 import { GetGenerationsDto } from './dto/get-generations.dto';
 
 @Controller('catalog')
 export class CatalogController {
   constructor(private readonly catalogService: CatalogService) {}
+
+  @Get('part-categories')
+  @Header('Cache-Control', 'public, max-age=86400')
+  getPartCategories(): Promise<PartCategory[]> {
+    return this.catalogService.getPartCategories();
+  }
 
   @Get('makes')
   @Header('Cache-Control', 'public, max-age=86400')
