@@ -21,15 +21,16 @@ export class SearchService {
   constructor(@Inject(PG_POOL) private readonly pool: Pool) {}
 
   async searchParts(dto: SearchPartsDto): Promise<VendorSearchResult[]> {
-    const { lat, lng, radius, makeId, modelId, categoryId, query } = dto;
+    const { lat, lng, radius, makeId, modelId, generationId, categoryId, query } = dto;
     const result = await this.pool.query<VendorSearchResult>(
-      'SELECT * FROM search_parts($1,$2,$3,$4,$5,$6,$7)',
+      'SELECT * FROM search_parts($1,$2,$3,$4,$5,$6,$7,$8)',
       [
         lat,
         lng,
         radius,
         makeId ?? null,
         modelId ?? null,
+        generationId ?? null,
         categoryId ?? null,
         query ?? null,
       ],
