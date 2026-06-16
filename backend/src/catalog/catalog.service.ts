@@ -2,6 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
 import { PG_POOL } from '../database/database.module';
 
+export interface PartCategory {
+  id: number;
+  name: string;
+  parent_id: number | null;
+}
+
 export interface CarMake {
   id: number;
   name: string;
@@ -36,6 +42,13 @@ export class CatalogService {
     const result = await this.pool.query<CarModel>(
       'SELECT id, make_id, name FROM car_models WHERE make_id = $1 ORDER BY name',
       [makeId],
+    );
+    return result.rows;
+  }
+
+  async getPartCategories(): Promise<PartCategory[]> {
+    const result = await this.pool.query<PartCategory>(
+      'SELECT id, name, parent_id FROM part_categories ORDER BY name',
     );
     return result.rows;
   }
