@@ -80,4 +80,19 @@ describe('GET /catalog (e2e)', () => {
       .get('/catalog/generations')
       .expect(400);
   });
+
+  it('GET /catalog/part-categories returns 200 array', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/catalog/part-categories')
+      .expect(200);
+
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+
+  it('GET /catalog/part-categories has Cache-Control: public, max-age=86400', async () => {
+    await request(app.getHttpServer())
+      .get('/catalog/part-categories')
+      .expect(200)
+      .expect('cache-control', 'public, max-age=86400');
+  });
 });
