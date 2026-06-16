@@ -17,6 +17,7 @@ export class SearchPartsDto {
   @IsOptional()
   @IsNumber()
   @IsPositive()
+  @Max(100000)
   @Type(() => Number)
   radius: number = 10000;
 
@@ -31,6 +32,12 @@ export class SearchPartsDto {
   @IsPositive()
   @Type(() => Number)
   modelId?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  @Type(() => Number)
+  generationId?: number;
 
   @IsOptional()
   @IsNumber()

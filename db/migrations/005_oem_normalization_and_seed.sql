@@ -97,3 +97,16 @@ WHERE v.name = 'АвтоДетали Центр'
       WHERE p2.vendor_id = v.id
         AND p2.oem_number = '19216'
   );
+
+-- Fitment for the seeded OEM part: whole-make ВАЗ (model_id NULL so any ВАЗ model matches)
+-- Required because search_parts INNER JOINs part_fitments; parts without fitments are invisible.
+INSERT INTO part_fitments (part_id, make_id, model_id, generation_id)
+SELECT p.id, mk.id, NULL, NULL
+FROM parts p
+JOIN vendors v ON v.id = p.vendor_id
+JOIN car_makes mk ON mk.name = 'ВАЗ'
+WHERE v.name = 'АвтоДетали Центр'
+  AND p.oem_number = '19216'
+  AND NOT EXISTS (
+      SELECT 1 FROM part_fitments pf WHERE pf.part_id = p.id AND pf.make_id = mk.id
+  );

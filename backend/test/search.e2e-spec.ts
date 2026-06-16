@@ -43,4 +43,75 @@ describe('GET /search/parts (e2e)', () => {
       .query({ lat: 'notanumber', lng: 44.5152, radius: 50000 })
       .expect(400);
   });
+
+  const YEREVAN = { lat: 40.1872, lng: 44.5152, radius: 20000 };
+
+  it('returns 400 when radius exceeds 100000 (DoS cap)', async () => {
+    await request(app.getHttpServer())
+      .get('/search/parts')
+      .query({ ...YEREVAN, radius: 150000 })
+      .expect(400);
+  });
+
+  it('accepts generationId and returns 200', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/search/parts')
+      .query({ ...YEREVAN, makeId: 1, generationId: 1 })
+      .expect(200);
+
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+
+  it('categoryId narrows results — brake category returns fewer vendors than no filter (8-arg fix regression)', async () => {
+    const [all, brakes] = await Promise.all([
+      request(app.getHttpServer())
+        .get('/search/parts')
+        .query({ ...YEREVAN })
+        .expect(200),
+      request(app.getHttpServer())
+        .get('/search/parts')
+        .query({ ...YEREVAN, categoryId: 1 })
+        .expect(200),
+    ]);
+
+    expect(Array.isArray(all.body)).toBe(true);
+    expect(Array.isArray(brakes.body)).toBe(true);
+    // categoryId=1 (Тормоза) must return fewer vendors than the unfiltered call
+    expect((brakes.body as unknown[]).length).toBeLessThan(
+      (all.body as unknown[]).length,
+    );
+  });
+
+  it('OEM query "192 16" (with space) returns the vendor holding oem 19216', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/search/parts')
+      .query({ ...YEREVAN, query: '192 16' })
+      .expect(200);
+
+    expect(Array.isArray(res.body)).toBe(true);
+    const names = (res.body as Array<{ name: string }>).map((v) => v.name);
+    expect(names).toContain('АвтоДетали Центр');
+  });
+
+  it('OEM query "192-16" (with dash) returns the same vendor as "192 16"', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/search/parts')
+      .query({ ...YEREVAN, query: '192-16' })
+      .expect(200);
+
+    expect(Array.isArray(res.body)).toBe(true);
+    const names = (res.body as Array<{ name: string }>).map((v) => v.name);
+    expect(names).toContain('АвтоДетали Центр');
+  });
+
+  it('makeId alone returns whole-make NULL-model fitment parts (PRT-03)', async () => {
+    // makeId=1 is ВАЗ; seed inserts whole-make fitments (model_id NULL) for ВАЗ parts
+    const res = await request(app.getHttpServer())
+      .get('/search/parts')
+      .query({ ...YEREVAN, makeId: 1 })
+      .expect(200);
+
+    expect(Array.isArray(res.body)).toBe(true);
+    expect((res.body as unknown[]).length).toBeGreaterThanOrEqual(1);
+  });
 });
