@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-last_updated: "2026-06-16T06:29:43.688Z"
+last_updated: "2026-06-16T08:27:28.344Z"
 progress:
   total_phases: 6
   completed_phases: 2
@@ -30,10 +30,11 @@ progress:
 
 ## Current Position
 
-Phase: 03 — next phase
+Phase: 03 (parts-search-list-results) — EXECUTING
+Plan: 1 of 5
 **Phase:** 02 — Car Catalog Selector — COMPLETE
 **Plan:** 02-03 complete (Asphalt & Signal theme + 6 widgets + make filter test)
-**Status:** Phase 02 complete & verified PASSED — Flutter 3.44.2 installed (C:\src\flutter), `flutter analyze` clean, `flutter test` 9/9 green (commit 476d3c8). Deferred to device/Docker: on-device cold-start persistence (SEL-04) + catalog e2e vs live DB. Ready to start Phase 03.
+**Status:** Executing Phase 03
 
 ```
 Progress: [ ][x][ ][ ][ ][ ]  2/6 phases complete
@@ -90,11 +91,17 @@ None currently.
 
 *Fill in before ending each session.*
 
-**Last action:** Completed 02-03-PLAN.md — Asphalt & Signal theme, 6 reusable widgets, make filter widget test, pages refactored (2026-06-16)
-**Next action:** Phase 03 — Home screen geo-search
-**Open questions:** Flutter SDK not in CI environment — `flutter test` and `flutter analyze` must be run locally before PR merge; .g.dart files hand-authored, need `build_runner` locally
+**Last action:** Phase 03 execution started (2026-06-16). Wave 1 backend plans DONE & merged to master: 03-01 (8-arg search_parts fix + OEM normalization migration 005 + radius cap, 9 e2e green) and 03-02 (GET /catalog/part-categories, 24h cache, 9 e2e green). 03-03 (Flutter scaffold) INTERRUPTED by session limit — partial work preserved as WIP on git branch `worktree-agent-abdaa1fb55d58c374` (commits bd77525 + 56c7acf): geolocator added to mobile/pubspec.yaml + smoke harness + mobile/lib/core/{api,models} + features/parts_results scaffold. NOT built/tested, NO SUMMARY yet, NOT merged.
+
+**IMPORTANT layout note:** Flutter app lives in `mobile/` (from Phase 02), NOT `app/` as plans 03-03/03-04/03-05 assume. Executors must target `mobile/` and adapt the planned `app/...` paths accordingly.
+
+**Next action (resume after limit reset ~3pm Yerevan):** Finish 03-03 — complete scaffold in `mobile/`, run `flutter analyze` + `flutter test` (SDK at C:\src\flutter), record human-verify checkpoint as DEFERRED, write 03-03-SUMMARY.md, merge branch to master. Then Wave 2 (03-04 home screen) and Wave 3 (03-05 results screen). Resume from the WIP branch rather than restarting.
+
+**Worktree harness bug:** the runtime does a non-exist-ok `mkdir .claude/worktrees`; before spawning a worktree agent, fully remove the empty `.claude/worktrees` parent dir (and prune `.git/worktrees/*`) or spawning fails with EEXIST.
+
+**Open questions:** Flutter SDK not in CI — `flutter test`/`analyze` run locally; backend e2e needs live PostGIS DB (deferred to local). .g.dart files hand-authored, need `build_runner` locally.
 
 ---
 
 *State initialized: 2026-06-14*
-*Last updated: 2026-06-16 after 02-03 completion*
+*Last updated: 2026-06-16 — Phase 03 Wave 1 partial (03-01, 03-02 done; 03-03 interrupted by session limit)*
