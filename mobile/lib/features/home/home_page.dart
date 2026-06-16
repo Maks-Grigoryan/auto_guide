@@ -16,7 +16,7 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedCar = ref.watch(selectedCarNotifierProvider);
+    final selectedCar = ref.watch(selectedCarProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xFF1C1F26),

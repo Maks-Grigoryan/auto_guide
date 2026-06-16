@@ -6,312 +6,262 @@ part of 'catalog_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dioHash() => r'b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [dio].
 @ProviderFor(dio)
-final dioProvider = AutoDisposeProvider<Dio>.internal(
-  dio,
-  name: r'dioProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$dioHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const dioProvider = DioProvider._();
 
-typedef DioRef = AutoDisposeProviderRef<Dio>;
+final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio>
+    with $Provider<Dio> {
+  const DioProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'dioProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
-String _$makesHash() => r'c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1';
+  @override
+  String debugGetCreateSourceHash() => _$dioHash();
 
-/// See also [makes].
+  @$internal
+  @override
+  $ProviderElement<Dio> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Dio create(Ref ref) {
+    return dio(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Dio value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Dio>(value),
+    );
+  }
+}
+
+String _$dioHash() => r'c5edccbbab7d0d966519385e8f9e292a6795543d';
+
+/// Fetches all car makes from GET /catalog/makes.
+
 @ProviderFor(makes)
-final makesProvider =
-    AutoDisposeFutureProvider<List<Map<String, dynamic>>>.internal(
-  makes,
-  name: r'makesProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$makesHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const makesProvider = MakesProvider._();
 
-typedef MakesRef = AutoDisposeFutureProviderRef<List<Map<String, dynamic>>>;
+/// Fetches all car makes from GET /catalog/makes.
 
-String _$modelsHash() => r'd3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2';
+final class MakesProvider extends $FunctionalProvider<
+        AsyncValue<List<Map<String, dynamic>>>,
+        List<Map<String, dynamic>>,
+        FutureOr<List<Map<String, dynamic>>>>
+    with
+        $FutureModifier<List<Map<String, dynamic>>>,
+        $FutureProvider<List<Map<String, dynamic>>> {
+  /// Fetches all car makes from GET /catalog/makes.
+  const MakesProvider._()
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'makesProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
-/// See also [models].
+  @override
+  String debugGetCreateSourceHash() => _$makesHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<Map<String, dynamic>>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<Map<String, dynamic>>> create(Ref ref) {
+    return makes(ref);
+  }
+}
+
+String _$makesHash() => r'832955c6ce006ac70885e025c97c6c7675f42455';
+
+/// Fetches models for a given [makeId] from GET /catalog/models?makeId=...
+
 @ProviderFor(models)
-const modelsProvider = ModelsFamily();
+const modelsProvider = ModelsFamily._();
 
-/// See also [models].
-class ModelsFamily extends Family<AsyncValue<List<Map<String, dynamic>>>> {
-  /// See also [models].
-  const ModelsFamily();
+/// Fetches models for a given [makeId] from GET /catalog/models?makeId=...
 
-  /// See also [models].
+final class ModelsProvider extends $FunctionalProvider<
+        AsyncValue<List<Map<String, dynamic>>>,
+        List<Map<String, dynamic>>,
+        FutureOr<List<Map<String, dynamic>>>>
+    with
+        $FutureModifier<List<Map<String, dynamic>>>,
+        $FutureProvider<List<Map<String, dynamic>>> {
+  /// Fetches models for a given [makeId] from GET /catalog/models?makeId=...
+  const ModelsProvider._(
+      {required ModelsFamily super.from, required int super.argument})
+      : super(
+          retry: null,
+          name: r'modelsProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
+
+  @override
+  String debugGetCreateSourceHash() => _$modelsHash();
+
+  @override
+  String toString() {
+    return r'modelsProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<List<Map<String, dynamic>>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<Map<String, dynamic>>> create(Ref ref) {
+    final argument = this.argument as int;
+    return models(
+      ref,
+      argument,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ModelsProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$modelsHash() => r'9a8b2d37225e023e7d1a7719b03d2a017acdd58b';
+
+/// Fetches models for a given [makeId] from GET /catalog/models?makeId=...
+
+final class ModelsFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<Map<String, dynamic>>>, int> {
+  const ModelsFamily._()
+      : super(
+          retry: null,
+          name: r'modelsProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
+
+  /// Fetches models for a given [makeId] from GET /catalog/models?makeId=...
+
   ModelsProvider call(
     int makeId,
-  ) {
-    return ModelsProvider(
-      makeId,
-    );
-  }
+  ) =>
+      ModelsProvider._(argument: makeId, from: this);
 
   @override
-  ModelsProvider getProviderOverride(
-    covariant ModelsProvider provider,
-  ) {
-    return call(
-      provider.makeId,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'modelsProvider';
+  String toString() => r'modelsProvider';
 }
 
-/// See also [models].
-class ModelsProvider
-    extends AutoDisposeFutureProvider<List<Map<String, dynamic>>> {
-  /// See also [models].
-  ModelsProvider(
-    int makeId,
-  ) : this._internal(
-          (ref) => models(
-            ref as ModelsRef,
-            makeId,
-          ),
-          from: modelsProvider,
-          name: r'modelsProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$modelsHash,
-          dependencies: ModelsFamily._dependencies,
-          allTransitiveDependencies: ModelsFamily._allTransitiveDependencies,
-          makeId: makeId,
+/// Fetches generations for a given [modelId] from GET /catalog/generations?modelId=...
+
+@ProviderFor(generations)
+const generationsProvider = GenerationsFamily._();
+
+/// Fetches generations for a given [modelId] from GET /catalog/generations?modelId=...
+
+final class GenerationsProvider extends $FunctionalProvider<
+        AsyncValue<List<Map<String, dynamic>>>,
+        List<Map<String, dynamic>>,
+        FutureOr<List<Map<String, dynamic>>>>
+    with
+        $FutureModifier<List<Map<String, dynamic>>>,
+        $FutureProvider<List<Map<String, dynamic>>> {
+  /// Fetches generations for a given [modelId] from GET /catalog/generations?modelId=...
+  const GenerationsProvider._(
+      {required GenerationsFamily super.from, required int super.argument})
+      : super(
+          retry: null,
+          name: r'generationsProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
         );
 
-  ModelsProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.makeId,
-  }) : super.internal();
-
-  final int makeId;
+  @override
+  String debugGetCreateSourceHash() => _$generationsHash();
 
   @override
-  Override overrideWith(
-    FutureOr<List<Map<String, dynamic>>> Function(ModelsRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: ModelsProvider._internal(
-        (ref) => create(ref as ModelsRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        makeId: makeId,
-      ),
-    );
+  String toString() {
+    return r'generationsProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  AutoDisposeFutureProviderElement<List<Map<String, dynamic>>> createElement() {
-    return _ModelsProviderElement(this);
+  $FutureProviderElement<List<Map<String, dynamic>>> $createElement(
+          $ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<Map<String, dynamic>>> create(Ref ref) {
+    final argument = this.argument as int;
+    return generations(
+      ref,
+      argument,
+    );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ModelsProvider && other.makeId == makeId;
+    return other is GenerationsProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, makeId.hashCode);
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-mixin ModelsRef on AutoDisposeFutureProviderRef<List<Map<String, dynamic>>> {
-  int get makeId;
-}
+String _$generationsHash() => r'342d5e75b59101979b6942955912f578306397c0';
 
-class _ModelsProviderElement
-    extends AutoDisposeFutureProviderElement<List<Map<String, dynamic>>>
-    with ModelsRef {
-  _ModelsProviderElement(super.provider);
+/// Fetches generations for a given [modelId] from GET /catalog/generations?modelId=...
 
-  @override
-  int get makeId => (origin as ModelsProvider).makeId;
-}
+final class GenerationsFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<Map<String, dynamic>>>, int> {
+  const GenerationsFamily._()
+      : super(
+          retry: null,
+          name: r'generationsProvider',
+          dependencies: null,
+          $allTransitiveDependencies: null,
+          isAutoDispose: true,
+        );
 
-String _$generationsHash() =>
-    r'e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3';
+  /// Fetches generations for a given [modelId] from GET /catalog/generations?modelId=...
 
-/// See also [generations].
-@ProviderFor(generations)
-const generationsProvider = GenerationsFamily();
-
-/// See also [generations].
-class GenerationsFamily
-    extends Family<AsyncValue<List<Map<String, dynamic>>>> {
-  /// See also [generations].
-  const GenerationsFamily();
-
-  /// See also [generations].
   GenerationsProvider call(
     int modelId,
-  ) {
-    return GenerationsProvider(
-      modelId,
-    );
-  }
+  ) =>
+      GenerationsProvider._(argument: modelId, from: this);
 
   @override
-  GenerationsProvider getProviderOverride(
-    covariant GenerationsProvider provider,
-  ) {
-    return call(
-      provider.modelId,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'generationsProvider';
-}
-
-/// See also [generations].
-class GenerationsProvider
-    extends AutoDisposeFutureProvider<List<Map<String, dynamic>>> {
-  /// See also [generations].
-  GenerationsProvider(
-    int modelId,
-  ) : this._internal(
-          (ref) => generations(
-            ref as GenerationsRef,
-            modelId,
-          ),
-          from: generationsProvider,
-          name: r'generationsProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$generationsHash,
-          dependencies: GenerationsFamily._dependencies,
-          allTransitiveDependencies:
-              GenerationsFamily._allTransitiveDependencies,
-          modelId: modelId,
-        );
-
-  GenerationsProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.modelId,
-  }) : super.internal();
-
-  final int modelId;
-
-  @override
-  Override overrideWith(
-    FutureOr<List<Map<String, dynamic>>> Function(GenerationsRef provider)
-        create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: GenerationsProvider._internal(
-        (ref) => create(ref as GenerationsRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        modelId: modelId,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeFutureProviderElement<List<Map<String, dynamic>>>
-      createElement() {
-    return _GenerationsProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is GenerationsProvider && other.modelId == modelId;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, modelId.hashCode);
-    return _SystemHash.finish(hash);
-  }
-}
-
-mixin GenerationsRef
-    on AutoDisposeFutureProviderRef<List<Map<String, dynamic>>> {
-  int get modelId;
-}
-
-class _GenerationsProviderElement
-    extends AutoDisposeFutureProviderElement<List<Map<String, dynamic>>>
-    with GenerationsRef {
-  _GenerationsProviderElement(super.provider);
-
-  @override
-  int get modelId => (origin as GenerationsProvider).modelId;
-}
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
-
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    hash = 0x1fffffff & (hash + value);
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
+  String toString() => r'generationsProvider';
 }

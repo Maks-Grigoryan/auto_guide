@@ -16,7 +16,7 @@ class GenerationListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final generationsAsync = ref.watch(generationsProvider(modelId));
 
-    final car = ref.watch(selectedCarNotifierProvider);
+    final car = ref.watch(selectedCarProvider);
     final appBarTitle =
         car != null ? '${car.makeName} ${car.modelName}' : '';
 
@@ -72,7 +72,7 @@ class GenerationListPage extends ConsumerWidget {
                       subtitle: yearSubtitle,
                       onTap: () {
                         ref
-                            .read(selectedCarNotifierProvider.notifier)
+                            .read(selectedCarProvider.notifier)
                             .pickGeneration(id, name);
                         context.push('/selector/confirm');
                       },

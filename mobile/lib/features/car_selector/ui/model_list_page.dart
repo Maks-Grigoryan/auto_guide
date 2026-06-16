@@ -23,7 +23,7 @@ class _ModelListPageState extends ConsumerState<ModelListPage> {
   @override
   Widget build(BuildContext context) {
     final modelsAsync = ref.watch(modelsProvider(widget.makeId));
-    final car = ref.watch(selectedCarNotifierProvider);
+    final car = ref.watch(selectedCarProvider);
     final appBarTitle = car?.makeName ?? '';
 
     return Scaffold(
@@ -87,7 +87,7 @@ class _ModelListPageState extends ConsumerState<ModelListPage> {
                         title: name,
                         onTap: () {
                           ref
-                              .read(selectedCarNotifierProvider.notifier)
+                              .read(selectedCarProvider.notifier)
                               .pickModel(id, name);
                           context.push('/selector/generation', extra: id);
                         },

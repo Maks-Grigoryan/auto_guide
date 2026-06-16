@@ -14,5 +14,4 @@ export 'catalog_providers.dart'
         dioProvider,
         makesProvider,
         modelsProvider,
-        modelsProvider,
         generationsProvider;

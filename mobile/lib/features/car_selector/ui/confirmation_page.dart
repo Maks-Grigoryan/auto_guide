@@ -10,8 +10,8 @@ class ConfirmationPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifier = ref.read(selectedCarNotifierProvider.notifier);
-    final car = ref.watch(selectedCarNotifierProvider);
+    final notifier = ref.read(selectedCarProvider.notifier);
+    final car = ref.watch(selectedCarProvider);
 
     final makeName = car?.makeName ?? '—';
     final modelName = car?.modelName ?? '—';

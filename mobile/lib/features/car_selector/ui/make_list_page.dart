@@ -85,7 +85,7 @@ class _MakeListPageState extends ConsumerState<MakeListPage> {
                         title: name,
                         onTap: () {
                           ref
-                              .read(selectedCarNotifierProvider.notifier)
+                              .read(selectedCarProvider.notifier)
                               .pickMake(id, name);
                           context.push('/selector/model', extra: id);
                         },
