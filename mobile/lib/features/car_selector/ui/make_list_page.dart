@@ -4,6 +4,9 @@ import 'package:go_router/go_router.dart';
 
 import '../data/catalog_providers.dart';
 import '../state/selected_car_notifier.dart';
+import 'widgets/async_state_view.dart';
+import 'widgets/catalog_list_tile.dart';
+import 'widgets/search_field.dart';
 
 class MakeListPage extends ConsumerStatefulWidget {
   const MakeListPage({super.key});
@@ -13,14 +16,7 @@ class MakeListPage extends ConsumerStatefulWidget {
 }
 
 class _MakeListPageState extends ConsumerState<MakeListPage> {
-  final _searchController = TextEditingController();
   String _query = '';
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,46 +33,29 @@ class _MakeListPageState extends ConsumerState<MakeListPage> {
           children: [
             Padding(
               padding: const EdgeInsets.all(16),
-              child: TextField(
-                controller: _searchController,
-                style: const TextStyle(color: Colors.white, fontSize: 16),
-                decoration: InputDecoration(
-                  hintText: 'Поиск марки...',
-                  hintStyle: const TextStyle(
-                    color: Color(0xFFE0E0E0),
-                    fontSize: 16,
-                  ),
-                  prefixIcon: const Icon(Icons.search, color: Color(0xFFE0E0E0)),
-                  filled: true,
-                  fillColor: const Color(0xFF2A2D36),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide.none,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 8),
-                ),
-                onChanged: (value) => setState(() => _query = value),
+              child: SearchField(
+                hintText: 'Поиск марки...',
+                onChanged: (value) => setState(() => _query = value.trim()),
               ),
             ),
             Expanded(
-              child: makesAsync.when(
-                loading: () => const Center(
-                  child: CircularProgressIndicator(
-                    color: Color(0xFFF5A623),
-                  ),
-                ),
-                error: (error, _) => _ErrorView(
-                  heading: 'Не удалось загрузить марки',
-                  onRetry: () => ref.refresh(makesProvider),
-                ),
-                data: (makes) {
+              child: AsyncStateView<List<Map<String, dynamic>>>(
+                asyncValue: makesAsync,
+                errorHeading: 'Не удалось загрузить марки',
+                onRetry: () => ref.refresh(makesProvider),
+                dataBuilder: (makes) {
+                  // Client-side case-insensitive contains filter + compareTo sort
+                  // (Pitfall 5 — Cyrillic sort).
                   final filtered = _query.isEmpty
-                      ? makes
+                      ? List<Map<String, dynamic>>.from(makes)
                       : makes.where((m) {
                           final name =
                               (m['name'] as String).toLowerCase();
                           return name.contains(_query.toLowerCase());
                         }).toList();
+
+                  filtered.sort((a, b) => (a['name'] as String)
+                      .compareTo(b['name'] as String));
 
                   if (filtered.isEmpty) {
                     return const Center(
@@ -102,15 +81,8 @@ class _MakeListPageState extends ConsumerState<MakeListPage> {
                       final id = make['id'] as int;
                       final name = make['name'] as String;
 
-                      return ListTile(
-                        minVerticalPadding: 8,
-                        title: Text(
-                          name,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                        ),
+                      return CatalogListTile(
+                        title: name,
                         onTap: () {
                           ref
                               .read(selectedCarNotifierProvider.notifier)
@@ -121,52 +93,6 @@ class _MakeListPageState extends ConsumerState<MakeListPage> {
                     },
                   );
                 },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ErrorView extends StatelessWidget {
-  const _ErrorView({required this.heading, required this.onRetry});
-
-  final String heading;
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.wifi_off, size: 48, color: Color(0xFFE0E0E0)),
-            const SizedBox(height: 16),
-            Text(
-              heading,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Проверьте подключение и попробуйте снова',
-              style: TextStyle(color: Color(0xFFE0E0E0), fontSize: 16),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-            TextButton(
-              onPressed: onRetry,
-              child: const Text(
-                'Повторить',
-                style: TextStyle(color: Color(0xFFF5A623), fontSize: 16),
               ),
             ),
           ],

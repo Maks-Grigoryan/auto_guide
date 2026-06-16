@@ -3,12 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../car_selector/state/selected_car_notifier.dart';
+import '../car_selector/ui/widgets/car_chip.dart';
 
 /// HomeStub — minimal home screen for Phase 2.
 ///
-/// Shows a "Выбрать авто" button when no car is selected, or a tappable
-/// chip showing the selected car when one has been confirmed (SEL-04).
-/// Full home screen with search results is Phase 3.
+/// Shows "Выбрать авто" button when no car is selected, or a [CarChip]
+/// (Icons.directions_car + name — status by icon+text, never color alone)
+/// once a car is confirmed (SEL-04, ACC-02).
+/// Full home screen with geo-search results is Phase 3.
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
@@ -43,7 +45,7 @@ class HomePage extends ConsumerWidget {
                   child: const Text('Выбрать авто'),
                 ),
               ] else ...[
-                _CarChip(
+                CarChip(
                   label: _buildChipLabel(selectedCar),
                   onTap: () => context.push('/selector/make'),
                 ),
@@ -62,59 +64,10 @@ class HomePage extends ConsumerWidget {
   }
 
   String _buildChipLabel(dynamic car) {
-    // car is SelectedCar
     final base = '${car.makeName} ${car.modelName}';
     if (car.generationLabel != null) {
       return '$base · ${car.generationLabel}';
     }
     return '$base · Поколение не указано';
-  }
-}
-
-class _CarChip extends StatelessWidget {
-  const _CarChip({required this.label, required this.onTap});
-
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 56,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF5A623),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          children: [
-            const Icon(
-              Icons.directions_car,
-              color: Color(0xFF1C1F26),
-              size: 20,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                label,
-                style: const TextStyle(
-                  color: Color(0xFF1C1F26),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const Icon(
-              Icons.edit,
-              color: Color(0xFF1C1F26),
-              size: 18,
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
