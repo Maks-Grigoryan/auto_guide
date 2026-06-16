@@ -5,6 +5,7 @@ import 'features/car_selector/ui/model_list_page.dart';
 import 'features/car_selector/ui/generation_list_page.dart';
 import 'features/car_selector/ui/confirmation_page.dart';
 import 'features/home/home_page.dart';
+import 'features/parts_results/parts_results_page.dart';
 
 /// Application router with 5 named routes for the car selector flow.
 ///
@@ -47,6 +48,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/selector/confirm',
       builder: (context, state) => const ConfirmationPage(),
+    ),
+    GoRoute(
+      path: '/results/parts',
+      builder: (context, state) => const PartsResultsPage(),
     ),
   ],
 );

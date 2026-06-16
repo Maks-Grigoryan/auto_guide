@@ -4,21 +4,36 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:avto_app/core/models/part_category.dart';
+import 'package:avto_app/core/location/location_service.dart';
 import 'package:avto_app/features/search/providers/categories_provider.dart';
 import 'package:avto_app/features/home/home_page.dart';
 import 'package:avto_app/features/car_selector/state/selected_car_notifier.dart';
 
 // ---------------------------------------------------------------------------
-// Fake router that captures pushed routes for assertion.
-// ---------------------------------------------------------------------------
-
-class _FakeRouter extends Fake implements GoRouter {
-  final List<String> pushed = [];
-}
-
-// ---------------------------------------------------------------------------
 // Helper: build a testable home page with provider overrides.
 // ---------------------------------------------------------------------------
+
+/// Fake location service that always returns Yerevan instantly (no geolocator).
+class _FakeLocationService extends LocationService {
+  _FakeLocationService()
+      : super(
+          delegate: _FakeDelegate(),
+        );
+}
+
+class _FakeDelegate implements LocationServiceDelegate {
+  @override
+  Future<bool> isLocationServiceEnabled() async => true;
+  @override
+  Future<LocationPermissionStatus> checkPermission() async =>
+      LocationPermissionStatus.granted;
+  @override
+  Future<LocationPermissionStatus> requestPermission() async =>
+      LocationPermissionStatus.granted;
+  @override
+  Future<LatLng> getCurrentPosition() async =>
+      const LatLng(kYerevanLat, kYerevanLng);
+}
 
 Widget _buildHome({
   List<PartCategory> categories = const [],
@@ -29,6 +44,7 @@ Widget _buildHome({
 
   return ProviderScope(
     overrides: [
+      locationServiceProvider.overrideWithValue(_FakeLocationService()),
       categoriesProvider.overrideWith((_) async {
         final v = catAsyncValue;
         if (v is AsyncData<List<PartCategory>>) return v.value;
