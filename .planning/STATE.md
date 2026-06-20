@@ -2,14 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-last_updated: "2026-06-16T08:27:28.344Z"
+status: ready_to_plan
+last_updated: 2026-06-20T06:58:47.325Z
 progress:
   total_phases: 6
   completed_phases: 3
-  total_plans: 12
-  completed_plans: 12
+  total_plans: 16
+  completed_plans: 16
   percent: 50
+stopped_at: Phase 04 complete (4/4) — ready to discuss Phase 5
 ---
 
 # STATE — Авто-агрегатор (СТО + запчасти)
@@ -30,9 +31,11 @@ progress:
 
 ## Current Position
 
-**Phase:** 03 — Parts Search & List Results — COMPLETE
-**Plan:** 03-05 complete (all 5 plans merged to master)
-**Status:** Phase 03 complete & verified — 5/5 success criteria PASS (static analysis). Integrated `mobile/` app: `flutter analyze` clean, `flutter test` 43/43 green (from /tmp copy due to OneDrive build lock). Backend: search_parts 8-arg fix + OEM normalization (migration 005) + part-categories endpoint. Deferred to local device/Docker: 03-03 app-launch checkpoint, visual results/location-denial flows, OEM search e2e + backend e2e vs live PostGIS. See 03-VERIFICATION.md.
+Phase: 04 (map-view-repair-search) — EXECUTING
+Plan: 1 of 4
+**Phase:** 5
+**Plan:** Not started
+**Status:** Ready to plan
 
 ```
 Progress: [ ][x][x][ ][ ][ ]  3/6 phases complete
@@ -46,10 +49,10 @@ Progress: [ ][x][x][ ][ ][ ]  3/6 phases complete
 | Metric | Value |
 |--------|-------|
 | Phases total | 6 |
-| Phases complete | 2 |
-| Plans complete | 7 |
+| Phases complete | 3 |
+| Plans complete | 12 |
 | Requirements mapped | 28/28 |
-| Requirements done | 4/28 (SEL-01..04) |
+| Requirements done | 17/28 (FND-01..05, CAT-01/02, SEL-01..04, PRT-01..03, RES-01/06/07) |
 
 ---
 
@@ -89,11 +92,13 @@ None currently.
 
 *Fill in before ending each session.*
 
-**Last action:** Phase 03 fully executed & merged to master (2026-06-16). All 5 plans complete: 03-01 (search_parts 8-arg fix + OEM normalization migration 005 + radius cap), 03-02 (GET /catalog/part-categories), 03-03 (Flutter scaffold in mobile/), 03-04 (home screen + search providers + location service Yerevan fallback), 03-05 (results UI + 4 async states). Integrated app: `flutter analyze` clean, `flutter test` 43/43 green. Verified 5/5 success criteria (static); 4 device/DB checks deferred.
+**Last action:** Phase 04 UI design contract created & approved (2026-06-16) → `04-UI-SPEC.md`. gsd-ui-researcher produced the contract (list⇄map `[Список]/[Карта]` toggle, Yandex marker view + marker→bottom-sheet card reusing `VendorResultCard`, «Сортировка и фильтры» instant-apply sheet, repair-search parity surface, graceful «Карта недоступна» degradation); design system carried forward UNCHANGED from Phase 2/3 (`app_theme.dart` "Asphalt & Signal"). gsd-ui-checker VERIFIED all 6 dimensions PASS first-pass — no token drift vs `app_theme.dart`/`03-UI-SPEC.md`, all CONTEXT D-01..D-04 + discretion defaults honored. Doc NOT committed (commit_docs=false). (Phase 03 execution detail retained in Current Position above.)
 
 **IMPORTANT layout note:** Flutter app lives in `mobile/` (from Phase 02), NOT `app/` as plans 03-03/03-04/03-05 assume. Executors must target `mobile/` and adapt the planned `app/...` paths accordingly.
 
-**Next action:** Start Phase 04. Before that, on a dev machine with Docker + device: run the 4 deferred verifications from 03-VERIFICATION.md (app launch, visual results screen, location-denial flow, OEM search e2e + backend e2e vs live PostGIS).
+**Next action:** `/gsd:plan-phase 4` — planner consumes `04-CONTEXT.md` + `04-UI-SPEC.md` as design context. No `04-RESEARCH.md` yet; plan-phase runs research first (config workflow.research=true). Phase 04 backend gap stands (see below). Still pending on a dev machine with Docker + device: the 4 deferred verifications from 03-VERIFICATION.md (app launch, visual results screen, location-denial flow, OEM search e2e + backend e2e vs live PostGIS), plus the new D-04 map-degradation path once a Yandex MapKit key is provisioned.
+
+**Phase 04 known gap:** no repair backend endpoint exists yet — only the `search_repair` SQL function + service_categories/vendor_services schema/seed (migrations 002/003/004). Phase 4 must add `GET /search/repair` + a service-categories endpoint, mirroring the parts endpoints.
 
 **Worktree harness bug:** the runtime does a non-exist-ok `mkdir .claude/worktrees`; before spawning a worktree agent, fully remove the empty `.claude/worktrees` parent dir (and prune `.git/worktrees/*`) or spawning fails with EEXIST.
 
@@ -102,4 +107,4 @@ None currently.
 ---
 
 *State initialized: 2026-06-14*
-*Last updated: 2026-06-16 — Phase 03 Wave 1 partial (03-01, 03-02 done; 03-03 interrupted by session limit)*
+*Last updated: 2026-06-16 — Phase 04 UI-SPEC created & approved (ui-phase)*
