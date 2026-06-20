@@ -1,5 +1,5 @@
 import { Controller, Get, Header, Query } from '@nestjs/common';
-import { CatalogService, CarMake, CarModel, CarGeneration, PartCategory } from './catalog.service';
+import { CatalogService, CarMake, CarModel, CarGeneration, PartCategory, ServiceCategory } from './catalog.service';
 import { GetModelsDto } from './dto/get-models.dto';
 import { GetGenerationsDto } from './dto/get-generations.dto';
 
@@ -29,5 +29,11 @@ export class CatalogController {
   @Header('Cache-Control', 'public, max-age=86400')
   getGenerations(@Query() dto: GetGenerationsDto): Promise<CarGeneration[]> {
     return this.catalogService.getGenerations(dto.modelId);
+  }
+
+  @Get('service-categories')
+  @Header('Cache-Control', 'public, max-age=86400')
+  getServiceCategories(): Promise<ServiceCategory[]> {
+    return this.catalogService.getServiceCategories();
   }
 }

@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
 import { PG_POOL } from '../database/database.module';
 import { SearchPartsDto } from './dto/search-parts.dto';
+import { SearchRepairDto } from './dto/search-repair.dto';
 
 export interface VendorSearchResult {
   vendor_id: string;
@@ -34,6 +35,16 @@ export class SearchService {
         categoryId ?? null,
         query ?? null,
       ],
+    );
+    return result.rows;
+  }
+
+  async searchRepair(dto: SearchRepairDto): Promise<VendorSearchResult[]> {
+    const result = await this.pool.query<VendorSearchResult>(
+      `SELECT vendor_id, name, 'repair_shop' AS type, phone, address, lat, lng,
+              distance_m, service_count AS item_count, min_price, rating
+       FROM search_repair($1,$2,$3,$4)`,
+      [dto.lat, dto.lng, dto.radius, dto.serviceCategoryId ?? null],
     );
     return result.rows;
   }
