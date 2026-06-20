@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/models/vendor_result.dart';
 import 'distance_badge.dart';
 
-/// Russian plural for "позиция" based on the count.
+/// Russian plural for "позиция" based on the count (parts path).
 String _ruItemCount(int n) {
   final mod10 = n % 10;
   final mod100 = n % 100;
@@ -13,7 +13,17 @@ String _ruItemCount(int n) {
   return '$n позиций';
 }
 
-/// Card displaying a single vendor result in the parts-search results list.
+/// Russian plural for "услуга" based on the count (repair path).
+String _ruServiceCount(int n) {
+  final mod10 = n % 10;
+  final mod100 = n % 100;
+  if (mod100 >= 11 && mod100 <= 19) return '$n услуг';
+  if (mod10 == 1) return '$n услуга';
+  if (mod10 >= 2 && mod10 <= 4) return '$n услуги';
+  return '$n услуг';
+}
+
+/// Card displaying a single vendor result in the search results list.
 ///
 /// Spec (03-UI-SPEC VendorResultCard):
 ///   Card/InkWell fill #2A2D36, radius 12, md (16 dp) padding, min height 88 dp
@@ -22,11 +32,17 @@ String _ruItemCount(int n) {
 ///   shop name 18 sp #FFFFFF max 2 lines ellipsis
 ///   shop type 16 sp #E0E0E0
 ///   min price: Icons.sell_outlined + "от {amount} ₽" — omit row when null
-///   item count: Icons.inventory_2_outlined + RU plural
+///
+/// Repair parameterization (vendor.type == 'repair_shop'):
+///   count icon: Icons.build_outlined (instead of Icons.inventory_2_outlined)
+///   count plural: «{n} услуга/услуги/услуг» (instead of «{n} позиция/позиции/позиций»)
+///   minPrice null-omit logic: identical — reused unchanged
 class VendorResultCard extends StatelessWidget {
   const VendorResultCard({super.key, required this.vendor});
 
   final VendorResult vendor;
+
+  bool get _isRepair => vendor.type == 'repair_shop';
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +93,7 @@ class VendorResultCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                // Metrics row: min price (optional) + item count
+                // Metrics row: min price (optional) + count
                 Row(
                   children: [
                     if (vendor.minPrice != null) ...[
@@ -96,14 +112,18 @@ class VendorResultCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                     ],
-                    const Icon(
-                      Icons.inventory_2_outlined,
+                    Icon(
+                      _isRepair
+                          ? Icons.build_outlined
+                          : Icons.inventory_2_outlined,
                       size: 16,
-                      color: Color(0xFFE0E0E0),
+                      color: const Color(0xFFE0E0E0),
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      _ruItemCount(vendor.itemCount),
+                      _isRepair
+                          ? _ruServiceCount(vendor.itemCount)
+                          : _ruItemCount(vendor.itemCount),
                       style: const TextStyle(
                         fontSize: 16,
                         color: Color(0xFFE0E0E0),
