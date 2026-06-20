@@ -1,14 +1,16 @@
 import 'package:dio/dio.dart';
 
 import '../models/part_category.dart';
+import '../models/service_category.dart';
 import '../models/vendor_result.dart';
 import 'dio_client.dart';
 
 /// Client for the search and catalog endpoints.
 ///
 /// Pitfall-3 guard: lat is sent FIRST, lng second — matching the DTO
-/// parameter order in SearchPartsDto (lat, lng, radius, ...).
+/// parameter order in SearchPartsDto / SearchRepairDto (lat, lng, radius, ...).
 /// Do NOT swap to (lng, lat); PostGIS will silently reverse the coordinate.
+/// This applies to BOTH searchParts and searchRepair.
 ///
 /// D-03 note: OEM space/dash normalisation lives ENTIRELY in the SQL function
 /// (server-side). This client sends the raw query string as typed by the user.
@@ -27,6 +29,20 @@ class SearchApi {
     return data
         .cast<Map<String, dynamic>>()
         .map(PartCategory.fromJson)
+        .toList(growable: false);
+  }
+
+  /// Fetches the flat list of service categories.
+  ///
+  /// GET /catalog/service-categories
+  /// Returns: [{ id, name }]
+  Future<List<ServiceCategory>> fetchServiceCategories() async {
+    final response =
+        await _dio.get<List<dynamic>>('/catalog/service-categories');
+    final data = response.data ?? [];
+    return data
+        .cast<Map<String, dynamic>>()
+        .map(ServiceCategory.fromJson)
         .toList(growable: false);
   }
 
@@ -66,6 +82,39 @@ class SearchApi {
 
     final response = await _dio.get<List<dynamic>>(
       '/search/parts',
+      queryParameters: queryParams,
+    );
+    final data = response.data ?? [];
+    return data
+        .cast<Map<String, dynamic>>()
+        .map(VendorResult.fromJson)
+        .toList(growable: false);
+  }
+
+  /// Searches for repair shops offering the given service near [lat]/[lng].
+  ///
+  /// GET /search/repair
+  ///
+  /// Parameters:
+  ///   [lat]               – search origin latitude (sent first; Pitfall-3)
+  ///   [lng]               – search origin longitude (sent second)
+  ///   [radius]            – radius in metres
+  ///   [serviceCategoryId] – optional service-category filter
+  Future<List<VendorResult>> searchRepair({
+    required double lat,
+    required double lng,
+    required int radius,
+    int? serviceCategoryId,
+  }) async {
+    final queryParams = <String, dynamic>{
+      'lat': lat,
+      'lng': lng,
+      'radius': radius,
+      if (serviceCategoryId != null) 'serviceCategoryId': serviceCategoryId,
+    };
+
+    final response = await _dio.get<List<dynamic>>(
+      '/search/repair',
       queryParameters: queryParams,
     );
     final data = response.data ?? [];
