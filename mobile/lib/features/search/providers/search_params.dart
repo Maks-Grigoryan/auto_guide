@@ -65,6 +65,8 @@ class PartsQuery {
     bool? availabilityOnly,
     double? minPrice,
     double? maxPrice,
+    bool clearMinPrice = false,
+    bool clearMaxPrice = false,
   }) {
     return PartsQuery(
       lat: lat ?? this.lat,
@@ -77,8 +79,10 @@ class PartsQuery {
       query: query ?? this.query,
       sort: sort ?? this.sort,
       availabilityOnly: availabilityOnly ?? this.availabilityOnly,
-      minPrice: minPrice ?? this.minPrice,
-      maxPrice: maxPrice ?? this.maxPrice,
+      // Sentinel flags let null explicitly clear a price bound (CR-02):
+      // `field ?? this.field` alone cannot distinguish "clear" from "leave".
+      minPrice: clearMinPrice ? null : (minPrice ?? this.minPrice),
+      maxPrice: clearMaxPrice ? null : (maxPrice ?? this.maxPrice),
     );
   }
 
@@ -131,6 +135,8 @@ class SearchParams extends _$SearchParams {
     double? minPrice,
     double? maxPrice,
     int? radius,
+    bool clearMinPrice = false,
+    bool clearMaxPrice = false,
   }) {
     if (state == null) return;
     state = state!.copyWith(
@@ -138,6 +144,8 @@ class SearchParams extends _$SearchParams {
       minPrice: minPrice,
       maxPrice: maxPrice,
       radius: radius,
+      clearMinPrice: clearMinPrice,
+      clearMaxPrice: clearMaxPrice,
     );
   }
 }

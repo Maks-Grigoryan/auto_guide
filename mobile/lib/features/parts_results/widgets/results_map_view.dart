@@ -178,8 +178,8 @@ class _ResultsMapViewState extends State<ResultsMapView> {
   // Distance formatting (mirrors DistanceBadge formatting)
   // ---------------------------------------------------------------------------
 
-  String _formatDistance(int distanceM) {
-    if (distanceM < 1000) return '$distanceM м';
+  String _formatDistance(double distanceM) {
+    if (distanceM < 1000) return '${distanceM.round()} м';
     final km = distanceM / 1000.0;
     return '${km.toStringAsFixed(1)} км';
   }

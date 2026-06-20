@@ -58,8 +58,8 @@ class _SortFilterSheetState extends ConsumerState<SortFilterSheet> {
     notifier.updateSort(ResultSort.distance);
     notifier.updateFilter(
       availabilityOnly: false,
-      minPrice: null,
-      maxPrice: null,
+      clearMinPrice: true,
+      clearMaxPrice: true,
     );
     final params = ref.read(searchParamsProvider);
     setState(() {
@@ -210,6 +210,8 @@ class _SortFilterSheetState extends ConsumerState<SortFilterSheet> {
                 ref.read(searchParamsProvider.notifier).updateFilter(
                       minPrice: range.start > 0 ? range.start : null,
                       maxPrice: range.end < _maxPriceRange ? range.end : null,
+                      clearMinPrice: range.start <= 0,
+                      clearMaxPrice: range.end >= _maxPriceRange,
                     );
               },
             ),

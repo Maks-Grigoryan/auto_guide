@@ -280,4 +280,39 @@ void main() {
       }
     });
   });
+
+  // ----- CR-02 regression: price bounds can be set AND cleared -----
+
+  group('PartsQuery.copyWith price-clear semantics (CR-02)', () {
+    const base = PartsQuery(lat: 40.18, lng: 44.51);
+
+    test('copyWith sets a price bound', () {
+      final withFloor = base.copyWith(minPrice: 500, maxPrice: 2000);
+      expect(withFloor.minPrice, equals(500));
+      expect(withFloor.maxPrice, equals(2000));
+    });
+
+    test('copyWith without args preserves existing price bounds', () {
+      final withFloor = base.copyWith(minPrice: 500, maxPrice: 2000);
+      final unchanged = withFloor.copyWith(sort: ResultSort.price);
+      expect(unchanged.minPrice, equals(500));
+      expect(unchanged.maxPrice, equals(2000));
+    });
+
+    test('clearMinPrice/clearMaxPrice reset bounds to null (the «Сбросить» path)',
+        () {
+      final withBounds = base.copyWith(minPrice: 500, maxPrice: 2000);
+      final cleared =
+          withBounds.copyWith(clearMinPrice: true, clearMaxPrice: true);
+      expect(cleared.minPrice, isNull);
+      expect(cleared.maxPrice, isNull);
+    });
+
+    test('clearMinPrice clears only the floor, leaves the ceiling', () {
+      final withBounds = base.copyWith(minPrice: 500, maxPrice: 2000);
+      final cleared = withBounds.copyWith(clearMinPrice: true);
+      expect(cleared.minPrice, isNull);
+      expect(cleared.maxPrice, equals(2000));
+    });
+  });
 }

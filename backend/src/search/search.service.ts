@@ -15,6 +15,7 @@ export interface VendorSearchResult {
   distance_m: number;
   item_count: string;
   min_price: string | null;
+  rating: string | null;
 }
 
 @Injectable()
