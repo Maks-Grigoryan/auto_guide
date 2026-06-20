@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../core/location/location_service.dart';
 import '../search/providers/parts_search_provider.dart';
+import '../search/providers/sorted_filtered_provider.dart';
+import 'widgets/sort_filter_sheet.dart';
 import 'widgets/vendor_result_card.dart';
 import 'widgets/empty_results_view.dart';
 import 'widgets/error_view.dart';
 import 'widgets/location_denied_view.dart';
 
-/// Results screen: displays distance-sorted vendor list for a parts search.
+/// Results screen: displays vendor list for a parts search with sort & filter.
 ///
-/// Consumes [partsSearchProvider] via AsyncValue.when.
+/// Consumes [sortedFilteredResultsProvider] (derived from [partsSearchProvider])
+/// via AsyncValue.when. Sort/availability/price changes update the list in-place
+/// with no new network request (RES-05). Radius re-fetches on slider release.
 /// Handles all four async states: loading / empty / error / location-denied.
 /// Location-denied is non-blocking — Yerevan-fallback results still render.
 class PartsResultsPage extends ConsumerWidget {
@@ -42,7 +47,8 @@ class PartsResultsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchAsync = ref.watch(partsSearchProvider);
+    // Watch the derived sorted/filtered provider — no new fetch on sort change.
+    final searchAsync = ref.watch(sortedFilteredResultsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -67,15 +73,53 @@ class PartsResultsPage extends ConsumerWidget {
             }
             return Column(
               children: [
+                // Sort & filter trigger row (48 dp height, above results)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: SizedBox(
+                    height: 48,
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      icon: const Icon(Icons.tune),
+                      label: const Text('Сортировка и фильтры'),
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(48),
+                        foregroundColor: const Color(0xFFFFFFFF),
+                        side: const BorderSide(color: Color(0xFF3D4050)),
+                      ),
+                      onPressed: () {
+                        showModalBottomSheet<void>(
+                          context: context,
+                          backgroundColor: const Color(0xFF2A2D36),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(16),
+                            ),
+                          ),
+                          isScrollControlled: true,
+                          builder: (_) => const SortFilterSheet(),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+
+                // Location-denied banner (non-blocking)
                 if (_locationDenied)
                   LocationDeniedView(
                     isPermanent:
                         locationStatus == LocationResultStatus.deniedForever,
                     onRetry: () => ref.invalidate(partsSearchProvider),
                     onOpenSettings: () {
-                      // geolocator.openAppSettings() — deferred to Phase 4
+                      // Wire deferred Phase-3 hook — open app location settings.
+                      Geolocator.openAppSettings();
                     },
                   ),
+
+                // Results list
                 Expanded(
                   child: ListView.separated(
                     padding: const EdgeInsets.all(16),
