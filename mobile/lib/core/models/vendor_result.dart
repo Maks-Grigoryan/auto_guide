@@ -3,6 +3,7 @@
 ///
 /// Backend SQL: search_parts($1..$8) returns rows with these exact column names.
 /// item_count and min_price come from the DB as strings (NUMERIC / BIGINT).
+/// rating is NUMERIC — arrives as string or null (added in migration 006).
 class VendorResult {
   const VendorResult({
     required this.vendorId,
@@ -15,6 +16,7 @@ class VendorResult {
     required this.distanceM,
     required this.itemCount,
     this.minPrice,
+    this.rating,
   });
 
   final String vendorId;
@@ -35,6 +37,10 @@ class VendorResult {
   /// priced listings for the searched category.
   final double? minPrice;
 
+  /// Average vendor rating (0–5). Nullable when no ratings exist yet.
+  /// Postgres NUMERIC arrives as string; absent/null in JSON → null.
+  final double? rating;
+
   factory VendorResult.fromJson(Map<String, dynamic> json) {
     return VendorResult(
       vendorId: json['vendor_id'] as String,
@@ -51,6 +57,10 @@ class VendorResult {
       minPrice: json['min_price'] == null
           ? null
           : double.parse(json['min_price'] as String),
+      // rating is NUMERIC — arrives as string or null (migration 006).
+      rating: json['rating'] == null
+          ? null
+          : double.parse(json['rating'] as String),
     );
   }
 
@@ -65,6 +75,7 @@ class VendorResult {
         'distance_m': distanceM,
         'item_count': itemCount.toString(),
         'min_price': minPrice?.toString(),
+        'rating': rating?.toString(),
       };
 
   @override
