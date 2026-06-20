@@ -27,6 +27,11 @@ export interface CarGeneration {
   year_to: number | null;
 }
 
+export interface ServiceCategory {
+  id: number;
+  name: string;
+}
+
 @Injectable()
 export class CatalogService {
   constructor(@Inject(PG_POOL) private readonly pool: Pool) {}
@@ -57,6 +62,13 @@ export class CatalogService {
     const result = await this.pool.query<CarGeneration>(
       'SELECT id, model_id, name, year_from, year_to FROM car_generations WHERE model_id = $1 ORDER BY year_from NULLS LAST',
       [modelId],
+    );
+    return result.rows;
+  }
+
+  async getServiceCategories(): Promise<ServiceCategory[]> {
+    const result = await this.pool.query<ServiceCategory>(
+      'SELECT id, name FROM service_categories ORDER BY name',
     );
     return result.rows;
   }

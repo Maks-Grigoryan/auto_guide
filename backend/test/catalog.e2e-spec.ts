@@ -95,4 +95,21 @@ describe('GET /catalog (e2e)', () => {
       .expect(200)
       .expect('cache-control', 'public, max-age=86400');
   });
+
+  it('GET /catalog/service-categories returns 200 array containing «Развал-схождение»', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/catalog/service-categories')
+      .expect(200);
+
+    expect(Array.isArray(res.body)).toBe(true);
+    const names: string[] = (res.body as { name: string }[]).map((c) => c.name);
+    expect(names).toContain('Развал-схождение');
+  });
+
+  it('GET /catalog/service-categories has Cache-Control: public, max-age=86400', async () => {
+    await request(app.getHttpServer())
+      .get('/catalog/service-categories')
+      .expect(200)
+      .expect('cache-control', 'public, max-age=86400');
+  });
 });

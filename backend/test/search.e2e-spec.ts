@@ -115,3 +115,86 @@ describe('GET /search/parts (e2e)', () => {
     expect((res.body as unknown[]).length).toBeGreaterThanOrEqual(1);
   });
 });
+
+describe('GET /search/repair (e2e)', () => {
+  let app: INestApplication;
+
+  const YEREVAN = { lat: 40.1872, lng: 44.5152, radius: 50000 };
+
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+    await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
+  });
+
+  it('returns 200 JSON array for Yerevan area', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/search/repair')
+      .query(YEREVAN)
+      .expect(200);
+
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+
+  it('returns 400 when lat is missing', async () => {
+    await request(app.getHttpServer())
+      .get('/search/repair')
+      .query({ lng: 44.5152, radius: 50000 })
+      .expect(400);
+  });
+
+  it('returns 400 when radius exceeds 100000 (DoS cap)', async () => {
+    await request(app.getHttpServer())
+      .get('/search/repair')
+      .query({ lat: 40.1872, lng: 44.5152, radius: 150000 })
+      .expect(400);
+  });
+
+  it('each returned row has type === "repair_shop" and numeric-string item_count', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/search/repair')
+      .query(YEREVAN)
+      .expect(200);
+
+    const rows = res.body as Array<{ type: string; item_count: string }>;
+    expect(Array.isArray(rows)).toBe(true);
+    for (const row of rows) {
+      expect(row.type).toBe('repair_shop');
+      expect(typeof row.item_count).toBe('string');
+      expect(Number.isFinite(Number(row.item_count))).toBe(true);
+    }
+  });
+
+  it('serviceCategoryId filter returns 200 array (subset by service category)', async () => {
+    // First fetch service categories to get the «Развал-схождение» id dynamically
+    const catRes = await request(app.getHttpServer())
+      .get('/catalog/service-categories')
+      .expect(200);
+
+    const categories = catRes.body as Array<{ id: number; name: string }>;
+    const razvalkaSkhod = categories.find((c) => c.name === 'Развал-схождение');
+    expect(razvalkaSkhod).toBeDefined();
+
+    const res = await request(app.getHttpServer())
+      .get('/search/repair')
+      .query({ ...YEREVAN, serviceCategoryId: razvalkaSkhod!.id })
+      .expect(200);
+
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+
+  it('returns 400 when lat is non-numeric', async () => {
+    await request(app.getHttpServer())
+      .get('/search/repair')
+      .query({ lat: 'notanumber', lng: 44.5152, radius: 50000 })
+      .expect(400);
+  });
+});
