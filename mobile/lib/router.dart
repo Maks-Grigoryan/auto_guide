@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'features/car_selector/ui/make_list_page.dart';
@@ -6,6 +7,8 @@ import 'features/car_selector/ui/generation_list_page.dart';
 import 'features/car_selector/ui/confirmation_page.dart';
 import 'features/home/home_page.dart';
 import 'features/parts_results/parts_results_page.dart';
+import 'features/repair_search/service_categories_page.dart';
+import 'features/repair_search/repair_results_page.dart';
 
 /// Application router with 5 named routes for the car selector flow.
 ///
@@ -52,6 +55,27 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/results/parts',
       builder: (context, state) => const PartsResultsPage(),
+    ),
+    GoRoute(
+      path: '/repair/categories',
+      builder: (context, state) => const ServiceCategoriesPage(),
+    ),
+    GoRoute(
+      path: '/results/repair',
+      builder: (context, state) {
+        final categoryName = state.extra as String?;
+        return RepairResultsPage(categoryName: categoryName);
+      },
+    ),
+    // Phase 5 reserved stub — prevents null-route crash on card tap
+    GoRoute(
+      path: '/vendor/:id',
+      builder: (context, state) => Scaffold(
+        appBar: AppBar(title: const Text('Карточка появится позже')),
+        body: const Center(
+          child: Text('Карточка появится позже', style: TextStyle(fontSize: 16)),
+        ),
+      ),
     ),
   ],
 );

@@ -71,6 +71,12 @@ Widget _buildHome({
             path: '/selector/make',
             builder: (_, __) => const Scaffold(body: Text('Selector')),
           ),
+          // REP-01: repair category browse (Plan 04-03)
+          GoRoute(
+            path: '/repair/categories',
+            builder: (_, __) =>
+                const Scaffold(body: Text('RepairCategories')),
+          ),
         ],
       ),
     ),
@@ -161,17 +167,19 @@ void main() {
     expect(find.text('Повторить'), findsOneWidget);
   });
 
-  // ── Test 6: Ремонт segment shows placeholder ──────────────────────────────
-  testWidgets('tapping Ремонт shows placeholder text', (tester) async {
+  // ── Test 6: Ремонт segment navigates to /repair/categories (REP-01) ───────
+  testWidgets('tapping Ремонт navigates to /repair/categories', (tester) async {
     await tester.pumpWidget(_buildHome());
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Ремонт').last);
     await tester.pumpAndSettle();
 
+    // Navigated to /repair/categories — placeholder text no longer shown
+    expect(find.text('RepairCategories'), findsOneWidget);
     expect(
       find.text('Поиск ремонта появится в следующей версии'),
-      findsOneWidget,
+      findsNothing,
     );
   });
 }
