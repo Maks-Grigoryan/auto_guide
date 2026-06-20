@@ -3,22 +3,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../core/location/location_service.dart';
+import '../../core/map/map_config.dart';
 import '../search/providers/parts_search_provider.dart';
 import '../search/providers/sorted_filtered_provider.dart';
+import 'widgets/map_unavailable_notice.dart';
+import 'widgets/results_map_view.dart';
+import 'widgets/results_view_toggle.dart';
 import 'widgets/sort_filter_sheet.dart';
 import 'widgets/vendor_result_card.dart';
 import 'widgets/empty_results_view.dart';
 import 'widgets/error_view.dart';
 import 'widgets/location_denied_view.dart';
 
-/// Results screen: displays vendor list for a parts search with sort & filter.
+/// Results screen: parts search results with list⇄map toggle (RES-02, D-01).
 ///
 /// Consumes [sortedFilteredResultsProvider] (derived from [partsSearchProvider])
-/// via AsyncValue.when. Sort/availability/price changes update the list in-place
-/// with no new network request (RES-05). Radius re-fetches on slider release.
-/// Handles all four async states: loading / empty / error / location-denied.
-/// Location-denied is non-blocking — Yerevan-fallback results still render.
-class PartsResultsPage extends ConsumerWidget {
+/// for BOTH list and map views — switching is instant with no re-fetch (D-01).
+/// Sort/availability/price changes update the list in-place (RES-05).
+/// Radius re-fetches on slider release.
+///
+/// D-04: when the MapKit key is missing, [mapAvailableProvider] is false;
+/// the «Карта» segment is disabled and [MapUnavailableNotice] is shown.
+class PartsResultsPage extends ConsumerStatefulWidget {
   const PartsResultsPage({
     super.key,
     this.categoryName,
@@ -26,29 +32,33 @@ class PartsResultsPage extends ConsumerWidget {
     this.locationStatus = LocationResultStatus.granted,
   });
 
-  /// If browsing by category, the displayed name ("Тормоза").
   final String? categoryName;
-
-  /// If searching by OEM query, the raw query string.
   final String? query;
-
-  /// Location permission status — drives LocationDeniedView banner.
   final LocationResultStatus locationStatus;
 
+  @override
+  ConsumerState<PartsResultsPage> createState() => _PartsResultsPageState();
+}
+
+class _PartsResultsPageState extends ConsumerState<PartsResultsPage> {
+  /// 0 = list view, 1 = map view. Survives sort/filter changes (D-01).
+  int _viewIndex = 0;
+
   String get _title {
-    if (categoryName != null) return categoryName!;
-    if (query != null) return 'Поиск: $query';
+    if (widget.categoryName != null) return widget.categoryName!;
+    if (widget.query != null) return 'Поиск: ${widget.query}';
     return 'Результаты';
   }
 
   bool get _locationDenied =>
-      locationStatus == LocationResultStatus.denied ||
-      locationStatus == LocationResultStatus.deniedForever;
+      widget.locationStatus == LocationResultStatus.denied ||
+      widget.locationStatus == LocationResultStatus.deniedForever;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // Watch the derived sorted/filtered provider — no new fetch on sort change.
+  Widget build(BuildContext context) {
+    // Both list and map read the SAME provider — no second fetch (D-01).
     final searchAsync = ref.watch(sortedFilteredResultsProvider);
+    final mapAvailable = ref.watch(mapAvailableProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -66,14 +76,26 @@ class PartsResultsPage extends ConsumerWidget {
             onRetry: () => ref.invalidate(partsSearchProvider),
           ),
           data: (results) {
-            if (results.isEmpty) {
-              return EmptyResultsView(
-                onBack: () => Navigator.of(context).maybePop(),
-              );
-            }
             return Column(
               children: [
-                // Sort & filter trigger row (48 dp height, above results)
+                // List⇄map toggle (pinned at top, 48 dp, full-width md padding).
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: ResultsViewToggle(
+                    selectedIndex: _viewIndex,
+                    mapAvailable: mapAvailable,
+                    onListSelected: () => setState(() => _viewIndex = 0),
+                    onMapSelected: () => setState(() => _viewIndex = 1),
+                  ),
+                ),
+
+                // D-04: show notice when map is unavailable.
+                if (!mapAvailable) const MapUnavailableNotice(),
+
+                // Sort & filter trigger row (visible in both list and map views).
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -107,26 +129,22 @@ class PartsResultsPage extends ConsumerWidget {
                   ),
                 ),
 
-                // Location-denied banner (non-blocking)
+                // Location-denied banner (non-blocking; only in list/parts).
                 if (_locationDenied)
                   LocationDeniedView(
-                    isPermanent:
-                        locationStatus == LocationResultStatus.deniedForever,
+                    isPermanent: widget.locationStatus ==
+                        LocationResultStatus.deniedForever,
                     onRetry: () => ref.invalidate(partsSearchProvider),
                     onOpenSettings: () {
-                      // Wire deferred Phase-3 hook — open app location settings.
                       Geolocator.openAppSettings();
                     },
                   ),
 
-                // Results list
+                // Body: list (index 0) or map (index 1), both from same provider.
                 Expanded(
-                  child: ListView.separated(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: results.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
-                    itemBuilder: (_, i) => VendorResultCard(vendor: results[i]),
-                  ),
+                  child: _viewIndex == 1 && mapAvailable
+                      ? _buildMapView(results)
+                      : _buildListView(results),
                 ),
               ],
             );
@@ -134,5 +152,41 @@ class PartsResultsPage extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildListView(List<dynamic> results) {
+    if (results.isEmpty) {
+      return EmptyResultsView(
+        onBack: () => Navigator.of(context).maybePop(),
+      );
+    }
+    return ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: results.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 8),
+      itemBuilder: (_, i) => VendorResultCard(vendor: results[i]),
+    );
+  }
+
+  Widget _buildMapView(List<dynamic> results) {
+    if (results.isEmpty) {
+      // Map-view empty: show Yerevan-centred map with overlay notice (UI-SPEC).
+      return Stack(
+        children: [
+          ResultsMapView(vendors: const []),
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                'Поблизости ничего не найдено',
+                style: TextStyle(fontSize: 16, color: Color(0xFFE0E0E0)),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+    return ResultsMapView(vendors: List.of(results));
   }
 }
