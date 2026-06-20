@@ -21,6 +21,8 @@ import 'widgets/search_type_toggle.dart';
 ///   PartsSearchField 48dp submit-triggered (D-03)
 ///   "Категории запчастей" section label
 ///   flat ListView of CategoryTile (PRT-01 browse)
+///
+/// Ремонт branch (REP-01): navigates to /repair/categories (Plan 04-03).
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
@@ -104,20 +106,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                 onPartsSelected: () => setState(() => _toggleIndex = 0),
                 onRepairSelected: () {
                   setState(() => _toggleIndex = 1);
+                  // REP-01: navigate to repair service-category browse (Plan 04-03)
+                  context.push('/repair/categories');
                 },
               ),
             ),
-
-            // ── Repair placeholder (shown when Ремонт selected) ─────────────
-            if (_toggleIndex == 1)
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: Text(
-                  'Поиск ремонта появится в следующей версии',
-                  style: TextStyle(color: Color(0xFFE0E0E0), fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-              ),
 
             if (_toggleIndex == 0) ...[
               // ── Car chip / select button ─────────────────────────────────
