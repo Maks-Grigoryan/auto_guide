@@ -12,8 +12,8 @@
 - [x] **Phase 2: Car Catalog & Selector** — catalog API + Flutter car-selector screens (make → model → generation) (completed 2026-06-16)
 - [x] **Phase 3: Parts Search & List Results** — search_parts backend + Flutter list screen with real seeded data (completed 2026-06-16)
 - [x] **Phase 4: Map View & Repair Search** — Yandex map markers, list⇄map toggle, repair search flow (completed 2026-06-20)
-- [ ] **Phase 5: Vendor Card & Contacts** — vendor detail screen with Call + Route buttons
-- [ ] **Phase 6: Accessibility & i18n** — theme, font, touch targets, contrast, RU/HY/EN localization
+- [x] **Phase 5: Vendor Card & Contacts** — vendor detail screen with Call + Route buttons (completed 2026-08-03)
+- [x] **Phase 6: Accessibility & i18n** — theme, font, touch targets, contrast, RU/HY/EN localization (completed 2026-08-03)
 
 ---
 
@@ -139,7 +139,7 @@ Plans:
   2. Tapping «Позвонить» opens the system phone dialer with the vendor's number pre-filled (tel: URI)
   3. Tapping «Маршрут» opens Yandex Navigator (or Yandex Maps) deep-link routed to the vendor's coordinates
 
-**Plans**: TBD
+**Plans**: Completed directly — vendor API/detail screen, tel/Yandex deep links, tests
 **UI hint**: yes
 
 ### Phase 6: Accessibility & i18n
@@ -156,7 +156,7 @@ Plans:
   4. Switching app language to Armenian (hy) or English (en) displays all screens without untranslated strings or layout breaks
   5. All prices display in AMD by default; locale-aware number formatting applied throughout
 
-**Plans**: TBD
+**Plans**: Completed directly — generated RU/HY/EN resources, locale persistence, adaptive UI and 9×3 accessibility matrix
 **UI hint**: yes
 
 ---
@@ -169,8 +169,8 @@ Plans:
 | 2. Car Catalog & Selector | 3/3 | Complete   | 2026-06-16 |
 | 3. Parts Search & List Results | 5/5 | Complete   | 2026-06-16 |
 | 4. Map View & Repair Search | 4/4 | Complete   | 2026-06-20 |
-| 5. Vendor Card & Contacts | 0/? | Not started | - |
-| 6. Accessibility & i18n | 0/? | Not started | - |
+| 5. Vendor Card & Contacts | 1/1 | Complete | 2026-08-03 |
+| 6. Accessibility & i18n | 1/1 | Complete | 2026-08-03 |
 
 ---
 

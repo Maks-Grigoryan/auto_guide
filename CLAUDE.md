@@ -167,3 +167,20 @@ Do not make direct repo edits outside a GSD workflow unless the user explicitly 
 > Profile not yet configured. Run `/gsd-profile-user` to generate your developer profile.
 > This section is managed by `generate-claude-profile` -- do not edit manually.
 <!-- GSD:profile-end -->
+
+## Obsidian Knowledge Vault
+
+Хранилище знаний: `C:\Users\User\OneDrive\Desktop\avto\avto\`
+
+### При старте сессии
+Прочитай `avto/00-home/index.md` и `avto/00-home/текущие приоритеты.md`.
+Если задача касается модуля — прочитай связанную заметку из `avto/knowledge/` или `avto/atlas/`.
+
+### При завершении (пользователь: "сохрани сессию")
+1. Создай заметку в `avto/sessions/` с датой
+2. Обнови `avto/00-home/текущие приоритеты.md`
+3. Если принято решение — создай в `avto/knowledge/decisions/`
+4. Если баг — создай в `avto/knowledge/debugging/`
+5. Обнови `avto/00-home/index.md`, если появились новые заметки
+
+Правила заметок: имена-утверждения (не категории), wiki-ссылки `[[имя]]`, frontmatter с `tags` и `date`, язык русский.
