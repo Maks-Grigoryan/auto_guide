@@ -29,6 +29,31 @@ class SafeExceptionFilter implements ExceptionFilter {
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
+  app.enableShutdownHooks();
+
+  const http = app.getHttpAdapter().getInstance() as {
+    disable(name: string): void;
+  };
+  http.disable('x-powered-by');
+
+  const corsOrigins = (process.env['CORS_ORIGINS'] ?? '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+  if (corsOrigins.length > 0) {
+    app.enableCors({ origin: corsOrigins });
+  }
+
+  app.use((_request: Request, response: Response, next: () => void) => {
+    response.setHeader('X-Content-Type-Options', 'nosniff');
+    response.setHeader('X-Frame-Options', 'DENY');
+    response.setHeader('Referrer-Policy', 'no-referrer');
+    response.setHeader(
+      'Content-Security-Policy',
+      "default-src 'none'; frame-ancestors 'none'",
+    );
+    next();
+  });
   app.useGlobalPipes(
     new ValidationPipe({ transform: true, whitelist: true }),
   );

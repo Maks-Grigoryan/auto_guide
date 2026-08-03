@@ -1,0 +1,12 @@
+{
+  "name": "autoapp-database-migrator",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "dependencies": {
+    "node-pg-migrate": "9.0.0",
+    "pg": "8.21.0"
+  }
+}

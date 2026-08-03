@@ -14,6 +14,14 @@
 --   2. SELECT list: added `v.rating AS rating` after `MIN(p.price) AS min_price`
 --   3. GROUP BY: added `v.rating`
 -- ---------------------------------------------------------------------------
+-- PostgreSQL cannot change a function's OUT row type with CREATE OR REPLACE.
+-- This migration has not shipped before the rating column is introduced, so
+-- dropping and recreating the exact signature is the safe, atomic operation.
+DROP FUNCTION IF EXISTS search_parts(
+    double precision, double precision, integer,
+    bigint, bigint, bigint, bigint, text
+);
+
 CREATE OR REPLACE FUNCTION search_parts(
     p_lat              double precision,
     p_lng              double precision,
@@ -99,6 +107,10 @@ $$;
 --   2. SELECT list: added `v.rating AS rating` after `MIN(vs.price_from) AS min_price`
 --   3. GROUP BY: added `v.rating`
 -- ---------------------------------------------------------------------------
+DROP FUNCTION IF EXISTS search_repair(
+    double precision, double precision, integer, bigint
+);
+
 CREATE OR REPLACE FUNCTION search_repair(
     p_lat                  double precision,
     p_lng                  double precision,
