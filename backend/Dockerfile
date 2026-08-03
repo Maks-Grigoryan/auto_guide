@@ -12,18 +12,33 @@ COPY backend/src/ ./src/
 
 RUN npx nest build
 
-# ---- runtime ----
-FROM node:20-alpine
+# ---- minimal one-shot database migrator ----
+FROM node:20-alpine AS migrator
 
 WORKDIR /app
 
-COPY backend/package*.json ./
-RUN npm ci --omit=dev && \
-    npm install node-pg-migrate pg
+COPY backend/migrator/package*.json ./
+RUN npm ci --omit=dev && npm cache clean --force
 
-COPY --from=builder /app/dist ./dist
-# Migrations live at repo-root db/migrations; copy them so the container
-# can run `node-pg-migrate up -m ./db/migrations` on startup.
 COPY db/migrations ./db/migrations
 
+USER node
+
+CMD ["./node_modules/.bin/node-pg-migrate", "up", "-m", "./db/migrations", "--no-check-order"]
+
+# ---- production API runtime ----
+FROM node:20-alpine
+
+WORKDIR /app
+ENV NODE_ENV=production
+
+COPY backend/package*.json ./
+RUN npm ci --omit=dev && npm cache clean --force
+
+COPY --from=builder --chown=node:node /app/dist ./dist
+
+USER node
+
 EXPOSE 3000
+
+CMD ["node", "dist/main"]

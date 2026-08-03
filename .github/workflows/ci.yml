@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_USER: autoapp
+          POSTGRES_PASSWORD: autoapp
+          POSTGRES_DB: autoapp
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U autoapp -d autoapp"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgres://autoapp:autoapp@localhost:5432/autoapp
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+      - name: Build backend
+        working-directory: backend
+        run: npm run build
+      - name: Audit production dependencies
+        working-directory: backend
+        run: npm run audit:prod
+      - name: Apply database migrations
+        working-directory: backend
+        run: npm run migrate:up
+      - name: Run backend e2e tests
+        working-directory: backend
+        run: npm run test:e2e -- --runInBand
+      - name: Run PostGIS smoke tests
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y postgresql-client
+          for test_file in db/tests/*.sql; do
+            psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f "$test_file"
+          done
+      - name: Build production Docker targets
+        run: |
+          docker compose config --quiet
+          docker build --target migrator -t avto-migrator-ci -f backend/Dockerfile .
+          docker build -t avto-api-ci -f backend/Dockerfile .
+
+  flutter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.4'
+          channel: stable
+          cache: true
+      - name: Install Flutter dependencies
+        working-directory: mobile
+        run: flutter pub get
+      - name: Verify generated code is not stale
+        working-directory: mobile
+        run: |
+          dart run build_runner build --delete-conflicting-outputs
+          git diff --exit-code || (echo "::error::Committed .g.dart output is stale — run build_runner and commit the result." && exit 1)
+      - name: Analyze Flutter code
+        working-directory: mobile
+        run: flutter analyze --no-pub
+      - name: Run Flutter tests
+        working-directory: mobile
+        run: flutter test --no-pub
+      - name: Build Android debug APK
+        working-directory: mobile
+        run: flutter build apk --debug --no-pub
+      - name: Upload Android debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: avto-armenia-debug-apk
+          path: mobile/build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error

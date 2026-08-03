@@ -14,3 +14,20 @@ dist/
 # OS
 .DS_Store
 Thumbs.db
+
+# Obsidian personal UI state (vault notes ARE committed)
+avto/.obsidian/
+
+# Grill/plan-review workflow artifacts — not project files
+PLAN.md
+PLAN-REVIEW-LOG.md
+
+# Belt-and-suspenders Flutter/Android/iOS artifacts (mobile/.gitignore is primary)
+mobile/build/
+mobile/.dart_tool/
+mobile/android/.gradle/
+mobile/android/local.properties
+mobile/ios/Pods/
+mobile/ios/.symlinks/
+**/Flutter/ephemeral/
+**/*.iml
