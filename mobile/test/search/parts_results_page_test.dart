@@ -69,7 +69,8 @@ Widget _buildPage({
 
 void main() {
   group('PartsResultsPage', () {
-    testWidgets('non-empty results → list of VendorResultCards', (tester) async {
+    testWidgets('non-empty results → list of VendorResultCards',
+        (tester) async {
       await tester.pumpWidget(_buildPage(
         searchValue: AsyncValue.data([
           _v('МагазинА', 500),
@@ -83,7 +84,8 @@ void main() {
       expect(find.text('МагазинБ'), findsOneWidget);
     });
 
-    testWidgets('empty list → EmptyResultsView (not ErrorView)', (tester) async {
+    testWidgets('empty list → EmptyResultsView (not ErrorView)',
+        (tester) async {
       await tester.pumpWidget(_buildPage(
         searchValue: const AsyncValue.data([]),
       ));

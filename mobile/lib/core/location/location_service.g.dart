@@ -12,9 +12,8 @@ part of 'location_service.dart';
 @ProviderFor(locationService)
 const locationServiceProvider = LocationServiceProvider._();
 
-final class LocationServiceProvider
-    extends $FunctionalProvider<LocationService, LocationService, LocationService>
-    with $Provider<LocationService> {
+final class LocationServiceProvider extends $FunctionalProvider<LocationService,
+    LocationService, LocationService> with $Provider<LocationService> {
   const LocationServiceProvider._()
       : super(
           from: null,
@@ -31,8 +30,7 @@ final class LocationServiceProvider
 
   @$internal
   @override
-  $ProviderElement<LocationService> $createElement(
-          $ProviderPointer pointer) =>
+  $ProviderElement<LocationService> $createElement($ProviderPointer pointer) =>
       $ProviderElement(pointer);
 
   @override
@@ -49,5 +47,4 @@ final class LocationServiceProvider
   }
 }
 
-String _$locationServiceHash() =>
-    r'a3c2e1f0b4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9';
+String _$locationServiceHash() => r'a3c2e1f0b4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9';

@@ -1,27 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/models/vendor_result.dart';
+import '../../../l10n/l10n.dart';
 import 'distance_badge.dart';
-
-/// Russian plural for "позиция" based on the count (parts path).
-String _ruItemCount(int n) {
-  final mod10 = n % 10;
-  final mod100 = n % 100;
-  if (mod100 >= 11 && mod100 <= 19) return '$n позиций';
-  if (mod10 == 1) return '$n позиция';
-  if (mod10 >= 2 && mod10 <= 4) return '$n позиции';
-  return '$n позиций';
-}
-
-/// Russian plural for "услуга" based on the count (repair path).
-String _ruServiceCount(int n) {
-  final mod10 = n % 10;
-  final mod100 = n % 100;
-  if (mod100 >= 11 && mod100 <= 19) return '$n услуг';
-  if (mod10 == 1) return '$n услуга';
-  if (mod10 >= 2 && mod10 <= 4) return '$n услуги';
-  return '$n услуг';
-}
 
 /// Card displaying a single vendor result in the search results list.
 ///
@@ -51,9 +33,7 @@ class VendorResultCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       margin: EdgeInsets.zero,
       child: InkWell(
-        onTap: () {
-          // Detail screen is Phase 5 — no-op for now.
-        },
+        onTap: () => context.push('/vendor/${vendor.vendorId}'),
         borderRadius: BorderRadius.circular(12),
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: 88),
@@ -86,7 +66,7 @@ class VendorResultCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 // Shop type
                 Text(
-                  vendor.type,
+                  _typeLabel(context),
                   style: const TextStyle(
                     fontSize: 16,
                     color: Color(0xFFE0E0E0),
@@ -94,40 +74,56 @@ class VendorResultCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 // Metrics row: min price (optional) + count
-                Row(
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 8,
                   children: [
-                    if (vendor.minPrice != null) ...[
-                      const Icon(
-                        Icons.sell_outlined,
-                        size: 16,
-                        color: Color(0xFFE0E0E0),
+                    if (vendor.minPrice != null)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.sell_outlined,
+                            size: 16,
+                            color: Color(0xFFE0E0E0),
+                          ),
+                          const SizedBox(width: 4),
+                          Flexible(
+                            child: Text(
+                              context.l10n.priceFromAmd(
+                                vendor.minPrice!.round(),
+                              ),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Color(0xFFE0E0E0),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 4),
-                      Text(
-                        'от ${vendor.minPrice!.round()} ₽',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Color(0xFFE0E0E0),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          _isRepair
+                              ? Icons.build_outlined
+                              : Icons.inventory_2_outlined,
+                          size: 16,
+                          color: const Color(0xFFE0E0E0),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                    ],
-                    Icon(
-                      _isRepair
-                          ? Icons.build_outlined
-                          : Icons.inventory_2_outlined,
-                      size: 16,
-                      color: const Color(0xFFE0E0E0),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      _isRepair
-                          ? _ruServiceCount(vendor.itemCount)
-                          : _ruItemCount(vendor.itemCount),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Color(0xFFE0E0E0),
-                      ),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            _isRepair
+                                ? context.l10n.serviceCount(vendor.itemCount)
+                                : context.l10n.itemCount(vendor.itemCount),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFFE0E0E0),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -138,4 +134,10 @@ class VendorResultCard extends StatelessWidget {
       ),
     );
   }
+
+  String _typeLabel(BuildContext context) => switch (vendor.type) {
+        'repair_shop' => context.l10n.repairShop,
+        'parts_shop' => context.l10n.partsShop,
+        _ => vendor.type,
+      };
 }

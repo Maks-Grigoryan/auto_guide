@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/l10n.dart';
+
 /// Non-blocking notice shown when location permission is denied (RES-06/RES-07).
 ///
 /// Explains Yerevan fallback and provides recovery action.
@@ -33,19 +35,21 @@ class LocationDeniedView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Геолокация выключена',
-                  style: TextStyle(
+                Text(
+                  context.l10n.locationDisabled,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  'Чтобы показать ближайшие магазины, разрешите доступ к местоположению. '
-                  'Пока показываем результаты для центра Еревана.',
-                  style: TextStyle(fontSize: 16, color: Color(0xFFE0E0E0)),
+                Text(
+                  context.l10n.locationDisabledHelp,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFFE0E0E0),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 SizedBox(
@@ -53,9 +57,9 @@ class LocationDeniedView extends StatelessWidget {
                   child: isPermanent
                       ? TextButton(
                           onPressed: onOpenSettings,
-                          child: const Text(
-                            'Открыть настройки',
-                            style: TextStyle(
+                          child: Text(
+                            context.l10n.openSettings,
+                            style: const TextStyle(
                               color: Color(0xFFF5A623),
                               fontSize: 16,
                             ),
@@ -63,9 +67,9 @@ class LocationDeniedView extends StatelessWidget {
                         )
                       : TextButton(
                           onPressed: onRetry,
-                          child: const Text(
-                            'Повторить',
-                            style: TextStyle(
+                          child: Text(
+                            context.l10n.retry,
+                            style: const TextStyle(
                               color: Color(0xFFF5A623),
                               fontSize: 16,
                             ),

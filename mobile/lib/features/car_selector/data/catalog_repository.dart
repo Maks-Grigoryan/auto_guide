@@ -10,8 +10,4 @@
 library;
 
 export 'catalog_providers.dart'
-    show
-        dioProvider,
-        makesProvider,
-        modelsProvider,
-        generationsProvider;
+    show dioProvider, makesProvider, modelsProvider, generationsProvider;

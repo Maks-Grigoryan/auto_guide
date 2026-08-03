@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/l10n.dart';
+
 /// Amber distance badge shown top-right on each VendorResultCard.
 ///
 /// Spec (03-UI-SPEC VendorResultCard):
@@ -14,11 +16,13 @@ class DistanceBadge extends StatelessWidget {
   /// Distance in metres.
   final double distanceM;
 
-  String get _label {
+  String _label(BuildContext context) {
     if (distanceM < 1000) {
-      return '${distanceM.round()} м';
+      return context.l10n.distanceMeters(distanceM.round());
     }
-    return '${(distanceM / 1000).toStringAsFixed(1)} км';
+    return context.l10n.distanceKilometers(
+      (distanceM / 1000).toStringAsFixed(1),
+    );
   }
 
   @override
@@ -35,7 +39,7 @@ class DistanceBadge extends StatelessWidget {
           const Icon(Icons.place, size: 16, color: Color(0xFF1C1F26)),
           const SizedBox(width: 2),
           Text(
-            _label,
+            _label(context),
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,

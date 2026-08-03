@@ -38,8 +38,7 @@ class RepairQuery {
   }
 
   @override
-  String toString() =>
-      'RepairQuery(lat: $lat, lng: $lng, radius: $radius, '
+  String toString() => 'RepairQuery(lat: $lat, lng: $lng, radius: $radius, '
       'serviceCategoryId: $serviceCategoryId)';
 }
 

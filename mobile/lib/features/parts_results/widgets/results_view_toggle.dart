@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/l10n.dart';
+
 /// List⇄map segmented toggle for the results screen.
 ///
 /// Renders «Список» (index 0) and «Карта» (index 1) at 48 dp height,
@@ -33,10 +35,10 @@ class ResultsViewToggle extends StatelessWidget {
       height: 48,
       child: SegmentedButton<int>(
         segments: [
-          const ButtonSegment<int>(value: 0, label: Text('Список')),
+          ButtonSegment<int>(value: 0, label: Text(context.l10n.list)),
           ButtonSegment<int>(
             value: 1,
-            label: const Text('Карта'),
+            label: Text(context.l10n.map),
             enabled: mapAvailable,
           ),
         ],

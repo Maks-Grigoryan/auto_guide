@@ -49,7 +49,8 @@ class PartsQuery {
   /// Client-side maximum price filter (inclusive). Null = no ceiling.
   final double? maxPrice;
 
-  bool get isEmpty => lat == 0 && lng == 0 && categoryId == null && query == null;
+  bool get isEmpty =>
+      lat == 0 && lng == 0 && categoryId == null && query == null;
 
   /// Returns a new PartsQuery with the given fields replaced.
   PartsQuery copyWith({
@@ -87,8 +88,7 @@ class PartsQuery {
   }
 
   @override
-  String toString() =>
-      'PartsQuery(lat: $lat, lng: $lng, radius: $radius, '
+  String toString() => 'PartsQuery(lat: $lat, lng: $lng, radius: $radius, '
       'makeId: $makeId, modelId: $modelId, generationId: $generationId, '
       'categoryId: $categoryId, query: $query, sort: $sort, '
       'availabilityOnly: $availabilityOnly, minPrice: $minPrice, maxPrice: $maxPrice)';

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../models/part_category.dart';
 import '../models/service_category.dart';
+import '../models/vendor_detail.dart';
 import '../models/vendor_result.dart';
 import 'dio_client.dart';
 
@@ -18,6 +19,12 @@ class SearchApi {
   SearchApi({Dio? dio}) : _dio = dio ?? createDioClient();
 
   final Dio _dio;
+
+  /// Loads the canonical detail record used by deep-linked vendor pages.
+  Future<VendorDetail> fetchVendor(String id) async {
+    final response = await _dio.get<Map<String, dynamic>>('/vendors/$id');
+    return VendorDetail.fromJson(response.data ?? const {});
+  }
 
   /// Fetches the flat list of part categories.
   ///

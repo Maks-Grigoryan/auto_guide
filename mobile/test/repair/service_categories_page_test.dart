@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,7 +13,8 @@ import 'package:avto_app/features/parts_results/widgets/error_view.dart';
 // Helpers
 // ---------------------------------------------------------------------------
 
-ServiceCategory _cat(int id, String name) => ServiceCategory(id: id, name: name);
+ServiceCategory _cat(int id, String name) =>
+    ServiceCategory(id: id, name: name);
 
 Widget _buildPage({
   required AsyncValue<List<ServiceCategory>> catValue,
@@ -25,8 +28,7 @@ Widget _buildPage({
           return Future<List<ServiceCategory>>.error(v.error, v.stackTrace);
         }
         // Loading — never resolves
-        await Future<void>.delayed(const Duration(days: 1));
-        return [];
+        return Completer<List<ServiceCategory>>().future;
       }),
     ],
     child: const MaterialApp(

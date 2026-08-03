@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_ce_flutter.dart';
-import 'package:yandex_maps_mapkit/init.dart' as mapkitInit;
+import 'package:yandex_maps_mapkit/init.dart' as mapkit_init;
 
 import 'app_theme.dart';
 import 'core/map/map_config.dart';
+import 'l10n/l10n.dart';
+import 'l10n/locale_provider.dart';
 import 'router.dart';
 
 Future<void> main() async {
@@ -13,6 +15,7 @@ Future<void> main() async {
   // Hive CE must be initialised and box opened BEFORE runApp (Pitfall 2).
   await Hive.initFlutter();
   await Hive.openBox('selectedCar');
+  await Hive.openBox('appSettings');
 
   // D-04: MapKit init guard — must run after ensureInitialized, before runApp.
   // A missing or empty key skips init entirely (no crash). An init failure is
@@ -20,7 +23,7 @@ Future<void> main() async {
   bool mapAvailable = false;
   if (mapkitKeyPresent) {
     try {
-      await mapkitInit.initMapkit(apiKey: kMapkitApiKey);
+      await mapkit_init.initMapkit(apiKey: kMapkitApiKey);
       mapAvailable = true;
     } catch (_) {
       // Graceful degradation — «Карта» segment will be disabled (D-04).
@@ -37,15 +40,18 @@ Future<void> main() async {
   );
 }
 
-class AvtoApp extends StatelessWidget {
+class AvtoApp extends ConsumerWidget {
   const AvtoApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
-      title: 'Авто-агрегатор',
+      onGenerateTitle: (context) => context.l10n.appTitle,
       debugShowCheckedModeBanner: false,
       theme: appTheme,
+      locale: ref.watch(appLocaleProvider),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       routerConfig: appRouter,
     );
   }

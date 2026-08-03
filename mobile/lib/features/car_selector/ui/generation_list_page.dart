@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../l10n/l10n.dart';
+
 import '../data/catalog_providers.dart';
 import '../state/selected_car_notifier.dart';
 import 'widgets/async_state_view.dart';
@@ -17,8 +19,7 @@ class GenerationListPage extends ConsumerWidget {
     final generationsAsync = ref.watch(generationsProvider(modelId));
 
     final car = ref.watch(selectedCarProvider);
-    final appBarTitle =
-        car != null ? '${car.makeName} ${car.modelName}' : '';
+    final appBarTitle = car != null ? '${car.makeName} ${car.modelName}' : '';
 
     return Scaffold(
       backgroundColor: const Color(0xFF1C1F26),
@@ -29,7 +30,7 @@ class GenerationListPage extends ConsumerWidget {
       body: SafeArea(
         child: AsyncStateView<List<Map<String, dynamic>>>(
           asyncValue: generationsAsync,
-          errorHeading: 'Не удалось загрузить поколения',
+          errorHeading: context.l10n.generationsLoadError,
           onRetry: () => ref.refresh(generationsProvider(modelId)),
           dataBuilder: (generations) {
             return ListView.builder(
@@ -40,7 +41,7 @@ class GenerationListPage extends ConsumerWidget {
                   return Column(
                     children: [
                       CatalogListTile(
-                        title: 'Пропустить (поколение не важно)',
+                        title: context.l10n.skipGeneration,
                         titleStyle: const TextStyle(
                           color: Color(0xFFF5A623),
                           fontSize: 18,
@@ -63,7 +64,11 @@ class GenerationListPage extends ConsumerWidget {
                 final yearFrom = gen['year_from'] as int?;
                 final yearTo = gen['year_to'] as int?;
 
-                final yearSubtitle = _buildYearSubtitle(yearFrom, yearTo);
+                final yearSubtitle = _buildYearSubtitle(
+                  context,
+                  yearFrom,
+                  yearTo,
+                );
 
                 return Column(
                   children: [
@@ -92,9 +97,13 @@ class GenerationListPage extends ConsumerWidget {
     );
   }
 
-  String? _buildYearSubtitle(int? yearFrom, int? yearTo) {
+  String? _buildYearSubtitle(
+    BuildContext context,
+    int? yearFrom,
+    int? yearTo,
+  ) {
     if (yearFrom != null && yearTo != null) return '$yearFrom–$yearTo';
-    if (yearFrom != null) return 'с $yearFrom';
+    if (yearFrom != null) return context.l10n.fromYear(yearFrom);
     return null;
   }
 }

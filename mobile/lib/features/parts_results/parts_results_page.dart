@@ -4,12 +4,14 @@ import 'package:geolocator/geolocator.dart';
 
 import '../../core/location/location_service.dart';
 import '../../core/map/map_config.dart';
+import '../../l10n/l10n.dart';
 import '../search/providers/parts_search_provider.dart';
 import '../search/providers/sorted_filtered_provider.dart';
 import 'widgets/map_unavailable_notice.dart';
 import 'widgets/results_map_view.dart';
 import 'widgets/results_view_toggle.dart';
 import 'widgets/sort_filter_sheet.dart';
+import '../../core/models/vendor_result.dart';
 import 'widgets/vendor_result_card.dart';
 import 'widgets/empty_results_view.dart';
 import 'widgets/error_view.dart';
@@ -44,10 +46,12 @@ class _PartsResultsPageState extends ConsumerState<PartsResultsPage> {
   /// 0 = list view, 1 = map view. Survives sort/filter changes (D-01).
   int _viewIndex = 0;
 
-  String get _title {
+  String _title(BuildContext context) {
     if (widget.categoryName != null) return widget.categoryName!;
-    if (widget.query != null) return 'Поиск: ${widget.query}';
-    return 'Результаты';
+    if (widget.query != null) {
+      return context.l10n.searchResultsFor(widget.query!);
+    }
+    return context.l10n.results;
   }
 
   bool get _locationDenied =>
@@ -62,7 +66,7 @@ class _PartsResultsPageState extends ConsumerState<PartsResultsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_title),
+        title: Text(_title(context)),
         leading: BackButton(
           onPressed: () => Navigator.of(context).maybePop(),
         ),
@@ -106,7 +110,7 @@ class _PartsResultsPageState extends ConsumerState<PartsResultsPage> {
                     width: double.infinity,
                     child: OutlinedButton.icon(
                       icon: const Icon(Icons.tune),
-                      label: const Text('Сортировка и фильтры'),
+                      label: Text(context.l10n.sortAndFilters),
                       style: OutlinedButton.styleFrom(
                         minimumSize: const Size.fromHeight(48),
                         foregroundColor: const Color(0xFFFFFFFF),
@@ -173,13 +177,16 @@ class _PartsResultsPageState extends ConsumerState<PartsResultsPage> {
       // Map-view empty: show Yerevan-centred map with overlay notice (UI-SPEC).
       return Stack(
         children: [
-          ResultsMapView(vendors: const []),
-          const Center(
+          const ResultsMapView(vendors: []),
+          Center(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Text(
-                'Поблизости ничего не найдено',
-                style: TextStyle(fontSize: 16, color: Color(0xFFE0E0E0)),
+                context.l10n.nothingNearby,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFFE0E0E0),
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -187,6 +194,6 @@ class _PartsResultsPageState extends ConsumerState<PartsResultsPage> {
         ],
       );
     }
-    return ResultsMapView(vendors: List.of(results));
+    return ResultsMapView(vendors: List<VendorResult>.from(results));
   }
 }

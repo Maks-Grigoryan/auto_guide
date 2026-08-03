@@ -51,10 +51,7 @@ abstract class _$SearchParams extends $Notifier<PartsQuery?> {
     final created = build();
     final ref = this.ref as $Ref<PartsQuery?, PartsQuery?>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<PartsQuery?, PartsQuery?>,
-        PartsQuery?,
-        Object?,
-        Object?>;
+        AnyNotifier<PartsQuery?, PartsQuery?>, PartsQuery?, Object?, Object?>;
     element.handleValue(ref, created);
   }
 }

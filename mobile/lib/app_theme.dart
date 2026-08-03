@@ -20,7 +20,7 @@ const _outlineVariant = Color(0xFF3D4050); // dividers
 /// Wire via `MaterialApp.router(theme: appTheme)`.
 final ThemeData appTheme = ThemeData(
   useMaterial3: true,
-  colorScheme: ColorScheme(
+  colorScheme: const ColorScheme(
     brightness: Brightness.dark,
     // Primary / accent
     primary: _primary,

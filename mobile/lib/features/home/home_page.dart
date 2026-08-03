@@ -8,6 +8,8 @@ import '../car_selector/ui/widgets/car_chip.dart';
 import '../search/providers/categories_provider.dart';
 import '../search/providers/search_params.dart';
 import '../../core/location/location_service.dart';
+import '../../l10n/l10n.dart';
+import '../../l10n/locale_provider.dart';
 import 'widgets/category_tile.dart';
 import 'widgets/parts_search_field.dart';
 import 'widgets/search_type_toggle.dart';
@@ -44,17 +46,17 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     if (result.status == LocationResultStatus.denied) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'Местоположение недоступно. Используем Ереван как центр поиска.',
+            context.l10n.locationFallback,
           ),
         ),
       );
     } else if (result.status == LocationResultStatus.deniedForever) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'Разрешите доступ к местоположению в настройках для точного поиска.',
+            context.l10n.locationSettingsHelp,
           ),
         ),
       );
@@ -91,8 +93,15 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Scaffold(
       backgroundColor: const Color(0xFF1C1F26),
       appBar: AppBar(
-        title: const Text('Авто-агрегатор'),
+        title: Text(context.l10n.appTitle),
         backgroundColor: const Color(0xFF2A2D36),
+        actions: [
+          IconButton(
+            tooltip: context.l10n.language,
+            onPressed: _showLanguagePicker,
+            icon: const Icon(Icons.language),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -126,11 +135,11 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
 
               // ── Categories label ─────────────────────────────────────────
-              const Padding(
-                padding: EdgeInsets.fromLTRB(16, 20, 16, 8),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
                 child: Text(
-                  'Категории запчастей',
-                  style: TextStyle(
+                  context.l10n.partsCategories,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: Color(0xFFE0E0E0),
@@ -176,7 +185,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ),
         onPressed: () => context.push('/selector/make'),
-        child: const Text('Выбрать авто'),
+        child: Text(context.l10n.selectCar),
       );
     }
     return CarChip(
@@ -188,27 +197,63 @@ class _HomePageState extends ConsumerState<HomePage> {
   String _chipLabel(SelectedCar car) {
     final base = '${car.makeName} ${car.modelName}';
     if (car.generationLabel != null) return '$base · ${car.generationLabel}';
-    return '$base · Поколение не указано';
+    return '$base · ${context.l10n.generationNotSpecified}';
   }
 
   Widget _buildCategoryError() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
-          'Не удалось загрузить категории',
-          style: TextStyle(color: Color(0xFFE0E0E0), fontSize: 16),
+        Text(
+          context.l10n.categoriesLoadError,
+          style: const TextStyle(color: Color(0xFFE0E0E0), fontSize: 16),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 12),
         TextButton(
           onPressed: () => ref.invalidate(categoriesProvider),
-          child: const Text(
-            'Повторить',
-            style: TextStyle(color: Color(0xFFF5A623), fontSize: 16),
+          child: Text(
+            context.l10n.retry,
+            style: const TextStyle(color: Color(0xFFF5A623), fontSize: 16),
           ),
         ),
       ],
+    );
+  }
+
+  Future<void> _showLanguagePicker() async {
+    final current = ref.read(appLocaleProvider).languageCode;
+    final l10n = context.l10n;
+    await showModalBottomSheet<void>(
+      context: context,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(title: Text(l10n.language)),
+            for (final option in [
+              ('ru', l10n.russian),
+              ('hy', l10n.armenian),
+              ('en', l10n.english),
+            ])
+              ListTile(
+                minTileHeight: 56,
+                leading: Icon(
+                  option.$1 == current
+                      ? Icons.radio_button_checked
+                      : Icons.radio_button_off,
+                ),
+                title: Text(option.$2),
+                onTap: () {
+                  ref
+                      .read(appLocaleProvider.notifier)
+                      .setLocale(Locale(option.$1));
+                  Navigator.of(sheetContext).pop();
+                },
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

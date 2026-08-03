@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/l10n.dart';
+
 /// Reusable error state widget for async list screens.
 ///
 /// Displays icon + screen-specific heading + generic body + retry TextButton.
@@ -43,18 +45,21 @@ class ErrorView extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Проверьте подключение и попробуйте снова',
-              style: TextStyle(color: Color(0xFFE0E0E0), fontSize: 16),
+            Text(
+              context.l10n.connectionHelp,
+              style: const TextStyle(
+                color: Color(0xFFE0E0E0),
+                fontSize: 16,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             // ≥48 dp tap target via TextButton default padding
             TextButton(
               onPressed: onRetry,
-              child: const Text(
-                'Повторить',
-                style: TextStyle(
+              child: Text(
+                context.l10n.retry,
+                style: const TextStyle(
                   color: Color(0xFFF5A623),
                   fontSize: 16,
                 ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../l10n/l10n.dart';
+
 import '../data/catalog_providers.dart';
 import '../state/selected_car_notifier.dart';
 import 'widgets/async_state_view.dart';
@@ -25,7 +27,7 @@ class _MakeListPageState extends ConsumerState<MakeListPage> {
     return Scaffold(
       backgroundColor: const Color(0xFF1C1F26),
       appBar: AppBar(
-        title: const Text('Выберите марку'),
+        title: Text(context.l10n.selectMake),
         backgroundColor: const Color(0xFF2A2D36),
       ),
       body: SafeArea(
@@ -34,14 +36,14 @@ class _MakeListPageState extends ConsumerState<MakeListPage> {
             Padding(
               padding: const EdgeInsets.all(16),
               child: SearchField(
-                hintText: 'Поиск марки...',
+                hintText: context.l10n.makeSearchHint,
                 onChanged: (value) => setState(() => _query = value.trim()),
               ),
             ),
             Expanded(
               child: AsyncStateView<List<Map<String, dynamic>>>(
                 asyncValue: makesAsync,
-                errorHeading: 'Не удалось загрузить марки',
+                errorHeading: context.l10n.makesLoadError,
                 onRetry: () => ref.refresh(makesProvider),
                 dataBuilder: (makes) {
                   // Client-side case-insensitive contains filter + compareTo sort
@@ -49,19 +51,18 @@ class _MakeListPageState extends ConsumerState<MakeListPage> {
                   final filtered = _query.isEmpty
                       ? List<Map<String, dynamic>>.from(makes)
                       : makes.where((m) {
-                          final name =
-                              (m['name'] as String).toLowerCase();
+                          final name = (m['name'] as String).toLowerCase();
                           return name.contains(_query.toLowerCase());
                         }).toList();
 
-                  filtered.sort((a, b) => (a['name'] as String)
-                      .compareTo(b['name'] as String));
+                  filtered.sort((a, b) =>
+                      (a['name'] as String).compareTo(b['name'] as String));
 
                   if (filtered.isEmpty) {
-                    return const Center(
+                    return Center(
                       child: Text(
-                        'Марка не найдена. Проверьте написание.',
-                        style: TextStyle(
+                        context.l10n.makeNotFound,
+                        style: const TextStyle(
                           color: Color(0xFFE0E0E0),
                           fontSize: 16,
                         ),

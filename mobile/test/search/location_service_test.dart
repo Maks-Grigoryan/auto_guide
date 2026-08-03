@@ -98,8 +98,7 @@ void main() {
     expect(result.lng, closeTo(45.0, 0.0001));
   });
 
-  test(
-      'denied → returns Yerevan fallback (40.1872, 44.5152), status=denied',
+  test('denied → returns Yerevan fallback (40.1872, 44.5152), status=denied',
       () async {
     final service = LocationService(delegate: _DeniedDelegate());
     final result = await service.resolve();

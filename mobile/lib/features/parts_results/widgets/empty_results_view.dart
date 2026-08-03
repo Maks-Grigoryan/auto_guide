@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/l10n.dart';
+
 /// Shown when the search returns an empty list (RES-07 empty state).
 ///
 /// Uses icon + heading + body — never color alone (ACC-02).
@@ -18,9 +20,9 @@ class EmptyResultsView extends StatelessWidget {
           children: [
             const Icon(Icons.search_off, size: 48, color: Color(0xFFE0E0E0)),
             const SizedBox(height: 16),
-            const Text(
-              'Ничего не найдено',
-              style: TextStyle(
+            Text(
+              context.l10n.nothingFound,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
@@ -28,17 +30,23 @@ class EmptyResultsView extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Поблизости нет магазинов с этой деталью. Попробуйте другую категорию.',
-              style: TextStyle(fontSize: 16, color: Color(0xFFE0E0E0)),
+            Text(
+              context.l10n.nothingFoundHelp,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Color(0xFFE0E0E0),
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             TextButton(
               onPressed: onBack,
-              child: const Text(
-                'Назад к категориям',
-                style: TextStyle(color: Color(0xFFF5A623), fontSize: 16),
+              child: Text(
+                context.l10n.backToCategories,
+                style: const TextStyle(
+                  color: Color(0xFFF5A623),
+                  fontSize: 16,
+                ),
               ),
             ),
           ],

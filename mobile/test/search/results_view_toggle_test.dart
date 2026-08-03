@@ -38,7 +38,9 @@ void main() {
               selectedIndex: 0,
               mapAvailable: true,
               onListSelected: () {},
-              onMapSelected: () { mapCalled = true; },
+              onMapSelected: () {
+                mapCalled = true;
+              },
             ),
           ),
         ),
@@ -62,7 +64,9 @@ void main() {
               selectedIndex: 0,
               mapAvailable: false,
               onListSelected: () {},
-              onMapSelected: () { mapCalled = true; },
+              onMapSelected: () {
+                mapCalled = true;
+              },
             ),
           ),
         ),
@@ -92,10 +96,12 @@ void main() {
       // The SizedBox(height: 48) wrapping the SegmentedButton renders
       // a widget of height exactly 48.
       final sizedBox = tester.widget<SizedBox>(
-        find.ancestor(
-          of: find.byType(SegmentedButton<int>),
-          matching: find.byType(SizedBox),
-        ).first,
+        find
+            .ancestor(
+              of: find.byType(SegmentedButton<int>),
+              matching: find.byType(SizedBox),
+            )
+            .first,
       );
       expect(sizedBox.height, greaterThanOrEqualTo(48.0));
     });

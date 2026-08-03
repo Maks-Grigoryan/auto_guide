@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/l10n.dart';
+
 /// OEM/text search field — submit-triggered only (D-03, T-03-10).
 ///
 /// Submits on keyboard action or the prefix icon tap.
@@ -43,7 +45,7 @@ class _PartsSearchFieldState extends State<PartsSearchField> {
         onSubmitted: (_) => _trySubmit(),
         style: const TextStyle(fontSize: 16, color: Color(0xFFFFFFFF)),
         decoration: InputDecoration(
-          hintText: 'Артикул или OEM-номер',
+          hintText: context.l10n.partSearchHint,
           prefixIcon: GestureDetector(
             onTap: _trySubmit,
             child: const Icon(Icons.search, color: Color(0xFFE0E0E0)),

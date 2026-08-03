@@ -16,9 +16,8 @@ class PartCategory {
     return PartCategory(
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
-      parentId: json['parent_id'] == null
-          ? null
-          : (json['parent_id'] as num).toInt(),
+      parentId:
+          json['parent_id'] == null ? null : (json['parent_id'] as num).toInt(),
     );
   }
 
@@ -29,5 +28,6 @@ class PartCategory {
       };
 
   @override
-  String toString() => 'PartCategory(id: $id, name: $name, parentId: $parentId)';
+  String toString() =>
+      'PartCategory(id: $id, name: $name, parentId: $parentId)';
 }

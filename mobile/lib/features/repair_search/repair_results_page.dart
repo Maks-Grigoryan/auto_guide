@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/map/map_config.dart';
+import '../../core/models/vendor_result.dart';
+import '../../l10n/l10n.dart';
 import '../search/providers/repair_search_provider.dart';
 import '../parts_results/widgets/map_unavailable_notice.dart';
 import '../parts_results/widgets/results_map_view.dart';
@@ -34,7 +36,8 @@ class _RepairResultsPageState extends ConsumerState<RepairResultsPage> {
   /// 0 = list view, 1 = map view. Survives filter changes (D-01).
   int _viewIndex = 0;
 
-  String get _title => widget.categoryName ?? 'Ремонт';
+  String _title(BuildContext context) =>
+      widget.categoryName ?? context.l10n.repair;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,7 @@ class _RepairResultsPageState extends ConsumerState<RepairResultsPage> {
     return Scaffold(
       backgroundColor: const Color(0xFF1C1F26),
       appBar: AppBar(
-        title: Text(_title),
+        title: Text(_title(context)),
         backgroundColor: const Color(0xFF2A2D36),
         leading: BackButton(
           onPressed: () => Navigator.of(context).maybePop(),
@@ -112,13 +115,16 @@ class _RepairResultsPageState extends ConsumerState<RepairResultsPage> {
       // Map-view empty: map centred on Yerevan + overlay notice (UI-SPEC).
       return Stack(
         children: [
-          ResultsMapView(vendors: const []),
-          const Center(
+          const ResultsMapView(vendors: []),
+          Center(
             child: Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Text(
-                'Поблизости ничего не найдено',
-                style: TextStyle(fontSize: 16, color: Color(0xFFE0E0E0)),
+                context.l10n.nothingNearby,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFFE0E0E0),
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -126,6 +132,6 @@ class _RepairResultsPageState extends ConsumerState<RepairResultsPage> {
         ],
       );
     }
-    return ResultsMapView(vendors: List.of(results));
+    return ResultsMapView(vendors: List<VendorResult>.from(results));
   }
 }

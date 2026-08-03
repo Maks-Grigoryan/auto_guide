@@ -95,7 +95,8 @@ void main() {
       final ids = results.map((v) => v.vendorId).toList();
       // C=200, A=500, B=1000 then D=null, E=null (both null — stable, order among nulls unconstrained)
       expect(ids.take(3).toList(), equals(['C', 'A', 'B']));
-      expect(ids.skip(3).toSet(), equals({'D', 'E'})); // both null — order unspecified
+      expect(ids.skip(3).toSet(),
+          equals({'D', 'E'})); // both null — order unspecified
     });
 
     // ----- Sort by rating -----
@@ -232,7 +233,8 @@ void main() {
       expect(result.rating, isNull);
     });
 
-    test('VendorResult.fromJson handles absent rating key without throwing', () {
+    test('VendorResult.fromJson handles absent rating key without throwing',
+        () {
       final json = {
         'vendor_id': 'v1',
         'name': 'Test',
@@ -299,7 +301,8 @@ void main() {
       expect(unchanged.maxPrice, equals(2000));
     });
 
-    test('clearMinPrice/clearMaxPrice reset bounds to null (the «Сбросить» path)',
+    test(
+        'clearMinPrice/clearMaxPrice reset bounds to null (the «Сбросить» path)',
         () {
       final withBounds = base.copyWith(minPrice: 500, maxPrice: 2000);
       final cleared =

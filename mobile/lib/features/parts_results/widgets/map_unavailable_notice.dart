@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/l10n.dart';
+
 /// Non-blocking notice shown below the list⇄map toggle when the Yandex
 /// MapKit key is missing or map initialisation failed (D-04).
 ///
@@ -16,19 +18,21 @@ class MapUnavailableNotice extends StatelessWidget {
       child: Container(
         color: const Color(0xFF2A2D36),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: const Row(
+        child: Row(
           children: [
-            Icon(
+            const Icon(
               Icons.map_outlined,
               color: Color(0xFFE0E0E0),
               size: 20,
             ),
-            SizedBox(width: 8),
-            Text(
-              'Карта недоступна',
-              style: TextStyle(
-                fontSize: 16,
-                color: Color(0xFFE0E0E0),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                context.l10n.mapUnavailable,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFFE0E0E0),
+                ),
               ),
             ),
           ],

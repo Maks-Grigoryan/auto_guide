@@ -12,8 +12,7 @@ part of 'map_config.dart';
 @ProviderFor(mapAvailable)
 const mapAvailableProvider = MapAvailableProvider._();
 
-final class MapAvailableProvider
-    extends $FunctionalProvider<bool, bool, bool>
+final class MapAvailableProvider extends $FunctionalProvider<bool, bool, bool>
     with $Provider<bool> {
   const MapAvailableProvider._()
       : super(

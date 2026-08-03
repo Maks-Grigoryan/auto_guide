@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/l10n.dart';
+
 /// Segmented toggle: Запчасти (default) / Ремонт.
 ///
 /// [onPartsSelected] is called when Запчасти is tapped.
-/// [onRepairSelected] is called when Ремонт is tapped — callers show the
-/// "Поиск ремонта появится в следующей версии" placeholder.
+/// [onRepairSelected] is called when Ремонт is tapped — callers open the
+/// service-category search flow.
 /// Height is 48dp (meets ≥48dp tap target requirement).
 class SearchTypeToggle extends StatelessWidget {
   const SearchTypeToggle({
@@ -24,9 +26,9 @@ class SearchTypeToggle extends StatelessWidget {
     return SizedBox(
       height: 48,
       child: SegmentedButton<int>(
-        segments: const [
-          ButtonSegment<int>(value: 0, label: Text('Запчасти')),
-          ButtonSegment<int>(value: 1, label: Text('Ремонт')),
+        segments: [
+          ButtonSegment<int>(value: 0, label: Text(context.l10n.parts)),
+          ButtonSegment<int>(value: 1, label: Text(context.l10n.repair)),
         ],
         selected: {selectedIndex},
         onSelectionChanged: (Set<int> newSelection) {

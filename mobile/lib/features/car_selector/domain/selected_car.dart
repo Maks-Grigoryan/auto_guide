@@ -44,8 +44,7 @@ class SelectedCar {
       );
 
   @override
-  String toString() =>
-      'SelectedCar(makeId: $makeId, makeName: $makeName, '
+  String toString() => 'SelectedCar(makeId: $makeId, makeName: $makeName, '
       'modelId: $modelId, modelName: $modelName, '
       'generationId: $generationId, generationLabel: $generationLabel)';
 

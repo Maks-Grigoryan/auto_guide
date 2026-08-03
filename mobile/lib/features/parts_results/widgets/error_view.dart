@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/l10n.dart';
+
 /// Error state for the results screen (RES-07 / T-03-11 mitigation).
 ///
 /// Shows icon + heading + generic body + retry button.
@@ -19,9 +21,9 @@ class ErrorView extends StatelessWidget {
           children: [
             const Icon(Icons.wifi_off, size: 48, color: Color(0xFFE0E0E0)),
             const SizedBox(height: 16),
-            const Text(
-              'Не удалось загрузить результаты',
-              style: TextStyle(
+            Text(
+              context.l10n.resultsLoadError,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
@@ -29,9 +31,12 @@ class ErrorView extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Проверьте подключение и попробуйте снова',
-              style: TextStyle(fontSize: 16, color: Color(0xFFE0E0E0)),
+            Text(
+              context.l10n.connectionHelp,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Color(0xFFE0E0E0),
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
@@ -39,9 +44,12 @@ class ErrorView extends StatelessWidget {
               height: 56,
               child: TextButton(
                 onPressed: onRetry,
-                child: const Text(
-                  'Повторить',
-                  style: TextStyle(color: Color(0xFFF5A623), fontSize: 16),
+                child: Text(
+                  context.l10n.retry,
+                  style: const TextStyle(
+                    color: Color(0xFFF5A623),
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),

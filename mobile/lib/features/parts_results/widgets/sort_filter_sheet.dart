@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../features/search/providers/search_params.dart';
+import '../../../l10n/l10n.dart';
 
 /// Sort & filter bottom sheet for the parts results screen.
 ///
@@ -12,7 +13,7 @@ import '../../../features/search/providers/search_params.dart';
 ///   Divider #3D4050
 ///   Slider «Радиус» committed via onChangeEnd (RESEARCH Pitfall 6)
 ///   SwitchListTile «Только в наличии»
-///   RangeSlider «Цена, ₽»
+///   RangeSlider «Цена, AMD»
 ///   TextButton «Сбросить»
 ///
 /// All changes apply instantly (no separate «Применить» button).
@@ -42,14 +43,14 @@ class _SortFilterSheetState extends ConsumerState<SortFilterSheet> {
     _maxPriceLocal = params?.maxPrice ?? _maxPriceRange;
   }
 
-  String _sortLabel(ResultSort sort) {
+  String _sortLabel(BuildContext context, ResultSort sort) {
     switch (sort) {
       case ResultSort.distance:
-        return 'По расстоянию';
+        return context.l10n.sortDistance;
       case ResultSort.price:
-        return 'По цене';
+        return context.l10n.sortPrice;
       case ResultSort.rating:
-        return 'По рейтингу';
+        return context.l10n.sortRating;
     }
   }
 
@@ -96,9 +97,9 @@ class _SortFilterSheetState extends ConsumerState<SortFilterSheet> {
             const SizedBox(height: 16),
 
             // Title
-            const Text(
-              'Сортировка и фильтры',
-              style: TextStyle(
+            Text(
+              context.l10n.sortAndFilters,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
                 color: Color(0xFFFFFFFF),
@@ -107,45 +108,57 @@ class _SortFilterSheetState extends ConsumerState<SortFilterSheet> {
             const SizedBox(height: 12),
 
             // Sort section label
-            const Text(
-              'Сортировка',
-              style: TextStyle(fontSize: 18, color: Color(0xFFFFFFFF)),
+            Text(
+              context.l10n.sort,
+              style: const TextStyle(
+                fontSize: 18,
+                color: Color(0xFFFFFFFF),
+              ),
             ),
 
             // Sort radio tiles
-            ...ResultSort.values.map(
-              (sort) => RadioListTile<ResultSort>(
-                value: sort,
-                groupValue: currentSort,
-                onChanged: (v) {
-                  if (v != null) {
-                    ref.read(searchParamsProvider.notifier).updateSort(v);
-                  }
-                },
-                title: Text(
-                  _sortLabel(sort),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFFFFFFFF),
-                  ),
-                ),
-                // M3 RadioListTile default row height satisfies ≥48dp
+            RadioGroup<ResultSort>(
+              groupValue: currentSort,
+              onChanged: (value) {
+                if (value != null) {
+                  ref.read(searchParamsProvider.notifier).updateSort(value);
+                }
+              },
+              child: Column(
+                children: ResultSort.values
+                    .map(
+                      (sort) => RadioListTile<ResultSort>(
+                        value: sort,
+                        title: Text(
+                          _sortLabel(context, sort),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFFFFFFFF),
+                          ),
+                        ),
+                        // M3 RadioListTile default row height satisfies ≥48dp
+                      ),
+                    )
+                    .toList(growable: false),
               ),
             ),
 
             const Divider(color: Color(0xFF3D4050)),
 
             // Filters section label
-            const Text(
-              'Фильтры',
-              style: TextStyle(fontSize: 18, color: Color(0xFFFFFFFF)),
+            Text(
+              context.l10n.filters,
+              style: const TextStyle(
+                fontSize: 18,
+                color: Color(0xFFFFFFFF),
+              ),
             ),
 
             // Radius slider — committed on release (RESEARCH Pitfall 6)
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(
-                'Радиус: ${_radiusKm.round()} км',
+                context.l10n.radiusKm(_radiusKm.round()),
                 style: const TextStyle(fontSize: 16, color: Color(0xFFE0E0E0)),
               ),
             ),
@@ -154,7 +167,9 @@ class _SortFilterSheetState extends ConsumerState<SortFilterSheet> {
               min: 1.0,
               max: _maxRadiusKm,
               divisions: 19,
-              label: '${_radiusKm.round()} км',
+              label: context.l10n.distanceKilometers(
+                _radiusKm.round().toString(),
+              ),
               activeColor: const Color(0xFFF5A623),
               onChanged: (v) {
                 // Update local display only — no re-fetch per drag frame
@@ -176,20 +191,26 @@ class _SortFilterSheetState extends ConsumerState<SortFilterSheet> {
                     .read(searchParamsProvider.notifier)
                     .updateFilter(availabilityOnly: v);
               },
-              title: const Text(
-                'Только в наличии',
-                style: TextStyle(fontSize: 16, color: Color(0xFFFFFFFF)),
+              title: Text(
+                context.l10n.availabilityOnly,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFFFFFFFF),
+                ),
               ),
-              activeColor: const Color(0xFFF5A623),
+              activeThumbColor: const Color(0xFFF5A623),
               // M3 SwitchListTile default row height satisfies ≥48dp
             ),
 
             // Price range slider
-            const Padding(
-              padding: EdgeInsets.only(top: 8),
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
               child: Text(
-                'Цена, ₽',
-                style: TextStyle(fontSize: 16, color: Color(0xFFE0E0E0)),
+                context.l10n.priceAmd,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFFE0E0E0),
+                ),
               ),
             ),
             RangeSlider(
@@ -198,8 +219,8 @@ class _SortFilterSheetState extends ConsumerState<SortFilterSheet> {
               max: _maxPriceRange,
               divisions: 100,
               labels: RangeLabels(
-                '${_minPriceLocal.round()} ₽',
-                '${_maxPriceLocal.round()} ₽',
+                context.l10n.priceValueAmd(_minPriceLocal.round()),
+                context.l10n.priceValueAmd(_maxPriceLocal.round()),
               ),
               activeColor: const Color(0xFFF5A623),
               onChanged: (range) {
@@ -221,9 +242,9 @@ class _SortFilterSheetState extends ConsumerState<SortFilterSheet> {
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: _reset,
-                child: const Text(
-                  'Сбросить',
-                  style: TextStyle(
+                child: Text(
+                  context.l10n.reset,
+                  style: const TextStyle(
                     color: Color(0xFFF5A623),
                     fontSize: 16,
                   ),

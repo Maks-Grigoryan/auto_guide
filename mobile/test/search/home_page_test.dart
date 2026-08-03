@@ -39,8 +39,7 @@ Widget _buildHome({
   List<PartCategory> categories = const [],
   AsyncValue<List<PartCategory>>? categoriesAsyncOverride,
 }) {
-  final catAsyncValue =
-      categoriesAsyncOverride ?? AsyncValue.data(categories);
+  final catAsyncValue = categoriesAsyncOverride ?? AsyncValue.data(categories);
 
   return ProviderScope(
     overrides: [
@@ -74,8 +73,7 @@ Widget _buildHome({
           // REP-01: repair category browse (Plan 04-03)
           GoRoute(
             path: '/repair/categories',
-            builder: (_, __) =>
-                const Scaffold(body: Text('RepairCategories')),
+            builder: (_, __) => const Scaffold(body: Text('RepairCategories')),
           ),
         ],
       ),

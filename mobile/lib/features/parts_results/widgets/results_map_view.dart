@@ -1,11 +1,12 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide TextStyle;
 import 'package:yandex_maps_mapkit/mapkit.dart';
 import 'package:yandex_maps_mapkit/yandex_map.dart';
 
 import '../../../core/location/location_service.dart';
 import '../../../core/models/vendor_result.dart';
+import '../../../l10n/l10n.dart';
 import 'vendor_summary_sheet.dart';
 
 /// Yandex map view showing one amber marker per vendor with a distance label.
@@ -74,7 +75,7 @@ class _ResultsMapViewState extends State<ResultsMapView> {
     if (vendors.isEmpty) {
       // D-02: empty → Yerevan centre fallback, zoom 12.
       map.move(
-        CameraPosition(
+        const CameraPosition(
           Point(latitude: kYerevanLat, longitude: kYerevanLng),
           zoom: 12.0,
           azimuth: 0.0,
@@ -138,31 +139,19 @@ class _ResultsMapViewState extends State<ResultsMapView> {
   // ---------------------------------------------------------------------------
 
   void _configureMarker(PlacemarkMapObject pm, VendorResult v) {
-    // Amber (#F5A623) placemark with dark outline for legibility over tiles
-    // (UI-SPEC marker color rule). Use the default placemark icon styled via
-    // PlacemarkIcon — the distance label is set as a text caption.
-    pm.setIcon(
-      PlacemarkIcon.single(
-        PlacemarkIconStyle(
-          // Use a solid amber circle image; in absence of a custom asset,
-          // rely on the default SDK icon style with amber tint.
-          // The distance label is rendered as a caption below the pin.
-          scale: 2.0,
-        ),
-      ),
-    );
+    // Keep the SDK's default pin and enlarge it for a 48 dp-equivalent target.
+    // MapKit 4.39 exposes style and text directly on PlacemarkMapObject.
+    pm.setIconStyle(const IconStyle(scale: 2.0));
 
     // Distance label (UI-SPEC: 16 sp SemiBold #1C1F26 on/under the pin).
-    pm.setText(
-      PlacemarkText(
-        text: _formatDistance(v.distanceM),
-        style: PlacemarkTextStyle(
-          size: 16.0,
-          color: const Color(0xFF1C1F26),
-          outlineColor: const Color(0xFFF5A623),
-          placement: TextPlacement.bottom,
-        ),
+    pm.setTextWithStyle(
+      const TextStyle(
+        size: 16.0,
+        color: Color(0xFF1C1F26),
+        outlineColor: Color(0xFFF5A623),
+        placement: TextStylePlacement.Bottom,
       ),
+      text: _formatDistance(context, v.distanceM),
     );
 
     // Tap listener stored in field (Pitfall 1 — weak ref guard).
@@ -178,10 +167,12 @@ class _ResultsMapViewState extends State<ResultsMapView> {
   // Distance formatting (mirrors DistanceBadge formatting)
   // ---------------------------------------------------------------------------
 
-  String _formatDistance(double distanceM) {
-    if (distanceM < 1000) return '${distanceM.round()} м';
+  String _formatDistance(BuildContext context, double distanceM) {
+    if (distanceM < 1000) {
+      return context.l10n.distanceMeters(distanceM.round());
+    }
     final km = distanceM / 1000.0;
-    return '${km.toStringAsFixed(1)} км';
+    return context.l10n.distanceKilometers(km.toStringAsFixed(1));
   }
 }
 

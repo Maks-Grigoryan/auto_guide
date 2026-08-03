@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../l10n/l10n.dart';
+
 import '../data/catalog_providers.dart';
 import '../state/selected_car_notifier.dart';
 import 'widgets/async_state_view.dart';
@@ -38,32 +40,31 @@ class _ModelListPageState extends ConsumerState<ModelListPage> {
             Padding(
               padding: const EdgeInsets.all(16),
               child: SearchField(
-                hintText: 'Поиск модели...',
+                hintText: context.l10n.modelSearchHint,
                 onChanged: (value) => setState(() => _query = value.trim()),
               ),
             ),
             Expanded(
               child: AsyncStateView<List<Map<String, dynamic>>>(
                 asyncValue: modelsAsync,
-                errorHeading: 'Не удалось загрузить модели',
+                errorHeading: context.l10n.modelsLoadError,
                 onRetry: () => ref.refresh(modelsProvider(widget.makeId)),
                 dataBuilder: (models) {
                   final filtered = _query.isEmpty
                       ? List<Map<String, dynamic>>.from(models)
                       : models.where((m) {
-                          final name =
-                              (m['name'] as String).toLowerCase();
+                          final name = (m['name'] as String).toLowerCase();
                           return name.contains(_query.toLowerCase());
                         }).toList();
 
-                  filtered.sort((a, b) => (a['name'] as String)
-                      .compareTo(b['name'] as String));
+                  filtered.sort((a, b) =>
+                      (a['name'] as String).compareTo(b['name'] as String));
 
                   if (filtered.isEmpty) {
-                    return const Center(
+                    return Center(
                       child: Text(
-                        'Модель не найдена. Проверьте написание.',
-                        style: TextStyle(
+                        context.l10n.modelNotFound,
+                        style: const TextStyle(
                           color: Color(0xFFE0E0E0),
                           fontSize: 16,
                         ),

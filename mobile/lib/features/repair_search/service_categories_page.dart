@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/location/location_service.dart';
+import '../../l10n/l10n.dart';
 import '../search/providers/repair_params.dart';
 import '../search/providers/service_categories_provider.dart';
 import '../parts_results/widgets/error_view.dart';
@@ -22,7 +23,7 @@ class ServiceCategoriesPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: const Color(0xFF1C1F26),
       appBar: AppBar(
-        title: const Text('Категории услуг'),
+        title: Text(context.l10n.serviceCategories),
         backgroundColor: const Color(0xFF2A2D36),
         leading: BackButton(
           onPressed: () => Navigator.of(context).maybePop(),
@@ -44,8 +45,8 @@ class ServiceCategoriesPage extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   InkWell(
-                    onTap: () => _onCategoryTap(context, ref, category.id,
-                        category.name),
+                    onTap: () => _onCategoryTap(
+                        context, ref, category.id, category.name),
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(minHeight: 56),
                       child: Padding(
@@ -100,17 +101,17 @@ class ServiceCategoriesPage extends ConsumerWidget {
 
     if (result.status == LocationResultStatus.denied) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'Местоположение недоступно. Используем Ереван как центр поиска.',
+            context.l10n.locationFallback,
           ),
         ),
       );
     } else if (result.status == LocationResultStatus.deniedForever) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'Разрешите доступ к местоположению в настройках для точного поиска.',
+            context.l10n.locationSettingsHelp,
           ),
         ),
       );
