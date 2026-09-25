@@ -23,9 +23,19 @@ export class SearchService {
   constructor(@Inject(PG_POOL) private readonly pool: Pool) {}
 
   async searchParts(dto: SearchPartsDto): Promise<VendorSearchResult[]> {
-    const { lat, lng, radius, makeId, modelId, generationId, categoryId, query } = dto;
+    const {
+      lat,
+      lng,
+      radius,
+      makeId,
+      modelId,
+      generationId,
+      categoryId,
+      query,
+      year,
+    } = dto;
     const result = await this.pool.query<VendorSearchResult>(
-      'SELECT * FROM search_parts($1,$2,$3,$4,$5,$6,$7,$8)',
+      'SELECT * FROM search_parts($1,$2,$3,$4,$5,$6,$7,$8,$9)',
       [
         lat,
         lng,
@@ -35,6 +45,10 @@ export class SearchService {
         generationId ?? null,
         categoryId ?? null,
         query ?? null,
+        // NULL is "no year given", which the function reads as no filter at
+        // all — the same results this endpoint returned before the year
+        // existed.
+        year ?? null,
       ],
     );
     return result.rows;

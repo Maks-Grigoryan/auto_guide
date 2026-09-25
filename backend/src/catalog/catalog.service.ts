@@ -51,25 +51,59 @@ export class CatalogService {
     return result.rows;
   }
 
-  async getPartCategories(): Promise<PartCategory[]> {
+  async getPartCategories(lang?: string): Promise<PartCategory[]> {
+    const name = localisedName(lang);
     const result = await this.pool.query<PartCategory>(
-      'SELECT id, name, parent_id FROM part_categories ORDER BY name',
+      `SELECT id, ${name} AS name, parent_id
+         FROM part_categories
+        ORDER BY ${name}`,
     );
     return result.rows;
   }
 
-  async getGenerations(modelId: number): Promise<CarGeneration[]> {
+  async getGenerations(
+    modelId: number,
+    lang?: string,
+  ): Promise<CarGeneration[]> {
     const result = await this.pool.query<CarGeneration>(
-      'SELECT id, model_id, name, year_from, year_to FROM car_generations WHERE model_id = $1 ORDER BY year_from NULLS LAST',
+      `SELECT id, model_id, ${localisedName(lang)} AS name, year_from, year_to
+         FROM car_generations
+        WHERE model_id = $1
+        ORDER BY year_from NULLS LAST`,
       [modelId],
     );
     return result.rows;
   }
 
-  async getServiceCategories(): Promise<ServiceCategory[]> {
+  async getServiceCategories(lang?: string): Promise<ServiceCategory[]> {
+    const name = localisedName(lang);
     const result = await this.pool.query<ServiceCategory>(
-      'SELECT id, name FROM service_categories ORDER BY name',
+      `SELECT id, ${name} AS name FROM service_categories ORDER BY ${name}`,
     );
     return result.rows;
+  }
+}
+
+/**
+ * The SQL expression yielding a row's name in [lang].
+ *
+ * A column name cannot be a bound parameter, so this is the one place where
+ * text reaches a query uninterpolated. The switch is what makes that safe:
+ * only these three literals can ever get into the SQL, whatever arrives as
+ * `lang`. Building the identifier out of the input would be an injection.
+ *
+ * COALESCE falls back to the base name, so a category added after migration
+ * 013 with no translations yet still appears in every locale rather than as an
+ * empty row.
+ */
+function localisedName(lang?: string): string {
+  switch (lang) {
+    case 'hy':
+      return 'COALESCE(name_hy, name)';
+    case 'en':
+      return 'COALESCE(name_en, name)';
+    default:
+      // Russian is the base column, and the fallback for anything unexpected.
+      return 'name';
   }
 }

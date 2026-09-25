@@ -14,13 +14,16 @@
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main",
     "test:e2e": "jest --config test/jest-e2e.json",
+    "admin:create": "node dist/scripts/create-admin",
     "audit:prod": "npm audit --omit=dev --audit-level=high"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.28",
     "@nestjs/config": "^4.0.0",
     "@nestjs/core": "^11.1.28",
+    "@nestjs/jwt": "^11.0.2",
     "@nestjs/platform-express": "^11.1.28",
+    "@nestjs/throttler": "^6.5.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "pg": "^8.21.0",

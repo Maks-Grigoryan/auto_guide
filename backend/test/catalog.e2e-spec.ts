@@ -2,6 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
+// Imported rather than copied: the previous literal froze the header at
+// max-age=86400, so changing the real value would have left the test green
+// while browsers kept serving a day-old catalogue.
+import { CATALOG_CACHE_CONTROL } from '../src/catalog/catalog.controller';
 
 describe('GET /catalog (e2e)', () => {
   let app: INestApplication;
@@ -31,11 +35,11 @@ describe('GET /catalog (e2e)', () => {
     expect(hasCisMake).toBe(true);
   });
 
-  it('GET /catalog/makes has Cache-Control: public, max-age=86400', async () => {
+  it('GET /catalog/makes has the shared catalogue Cache-Control', async () => {
     await request(app.getHttpServer())
       .get('/catalog/makes')
       .expect(200)
-      .expect('cache-control', 'public, max-age=86400');
+      .expect('cache-control', CATALOG_CACHE_CONTROL);
   });
 
   it('GET /catalog/models?makeId=X returns 200 array with cache header', async () => {
@@ -44,7 +48,7 @@ describe('GET /catalog (e2e)', () => {
       .get('/catalog/models')
       .query({ makeId: 1 })
       .expect(200)
-      .expect('cache-control', 'public, max-age=86400')
+      .expect('cache-control', CATALOG_CACHE_CONTROL)
       .then((res) => {
         expect(Array.isArray(res.body)).toBe(true);
       });
@@ -69,7 +73,7 @@ describe('GET /catalog (e2e)', () => {
       .get('/catalog/generations')
       .query({ modelId: 1 })
       .expect(200)
-      .expect('cache-control', 'public, max-age=86400')
+      .expect('cache-control', CATALOG_CACHE_CONTROL)
       .then((res) => {
         expect(Array.isArray(res.body)).toBe(true);
       });
@@ -89,11 +93,11 @@ describe('GET /catalog (e2e)', () => {
     expect(Array.isArray(res.body)).toBe(true);
   });
 
-  it('GET /catalog/part-categories has Cache-Control: public, max-age=86400', async () => {
+  it('GET /catalog/part-categories has the shared catalogue Cache-Control', async () => {
     await request(app.getHttpServer())
       .get('/catalog/part-categories')
       .expect(200)
-      .expect('cache-control', 'public, max-age=86400');
+      .expect('cache-control', CATALOG_CACHE_CONTROL);
   });
 
   it('GET /catalog/service-categories returns 200 array containing «Развал-схождение»', async () => {
@@ -106,10 +110,10 @@ describe('GET /catalog (e2e)', () => {
     expect(names).toContain('Развал-схождение');
   });
 
-  it('GET /catalog/service-categories has Cache-Control: public, max-age=86400', async () => {
+  it('GET /catalog/service-categories has the shared catalogue Cache-Control', async () => {
     await request(app.getHttpServer())
       .get('/catalog/service-categories')
       .expect(200)
-      .expect('cache-control', 'public, max-age=86400');
+      .expect('cache-control', CATALOG_CACHE_CONTROL);
   });
 });

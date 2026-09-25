@@ -48,4 +48,16 @@ export class SearchPartsDto {
   @IsOptional()
   @IsString()
   query?: string;
+
+  /// Year of manufacture. Narrows the search to parts whose fitment covers it.
+  ///
+  /// Bounded rather than merely positive: a year is not an id, and 70000 is a
+  /// typo every time. The lower bound predates any car this catalogue will
+  /// carry; the upper leaves room for model years sold ahead of the calendar.
+  @IsOptional()
+  @IsNumber()
+  @Min(1900)
+  @Max(2100)
+  @Type(() => Number)
+  year?: number;
 }
