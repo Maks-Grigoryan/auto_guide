@@ -217,7 +217,7 @@ abstract class AppLocalizations {
   /// No description provided for @skipGeneration.
   ///
   /// In ru, this message translates to:
-  /// **'Пропустить (поколение не важно)'**
+  /// **'Пропустить'**
   String get skipGeneration;
 
   /// No description provided for @fromYear.
@@ -561,6 +561,372 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'English'**
   String get english;
+
+  /// No description provided for @noModelsForMake.
+  ///
+  /// In ru, this message translates to:
+  /// **'Для этой марки пока нет моделей.'**
+  String get noModelsForMake;
+
+  /// No description provided for @noMakesInCatalog.
+  ///
+  /// In ru, this message translates to:
+  /// **'Каталог марок пуст.'**
+  String get noMakesInCatalog;
+
+  /// No description provided for @authTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вход в приложение'**
+  String get authTitle;
+
+  /// No description provided for @authSubtitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Запчасти и автосервисы рядом с вами'**
+  String get authSubtitle;
+
+  /// No description provided for @authSignInTab.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вход'**
+  String get authSignInTab;
+
+  /// No description provided for @authSignUpTab.
+  ///
+  /// In ru, this message translates to:
+  /// **'Регистрация'**
+  String get authSignUpTab;
+
+  /// No description provided for @authIdentifierLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Телефон или e-mail'**
+  String get authIdentifierLabel;
+
+  /// No description provided for @authIdentifierInvalid.
+  ///
+  /// In ru, this message translates to:
+  /// **'Это не похоже на телефон или e-mail'**
+  String get authIdentifierInvalid;
+
+  /// No description provided for @authPasswordLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пароль'**
+  String get authPasswordLabel;
+
+  /// No description provided for @authPasswordRepeatLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Повторите пароль'**
+  String get authPasswordRepeatLabel;
+
+  /// No description provided for @authSignInButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Войти'**
+  String get authSignInButton;
+
+  /// No description provided for @authSignUpButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Зарегистрироваться'**
+  String get authSignUpButton;
+
+  /// No description provided for @authIdentifierRequired.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите телефон или e-mail'**
+  String get authIdentifierRequired;
+
+  /// No description provided for @authPasswordRequired.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите пароль'**
+  String get authPasswordRequired;
+
+  /// No description provided for @authPasswordTooShort.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пароль должен быть не короче 8 символов'**
+  String get authPasswordTooShort;
+
+  /// No description provided for @authPasswordsDoNotMatch.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пароли не совпадают'**
+  String get authPasswordsDoNotMatch;
+
+  /// No description provided for @authInvalidCredentials.
+  ///
+  /// In ru, this message translates to:
+  /// **'Неверный телефон, e-mail или пароль'**
+  String get authInvalidCredentials;
+
+  /// No description provided for @authAccountExists.
+  ///
+  /// In ru, this message translates to:
+  /// **'Аккаунт с такими данными уже существует'**
+  String get authAccountExists;
+
+  /// No description provided for @authTooManyAttempts.
+  ///
+  /// In ru, this message translates to:
+  /// **'Слишком много попыток. Подождите минуту'**
+  String get authTooManyAttempts;
+
+  /// No description provided for @authNetworkError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервер недоступен. Проверьте соединение'**
+  String get authNetworkError;
+
+  /// No description provided for @authUnknownError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось выполнить вход. Попробуйте ещё раз'**
+  String get authUnknownError;
+
+  /// No description provided for @authSignedInAs.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вы вошли как {name}'**
+  String authSignedInAs(String name);
+
+  /// No description provided for @authAdminBadge.
+  ///
+  /// In ru, this message translates to:
+  /// **'Администратор'**
+  String get authAdminBadge;
+
+  /// No description provided for @authSignOut.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выйти'**
+  String get authSignOut;
+
+  /// No description provided for @authCodeTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Подтвердите контакт'**
+  String get authCodeTitle;
+
+  /// No description provided for @authCodeSentTo.
+  ///
+  /// In ru, this message translates to:
+  /// **'Код отправлен на {target}'**
+  String authCodeSentTo(String target);
+
+  /// No description provided for @authCodeLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Код из 6 цифр'**
+  String get authCodeLabel;
+
+  /// No description provided for @authConfirmButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Подтвердить'**
+  String get authConfirmButton;
+
+  /// No description provided for @authResendCode.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправить код ещё раз'**
+  String get authResendCode;
+
+  /// No description provided for @authCodeResent.
+  ///
+  /// In ru, this message translates to:
+  /// **'Код отправлен повторно'**
+  String get authCodeResent;
+
+  /// No description provided for @authChangeContact.
+  ///
+  /// In ru, this message translates to:
+  /// **'Изменить контакт'**
+  String get authChangeContact;
+
+  /// No description provided for @authCodeRequired.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите код из 6 цифр'**
+  String get authCodeRequired;
+
+  /// No description provided for @authCodeInvalid.
+  ///
+  /// In ru, this message translates to:
+  /// **'Неверный код'**
+  String get authCodeInvalid;
+
+  /// No description provided for @authCodeExpired.
+  ///
+  /// In ru, this message translates to:
+  /// **'Код устарел. Запросите новый'**
+  String get authCodeExpired;
+
+  /// Label above the list of sections on the main screen
+  ///
+  /// In ru, this message translates to:
+  /// **'Разделы'**
+  String get hubSectionsLabel;
+
+  /// Main-screen tile opening the parts search
+  ///
+  /// In ru, this message translates to:
+  /// **'Запчасти'**
+  String get hubParts;
+
+  /// Supporting line under the parts tile
+  ///
+  /// In ru, this message translates to:
+  /// **'Магазины рядом с вами'**
+  String get hubPartsHint;
+
+  /// Main-screen tile opening the repair search
+  ///
+  /// In ru, this message translates to:
+  /// **'Ремонт'**
+  String get hubRepair;
+
+  /// Supporting line under the repair tile
+  ///
+  /// In ru, this message translates to:
+  /// **'Автосервисы рядом с вами'**
+  String get hubRepairHint;
+
+  /// Main-screen tile opening the parts and repair search
+  ///
+  /// In ru, this message translates to:
+  /// **'Запчасти и ремонт'**
+  String get hubPartsRepair;
+
+  /// Supporting line under the parts and repair tile
+  ///
+  /// In ru, this message translates to:
+  /// **'Магазины и автосервисы рядом с вами'**
+  String get hubPartsRepairHint;
+
+  /// Main-screen tile for towing and roadside assistance
+  ///
+  /// In ru, this message translates to:
+  /// **'Помощь на дороге'**
+  String get hubRoadside;
+
+  /// Supporting line under the roadside assistance tile
+  ///
+  /// In ru, this message translates to:
+  /// **'Эвакуатор и помощь на месте'**
+  String get hubRoadsideHint;
+
+  /// Badge on a main-screen tile whose section is not built yet
+  ///
+  /// In ru, this message translates to:
+  /// **'Скоро'**
+  String get hubComingSoon;
+
+  /// Shown when tapping a section that is not built yet
+  ///
+  /// In ru, this message translates to:
+  /// **'Раздел скоро появится'**
+  String get hubComingSoonMessage;
+
+  /// Placeholder text inside the chat bar on the main screen
+  ///
+  /// In ru, this message translates to:
+  /// **'Спросите помощника о машине'**
+  String get aiChatBarPrompt;
+
+  /// Title of the full-screen assistant chat
+  ///
+  /// In ru, this message translates to:
+  /// **'Помощник'**
+  String get aiChatTitle;
+
+  /// Placeholder in the chat message input field
+  ///
+  /// In ru, this message translates to:
+  /// **'Опишите проблему...'**
+  String get aiChatInputHint;
+
+  /// Tooltip on the send button in the chat
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправить'**
+  String get aiChatSend;
+
+  /// Heading of the empty chat state
+  ///
+  /// In ru, this message translates to:
+  /// **'Что случилось с машиной?'**
+  String get aiChatGreeting;
+
+  /// Supporting line under the empty-chat heading
+  ///
+  /// In ru, this message translates to:
+  /// **'Опишите проблему своими словами — помогу понять причину и найти нужную деталь рядом с вами.'**
+  String get aiChatGreetingHint;
+
+  /// Label above the tappable example questions
+  ///
+  /// In ru, this message translates to:
+  /// **'Например'**
+  String get aiChatExamplesLabel;
+
+  /// Example question: a knocking noise over bumps
+  ///
+  /// In ru, this message translates to:
+  /// **'Стучит спереди на кочках'**
+  String get aiChatExampleKnock;
+
+  /// Example question: looking for brake pads
+  ///
+  /// In ru, this message translates to:
+  /// **'Нужны тормозные колодки'**
+  String get aiChatExamplePads;
+
+  /// Example question: which engine oil to use
+  ///
+  /// In ru, this message translates to:
+  /// **'Какое масло заливать?'**
+  String get aiChatExampleOil;
+
+  /// Safety notice shown in the chat: the assistant is not a mechanic
+  ///
+  /// In ru, this message translates to:
+  /// **'Помощник называет вероятные причины и не заменяет осмотр на сервисе.'**
+  String get aiChatDisclaimer;
+
+  /// Stub reply shown until the backend is built
+  ///
+  /// In ru, this message translates to:
+  /// **'Помощник пока не подключён — готов только интерфейс. Скоро он сможет искать детали в каталоге и отвечать на вопросы.'**
+  String get aiChatNotConnected;
+
+  /// Label of the year-of-manufacture row in the car selector
+  ///
+  /// In ru, this message translates to:
+  /// **'Год выпуска'**
+  String get yearLabel;
+
+  /// Value shown in the year row when no year has been chosen
+  ///
+  /// In ru, this message translates to:
+  /// **'Не указан'**
+  String get yearNotSpecified;
+
+  /// Title of the year picker sheet
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите год'**
+  String get selectYear;
+
+  /// Option in the year picker that clears the year
+  ///
+  /// In ru, this message translates to:
+  /// **'Не указывать год'**
+  String get yearSkip;
 }
 
 class _AppLocalizationsDelegate

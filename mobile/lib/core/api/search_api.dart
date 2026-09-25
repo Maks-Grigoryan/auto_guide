@@ -26,12 +26,20 @@ class SearchApi {
     return VendorDetail.fromJson(response.data ?? const {});
   }
 
-  /// Fetches the flat list of part categories.
+  /// Fetches the flat list of part categories, named in [lang].
   ///
-  /// GET /catalog/part-categories
+  /// GET /catalog/part-categories?lang=…
   /// Returns: [{ id, name, parent_id }]
-  Future<List<PartCategory>> fetchCategories() async {
-    final response = await _dio.get<List<dynamic>>('/catalog/part-categories');
+  ///
+  /// The names live in the database, so the language has to travel with the
+  /// request. Translating them client-side would mean hard-coding the Russian
+  /// spellings here and losing a category's translation, silently, the moment
+  /// anyone renamed it.
+  Future<List<PartCategory>> fetchCategories({String? lang}) async {
+    final response = await _dio.get<List<dynamic>>(
+      '/catalog/part-categories',
+      queryParameters: {if (lang != null) 'lang': lang},
+    );
     final data = response.data ?? [];
     return data
         .cast<Map<String, dynamic>>()
@@ -39,13 +47,15 @@ class SearchApi {
         .toList(growable: false);
   }
 
-  /// Fetches the flat list of service categories.
+  /// Fetches the flat list of service categories, named in [lang].
   ///
-  /// GET /catalog/service-categories
+  /// GET /catalog/service-categories?lang=…
   /// Returns: [{ id, name }]
-  Future<List<ServiceCategory>> fetchServiceCategories() async {
-    final response =
-        await _dio.get<List<dynamic>>('/catalog/service-categories');
+  Future<List<ServiceCategory>> fetchServiceCategories({String? lang}) async {
+    final response = await _dio.get<List<dynamic>>(
+      '/catalog/service-categories',
+      queryParameters: {if (lang != null) 'lang': lang},
+    );
     final data = response.data ?? [];
     return data
         .cast<Map<String, dynamic>>()
@@ -66,6 +76,7 @@ class SearchApi {
   ///   [generationId] – optional car generation filter
   ///   [categoryId]   – optional part-category filter
   ///   [query]        – optional text query (OEM / name); sent as-is (D-03)
+  ///   [year]         – optional year of manufacture; narrows by fitment range
   Future<List<VendorResult>> searchParts({
     required double lat,
     required double lng,
@@ -75,6 +86,7 @@ class SearchApi {
     int? generationId,
     int? categoryId,
     String? query,
+    int? year,
   }) async {
     final queryParams = <String, dynamic>{
       'lat': lat,
@@ -85,6 +97,9 @@ class SearchApi {
       if (generationId != null) 'generationId': generationId,
       if (categoryId != null) 'categoryId': categoryId,
       if (query != null && query.isNotEmpty) 'query': query,
+      // Omitted rather than sent as null when unset: the endpoint reads an
+      // absent year as "no filter", and an explicit null would fail validation.
+      if (year != null) 'year': year,
     };
 
     final response = await _dio.get<List<dynamic>>(

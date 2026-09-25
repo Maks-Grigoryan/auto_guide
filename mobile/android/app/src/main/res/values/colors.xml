@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      The app's own surface colour, matching _surface in lib/app_theme.dart and
+      the intro's background on the web.
+
+      Defined here, outside values-night/, on purpose: the app has one dark
+      theme and no light one, so the launch window must not follow the phone's
+      day/night setting. Left on the Flutter defaults it did — white while the
+      system theme was light — and the app opened with a white flash before its
+      first dark frame.
+    -->
+    <color name="avto_surface">#FF1C1F26</color>
+</resources>

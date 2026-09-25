@@ -6,6 +6,7 @@ import '../../core/models/vendor_result.dart';
 import '../../l10n/l10n.dart';
 import '../search/providers/repair_search_provider.dart';
 import '../parts_results/widgets/map_unavailable_notice.dart';
+import '../parts_results/widgets/map_empty_notice.dart';
 import '../parts_results/widgets/results_map_view.dart';
 import '../parts_results/widgets/results_view_toggle.dart';
 import '../parts_results/widgets/vendor_result_card.dart';
@@ -113,21 +114,16 @@ class _RepairResultsPageState extends ConsumerState<RepairResultsPage> {
   Widget _buildMapView(List<dynamic> results) {
     if (results.isEmpty) {
       // Map-view empty: map centred on Yerevan + overlay notice (UI-SPEC).
+      // Same rule as the parts page: the map stays whole, the notice takes a
+      // band at the top instead of covering the middle of it.
       return Stack(
         children: [
           const ResultsMapView(vendors: []),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                context.l10n.nothingNearby,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Color(0xFFE0E0E0),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: MapEmptyNotice(text: context.l10n.nothingNearby),
           ),
         ],
       );

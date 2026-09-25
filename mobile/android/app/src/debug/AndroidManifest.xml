@@ -4,4 +4,7 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Local development backend runs over HTTP on the host LAN. Release
+         builds keep Android's secure default and require HTTPS. -->
+    <application android:usesCleartextTraffic="true" />
 </manifest>

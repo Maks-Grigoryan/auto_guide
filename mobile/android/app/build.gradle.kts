@@ -15,7 +15,8 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "am.avto.avto_app"
-    compileSdk = flutter.compileSdkVersion
+    // flutter_plugin_android_lifecycle requires API 36 metadata.
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -50,6 +51,13 @@ android {
             signingConfig = signingConfigs.findByName("release")
         }
     }
+}
+
+dependencies {
+    // Backport of the API 31 SplashScreen API. Used rather than the platform
+    // one alone because minSdk here is 26: without it, phones below API 31
+    // would fall back to a plain window background and lose the brand mark.
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }
 
 kotlin {

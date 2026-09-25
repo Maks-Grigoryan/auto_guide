@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Theme applied to the Android Window while the process is starting when the OS's Dark Mode setting is off -->
-    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
-        <!-- Show a splash screen on the activity. Automatically removed when
-             the Flutter engine draws its first frame -->
-        <item name="android:windowBackground">@drawable/launch_background</item>
-    </style>
-    <!-- Theme applied to the Android Window as soon as the process has started.
-         This theme determines the color of the Android Window while your
-         Flutter UI initializes, as well as behind your Flutter UI while its
-         running.
+    <!--
+      The system splash screen (androidx.core:core-splashscreen), not a timed
+      intro of our own.
 
-         This Theme is only used starting with V2 of Flutter's Android embedding. -->
-    <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
-        <item name="android:windowBackground">?android:colorBackground</item>
+      Its length is not a number anyone picked: Android shows it from process
+      start and takes it away the moment Flutter draws its first frame. That is
+      the difference from the web intro — there the animation covers a real
+      wait while CanvasKit downloads, here there is nothing to cover, and a
+      timed splash would be a delay invented for the user rather than one
+      explained to them.
+
+      Both themes are dark regardless of the phone's day/night setting. The app
+      has only a dark theme (app_theme.dart is Brightness.dark), and the Flutter
+      defaults inherited Theme.Light here, which showed as a white flash on
+      launch whenever the system theme was light.
+    -->
+    <style name="LaunchTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/avto_surface</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_mark</item>
+        <!-- Handed over to the moment the splash is dismissed. -->
+        <item name="postSplashScreenTheme">@style/NormalTheme</item>
+    </style>
+
+    <!-- Applied once the process has started, and behind the Flutter UI while
+         it runs. -->
+    <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
+        <item name="android:windowBackground">@color/avto_surface</item>
     </style>
 </resources>

@@ -1,3 +1,5 @@
+import '../utils/json_value.dart';
+
 /// Service category as returned by GET /catalog/service-categories.
 ///
 /// Maps [{ id: int, name: string }] from the backend.
@@ -13,7 +15,7 @@ class ServiceCategory {
 
   factory ServiceCategory.fromJson(Map<String, dynamic> json) {
     return ServiceCategory(
-      id: (json['id'] as num).toInt(),
+      id: jsonInt(json['id'], field: 'serviceCategory.id'),
       name: json['name'] as String,
     );
   }

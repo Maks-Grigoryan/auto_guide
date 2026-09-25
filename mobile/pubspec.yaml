@@ -33,8 +33,17 @@ dependencies:
   # Native actions (phone dialer and navigation deep links)
   url_launcher: ^6.3.2
 
-  # Map
+  # Map — native SDK on mobile; the web build uses the Yandex Maps JS API 3.0
+  # through web/yandex_map.js instead (this package has no web support).
   yandex_maps_mapkit: ^4.36.0
+
+  # DOM interop for the web map platform view (web build only).
+  web: ^1.1.0
+
+  # Access-token storage — Keychain on iOS, EncryptedSharedPreferences on
+  # Android, WebCrypto-wrapped storage on web. The token deliberately does not
+  # go in the existing Hive boxes: those are plain files on disk.
+  flutter_secure_storage: ^11.0.0
 
   # UI
   google_fonts: ^6.2.1
@@ -51,4 +60,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    # Sign-in backdrop. Rendered from the same car model and studio lighting the
+    # intro uses, so the screen the intro hands over to is visibly the same set
+    # — and so no third-party stock photo has to be licensed to get there.
+    - assets/images/
   generate: true

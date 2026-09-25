@@ -5,7 +5,9 @@ import 'package:go_router/go_router.dart';
 
 import 'package:avto_app/core/models/part_category.dart';
 import 'package:avto_app/core/location/location_service.dart';
+import 'package:avto_app/core/models/service_category.dart';
 import 'package:avto_app/features/search/providers/categories_provider.dart';
+import 'package:avto_app/features/search/providers/service_categories_provider.dart';
 import 'package:avto_app/features/home/home_page.dart';
 import 'package:avto_app/features/car_selector/state/selected_car_notifier.dart';
 
@@ -38,6 +40,7 @@ class _FakeDelegate implements LocationServiceDelegate {
 Widget _buildHome({
   List<PartCategory> categories = const [],
   AsyncValue<List<PartCategory>>? categoriesAsyncOverride,
+  int initialIndex = 0,
 }) {
   final catAsyncValue = categoriesAsyncOverride ?? AsyncValue.data(categories);
 
@@ -53,6 +56,12 @@ Widget _buildHome({
         return [];
       }),
       selectedCarProvider.overrideWithValue(null),
+      // Repair now renders inside HomePage, so its categories must be stubbed
+      // here too rather than only in the repair screen's own test.
+      serviceCategoriesProvider.overrideWith((_) async => const [
+            ServiceCategory(id: 1, name: 'Диагностика'),
+            ServiceCategory(id: 2, name: 'Замена масла'),
+          ]),
     ],
     child: MaterialApp.router(
       routerConfig: GoRouter(
@@ -60,7 +69,7 @@ Widget _buildHome({
         routes: [
           GoRoute(
             path: '/',
-            builder: (_, __) => const HomePage(),
+            builder: (_, __) => HomePage(initialIndex: initialIndex),
           ),
           GoRoute(
             path: '/results/parts',
@@ -83,7 +92,7 @@ Widget _buildHome({
 
 void main() {
   // ── Test 1: RES-01 – core widgets present ─────────────────────────────────
-  testWidgets('home renders SegmentedButton, search field, and Выбрать авто',
+  testWidgets('home renders search field, section label, and no car button',
       (tester) async {
     await tester.pumpWidget(_buildHome(categories: [
       const PartCategory(id: 1, name: 'Тормоза'),
@@ -91,18 +100,17 @@ void main() {
     ]));
     await tester.pumpAndSettle();
 
-    // SegmentedButton with Запчасти and Ремонт
-    expect(find.text('Запчасти'), findsAtLeastNWidgets(1));
-    expect(find.text('Ремонт'), findsAtLeastNWidgets(1));
+    // Parts section, no section switcher: the hub owns the parts/repair
+    // choice, so this screen never shows both words at once.
+    expect(find.text('Категории запчастей'), findsOneWidget);
+    expect(find.text('Ремонт'), findsNothing);
 
     // Search field (hint text)
     expect(find.byType(TextField), findsAtLeastNWidgets(1));
 
-    // «Выбрать авто» button (no car selected)
-    expect(find.text('Выбрать авто'), findsOneWidget);
-
-    // Category section label
-    expect(find.text('Категории запчастей'), findsOneWidget);
+    // No «Выбрать авто» button: choosing a car is the app's first step, so the
+    // home screen never offers it — the car is shown as a CarChip instead.
+    expect(find.text('Выбрать авто'), findsNothing);
 
     // Category tiles
     expect(find.text('Тормоза'), findsOneWidget);
@@ -133,7 +141,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Still on home
-    expect(find.text('Запчасти'), findsAtLeastNWidgets(1));
+    expect(find.text('Категории запчастей'), findsOneWidget);
     expect(find.text('Results'), findsNothing);
   });
 
@@ -165,19 +173,31 @@ void main() {
     expect(find.text('Повторить'), findsOneWidget);
   });
 
-  // ── Test 6: Ремонт segment navigates to /repair/categories (REP-01) ───────
-  testWidgets('tapping Ремонт navigates to /repair/categories', (tester) async {
-    await tester.pumpWidget(_buildHome());
+  // ── Test 6: no in-screen section switcher ─────────────────────────────────
+  testWidgets('parts section shows no repair switcher', (tester) async {
+    await tester.pumpWidget(_buildHome(categories: [
+      const PartCategory(id: 1, name: 'Тормоза'),
+    ]));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Ремонт').last);
+    // The section is fixed by initialIndex: switching happens on the hub, so
+    // the repair word and the service list never appear on the parts screen.
+    expect(find.text('Ремонт'), findsNothing);
+    expect(find.text('Категории услуг'), findsNothing);
+    expect(find.text('Категории запчастей'), findsOneWidget);
+    expect(find.text('Тормоза'), findsOneWidget);
+  });
+
+  // ── Test 7: initialIndex selects the opening section ──────────────────────
+  testWidgets('HomePage with initialIndex 1 opens on the repair list',
+      (tester) async {
+    await tester.pumpWidget(_buildHome(initialIndex: 1));
     await tester.pumpAndSettle();
 
-    // Navigated to /repair/categories — placeholder text no longer shown
-    expect(find.text('RepairCategories'), findsOneWidget);
-    expect(
-      find.text('Поиск ремонта появится в следующей версии'),
-      findsNothing,
-    );
+    expect(find.text('Категории услуг'), findsOneWidget);
+    expect(find.text('Диагностика'), findsOneWidget);
+    expect(find.text('Категории запчастей'), findsNothing);
+    // And the repair screen has no switcher back either.
+    expect(find.text('Ремонт'), findsNothing);
   });
 }

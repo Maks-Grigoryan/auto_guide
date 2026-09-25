@@ -19,9 +19,15 @@
   "modelsLoadError": "Не удалось загрузить модели",
   "modelNotFound": "Модель не найдена. Проверьте написание.",
   "generationsLoadError": "Не удалось загрузить поколения",
-  "skipGeneration": "Пропустить (поколение не важно)",
+  "skipGeneration": "Пропустить",
   "fromYear": "с {year}",
-  "@fromYear": {"placeholders": {"year": {"type": "int"}}},
+  "@fromYear": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "yourCar": "Ваше авто",
   "make": "Марка",
   "model": "Модель",
@@ -34,7 +40,13 @@
   "serviceCategoryNoLocation": "Не удалось определить местоположение",
   "results": "Результаты",
   "searchResultsFor": "Поиск: {query}",
-  "@searchResultsFor": {"placeholders": {"query": {"type": "String"}}},
+  "@searchResultsFor": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
   "sortAndFilters": "Сортировка и фильтры",
   "sort": "Сортировка",
   "filters": "Фильтры",
@@ -42,17 +54,47 @@
   "sortPrice": "По цене",
   "sortRating": "По рейтингу",
   "radiusKm": "Радиус: {value} км",
-  "@radiusKm": {"placeholders": {"value": {"type": "int"}}},
+  "@radiusKm": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
   "distanceMeters": "{value} м",
-  "@distanceMeters": {"placeholders": {"value": {"type": "int"}}},
+  "@distanceMeters": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
   "distanceKilometers": "{value} км",
-  "@distanceKilometers": {"placeholders": {"value": {"type": "String"}}},
+  "@distanceKilometers": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "availabilityOnly": "Только в наличии",
   "priceAmd": "Цена, AMD",
   "priceValueAmd": "{value} AMD",
-  "@priceValueAmd": {"placeholders": {"value": {"type": "num"}}},
+  "@priceValueAmd": {
+    "placeholders": {
+      "value": {
+        "type": "num"
+      }
+    }
+  },
   "priceFromAmd": "от {value} AMD",
-  "@priceFromAmd": {"placeholders": {"value": {"type": "num"}}},
+  "@priceFromAmd": {
+    "placeholders": {
+      "value": {
+        "type": "num"
+      }
+    }
+  },
   "reset": "Сбросить",
   "list": "Список",
   "map": "Карта",
@@ -68,13 +110,31 @@
   "partsShop": "Магазин запчастей",
   "repairShop": "Автосервис",
   "itemCount": "{count, plural, one{{count} позиция} few{{count} позиции} many{{count} позиций} other{{count} позиций}}",
-  "@itemCount": {"placeholders": {"count": {"type": "int"}}},
+  "@itemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "serviceCount": "{count, plural, one{{count} услуга} few{{count} услуги} many{{count} услуг} other{{count} услуг}}",
-  "@serviceCount": {"placeholders": {"count": {"type": "int"}}},
+  "@serviceCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "vendor": "Продавец",
   "verifiedVendor": "Проверенный продавец",
   "ratingOutOfFive": "{rating} из 5",
-  "@ratingOutOfFive": {"placeholders": {"rating": {"type": "String"}}},
+  "@ratingOutOfFive": {
+    "placeholders": {
+      "rating": {
+        "type": "String"
+      }
+    }
+  },
   "openingHours": "Часы работы",
   "weekdaysShort": "Пн–Пт",
   "saturdayShort": "Сб",
@@ -86,5 +146,161 @@
   "language": "Язык",
   "russian": "Русский",
   "armenian": "Հայերեն",
-  "english": "English"
+  "english": "English",
+  "noModelsForMake": "Для этой марки пока нет моделей.",
+  "noMakesInCatalog": "Каталог марок пуст.",
+  "authTitle": "Вход в приложение",
+  "authSubtitle": "Запчасти и автосервисы рядом с вами",
+  "authSignInTab": "Вход",
+  "authSignUpTab": "Регистрация",
+  "authIdentifierLabel": "Телефон или e-mail",
+  "authIdentifierInvalid": "Это не похоже на телефон или e-mail",
+  "authPasswordLabel": "Пароль",
+  "authPasswordRepeatLabel": "Повторите пароль",
+  "authSignInButton": "Войти",
+  "authSignUpButton": "Зарегистрироваться",
+  "authIdentifierRequired": "Введите телефон или e-mail",
+  "authPasswordRequired": "Введите пароль",
+  "authPasswordTooShort": "Пароль должен быть не короче 8 символов",
+  "authPasswordsDoNotMatch": "Пароли не совпадают",
+  "authInvalidCredentials": "Неверный телефон, e-mail или пароль",
+  "authAccountExists": "Аккаунт с такими данными уже существует",
+  "authTooManyAttempts": "Слишком много попыток. Подождите минуту",
+  "authNetworkError": "Сервер недоступен. Проверьте соединение",
+  "authUnknownError": "Не удалось выполнить вход. Попробуйте ещё раз",
+  "authSignedInAs": "Вы вошли как {name}",
+  "@authSignedInAs": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "authAdminBadge": "Администратор",
+  "authSignOut": "Выйти",
+  "authCodeTitle": "Подтвердите контакт",
+  "authCodeSentTo": "Код отправлен на {target}",
+  "@authCodeSentTo": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "authCodeLabel": "Код из 6 цифр",
+  "authConfirmButton": "Подтвердить",
+  "authResendCode": "Отправить код ещё раз",
+  "authCodeResent": "Код отправлен повторно",
+  "authChangeContact": "Изменить контакт",
+  "authCodeRequired": "Введите код из 6 цифр",
+  "authCodeInvalid": "Неверный код",
+  "authCodeExpired": "Код устарел. Запросите новый",
+  "hubSectionsLabel": "Разделы",
+  "@hubSectionsLabel": {
+    "description": "Label above the list of sections on the main screen"
+  },
+  "hubParts": "Запчасти",
+  "@hubParts": {
+    "description": "Main-screen tile opening the parts search"
+  },
+  "hubPartsHint": "Магазины рядом с вами",
+  "@hubPartsHint": {
+    "description": "Supporting line under the parts tile"
+  },
+  "hubRepair": "Ремонт",
+  "@hubRepair": {
+    "description": "Main-screen tile opening the repair search"
+  },
+  "hubRepairHint": "Автосервисы рядом с вами",
+  "@hubRepairHint": {
+    "description": "Supporting line under the repair tile"
+  },
+  "hubPartsRepair": "Запчасти и ремонт",
+  "@hubPartsRepair": {
+    "description": "Main-screen tile opening the parts and repair search"
+  },
+  "hubPartsRepairHint": "Магазины и автосервисы рядом с вами",
+  "@hubPartsRepairHint": {
+    "description": "Supporting line under the parts and repair tile"
+  },
+  "hubRoadside": "Помощь на дороге",
+  "@hubRoadside": {
+    "description": "Main-screen tile for towing and roadside assistance"
+  },
+  "hubRoadsideHint": "Эвакуатор и помощь на месте",
+  "@hubRoadsideHint": {
+    "description": "Supporting line under the roadside assistance tile"
+  },
+  "hubComingSoon": "Скоро",
+  "@hubComingSoon": {
+    "description": "Badge on a main-screen tile whose section is not built yet"
+  },
+  "hubComingSoonMessage": "Раздел скоро появится",
+  "@hubComingSoonMessage": {
+    "description": "Shown when tapping a section that is not built yet"
+  },
+  "aiChatBarPrompt": "Спросите помощника о машине",
+  "@aiChatBarPrompt": {
+    "description": "Placeholder text inside the chat bar on the main screen"
+  },
+  "aiChatTitle": "Помощник",
+  "@aiChatTitle": {
+    "description": "Title of the full-screen assistant chat"
+  },
+  "aiChatInputHint": "Опишите проблему...",
+  "@aiChatInputHint": {
+    "description": "Placeholder in the chat message input field"
+  },
+  "aiChatSend": "Отправить",
+  "@aiChatSend": {
+    "description": "Tooltip on the send button in the chat"
+  },
+  "aiChatGreeting": "Что случилось с машиной?",
+  "@aiChatGreeting": {
+    "description": "Heading of the empty chat state"
+  },
+  "aiChatGreetingHint": "Опишите проблему своими словами — помогу понять причину и найти нужную деталь рядом с вами.",
+  "@aiChatGreetingHint": {
+    "description": "Supporting line under the empty-chat heading"
+  },
+  "aiChatExamplesLabel": "Например",
+  "@aiChatExamplesLabel": {
+    "description": "Label above the tappable example questions"
+  },
+  "aiChatExampleKnock": "Стучит спереди на кочках",
+  "@aiChatExampleKnock": {
+    "description": "Example question: a knocking noise over bumps"
+  },
+  "aiChatExamplePads": "Нужны тормозные колодки",
+  "@aiChatExamplePads": {
+    "description": "Example question: looking for brake pads"
+  },
+  "aiChatExampleOil": "Какое масло заливать?",
+  "@aiChatExampleOil": {
+    "description": "Example question: which engine oil to use"
+  },
+  "aiChatDisclaimer": "Помощник называет вероятные причины и не заменяет осмотр на сервисе.",
+  "@aiChatDisclaimer": {
+    "description": "Safety notice shown in the chat: the assistant is not a mechanic"
+  },
+  "aiChatNotConnected": "Помощник пока не подключён — готов только интерфейс. Скоро он сможет искать детали в каталоге и отвечать на вопросы.",
+  "@aiChatNotConnected": {
+    "description": "Stub reply shown until the backend is built"
+  },
+  "yearLabel": "Год выпуска",
+  "@yearLabel": {
+    "description": "Label of the year-of-manufacture row in the car selector"
+  },
+  "yearNotSpecified": "Не указан",
+  "@yearNotSpecified": {
+    "description": "Value shown in the year row when no year has been chosen"
+  },
+  "selectYear": "Выберите год",
+  "@selectYear": {
+    "description": "Title of the year picker sheet"
+  },
+  "yearSkip": "Не указывать год",
+  "@yearSkip": {
+    "description": "Option in the year picker that clears the year"
+  }
 }

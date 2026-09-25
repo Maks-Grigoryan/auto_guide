@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../l10n/l10n.dart';
+import '../../../core/utils/json_value.dart';
 
 import '../data/catalog_providers.dart';
 import '../state/selected_car_notifier.dart';
@@ -26,7 +27,8 @@ class _ModelListPageState extends ConsumerState<ModelListPage> {
   Widget build(BuildContext context) {
     final modelsAsync = ref.watch(modelsProvider(widget.makeId));
     final car = ref.watch(selectedCarProvider);
-    final appBarTitle = car?.makeName ?? '';
+    final draft = ref.read(selectedCarProvider.notifier);
+    final appBarTitle = draft.draftMakeName ?? car?.makeName ?? '';
 
     return Scaffold(
       backgroundColor: const Color(0xFF1C1F26),
@@ -57,13 +59,24 @@ class _ModelListPageState extends ConsumerState<ModelListPage> {
                           return name.contains(_query.toLowerCase());
                         }).toList();
 
-                  filtered.sort((a, b) =>
-                      (a['name'] as String).compareTo(b['name'] as String));
+                  // Case-insensitive, matching the make list: a code-unit sort
+                  // puts every capital ahead of every lowercase, so «i30» would
+                  // sort after «Zafira».
+                  filtered.sort((a, b) => (a['name'] as String)
+                      .toLowerCase()
+                      .compareTo((b['name'] as String).toLowerCase()));
 
                   if (filtered.isEmpty) {
+                    // Two different situations wore the same message. With an
+                    // empty search box there is nothing to re-spell — the make
+                    // simply has no models — and telling the user to check
+                    // their typing blamed them for a gap in the catalogue.
+                    final message = _query.isEmpty
+                        ? context.l10n.noModelsForMake
+                        : context.l10n.modelNotFound;
                     return Center(
                       child: Text(
-                        context.l10n.modelNotFound,
+                        message,
                         style: const TextStyle(
                           color: Color(0xFFE0E0E0),
                           fontSize: 16,
@@ -81,7 +94,7 @@ class _ModelListPageState extends ConsumerState<ModelListPage> {
                     ),
                     itemBuilder: (context, index) {
                       final model = filtered[index];
-                      final id = model['id'] as int;
+                      final id = jsonInt(model['id'], field: 'model.id');
                       final name = model['name'] as String;
 
                       return CatalogListTile(

@@ -1,3 +1,5 @@
+import '../utils/json_value.dart';
+
 /// Vendor search result matching the VendorSearchResult interface in
 /// backend/src/search/search.service.ts.
 ///
@@ -48,19 +50,24 @@ class VendorResult {
       type: json['type'] as String,
       phone: json['phone'] as String?,
       address: json['address'] as String?,
-      lat: (json['lat'] as num).toDouble(),
-      lng: (json['lng'] as num).toDouble(),
-      distanceM: (json['distance_m'] as num).toDouble(),
+      lat: jsonDouble(json['lat'], field: 'vendorResult.lat'),
+      lng: jsonDouble(json['lng'], field: 'vendorResult.lng'),
+      distanceM: jsonDouble(
+        json['distance_m'],
+        field: 'vendorResult.distance_m',
+      ),
       // item_count arrives as a string from the DB (BIGINT aggregate).
-      itemCount: int.parse(json['item_count'] as String),
+      itemCount: jsonInt(json['item_count'], field: 'vendorResult.item_count'),
       // min_price is NUMERIC — arrives as string or null.
-      minPrice: json['min_price'] == null
-          ? null
-          : double.parse(json['min_price'] as String),
+      minPrice: jsonNullableDouble(
+        json['min_price'],
+        field: 'vendorResult.min_price',
+      ),
       // rating is NUMERIC — arrives as string or null (migration 006).
-      rating: json['rating'] == null
-          ? null
-          : double.parse(json['rating'] as String),
+      rating: jsonNullableDouble(
+        json['rating'],
+        field: 'vendorResult.rating',
+      ),
     );
   }
 

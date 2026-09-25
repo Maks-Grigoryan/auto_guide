@@ -100,10 +100,27 @@ class GeolocatorDelegate implements LocationServiceDelegate {
 /// Pitfall-3 guard: returns lat first, lng second in [LocationResult].
 /// Consumers must pass lat before lng to SearchApi.searchParts.
 class LocationService {
-  LocationService({LocationServiceDelegate? delegate})
-      : _delegate = delegate ?? GeolocatorDelegate();
+  LocationService({
+    LocationServiceDelegate? delegate,
+    Duration? permissionTimeout,
+    Duration? positionTimeout,
+  })  : _delegate = delegate ?? GeolocatorDelegate(),
+        // Injectable so tests can exercise the fallback without waiting out the
+        // real durations.
+        _permissionTimeout = permissionTimeout ?? defaultPermissionTimeout,
+        _positionTimeout = positionTimeout ?? defaultPositionTimeout;
 
   final LocationServiceDelegate _delegate;
+  final Duration _permissionTimeout;
+  final Duration _positionTimeout;
+
+  /// Long enough for a person to read the system prompt and decide, short
+  /// enough that ignoring it does not look like a frozen app.
+  static const defaultPermissionTimeout = Duration(seconds: 12);
+
+  /// A first GPS fix indoors can take a while; past this the city centre is a
+  /// better answer than a blank screen.
+  static const defaultPositionTimeout = Duration(seconds: 8);
 
   Future<LocationResult> resolve() async {
     final serviceEnabled = await _delegate.isLocationServiceEnabled();
@@ -125,7 +142,14 @@ class LocationService {
     }
 
     if (permission == LocationPermissionStatus.denied) {
-      permission = await _delegate.requestPermission();
+      // A permission prompt that is never answered used to hang resolve()
+      // forever: the caller awaited it, so the screen simply never opened —
+      // no spinner, no message, indistinguishable from a crash. Treat silence
+      // as a refusal and carry on with the Yerevan fallback.
+      permission = await _delegate.requestPermission().timeout(
+            _permissionTimeout,
+            onTimeout: () => LocationPermissionStatus.denied,
+          );
     }
 
     if (permission == LocationPermissionStatus.deniedForever) {
@@ -144,7 +168,12 @@ class LocationService {
       );
     }
 
-    final pos = await _delegate.getCurrentPosition();
+    // Same guard on the fix itself: a granted permission does not guarantee a
+    // position ever arrives (indoors, GPS off mid-flight, a browser that stalls).
+    final pos = await _delegate.getCurrentPosition().timeout(
+      _positionTimeout,
+      onTimeout: () => const LatLng(kYerevanLat, kYerevanLng),
+    );
     return LocationResult(
       lat: pos.lat,
       lng: pos.lng,

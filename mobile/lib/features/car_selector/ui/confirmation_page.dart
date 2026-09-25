@@ -13,12 +13,29 @@ class ConfirmationPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(selectedCarProvider.notifier);
-    final car = ref.watch(selectedCarProvider);
 
-    final makeName = car?.makeName ?? '—';
-    final modelName = car?.modelName ?? '—';
+    final makeName = notifier.draftMakeName;
+    final modelName = notifier.draftModelName;
+
+    // Reached without a draft — a hot restart, or a pasted URL on the web.
+    // There is nothing to confirm, so start the wizard rather than show a page
+    // of dashes above a button that would throw on its null assertions.
+    if (makeName == null || modelName == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted) context.go('/selector/make');
+      });
+      return const Scaffold(backgroundColor: Color(0xFF1C1F26));
+    }
+
+    // Draft only, never falling back to the confirmed car: mixing the two
+    // showed the previous car's generation beside the new make and model
+    // whenever someone chose «Пропустить» on the generation step.
     final generationLabel =
-        car?.generationLabel ?? context.l10n.generationNotSpecified;
+        notifier.draftGenerationLabel ?? context.l10n.generationNotSpecified;
+
+    final draftYear = notifier.draftYear;
+    final yearLabel =
+        draftYear != null ? '$draftYear' : context.l10n.yearNotSpecified;
 
     return Scaffold(
       backgroundColor: const Color(0xFF1C1F26),
@@ -46,11 +63,12 @@ class ConfirmationPage extends ConsumerWidget {
                       label: context.l10n.model,
                       value: modelName,
                       onTap: () {
-                        if (car != null) {
-                          context.push(
-                            '/selector/model',
-                            extra: car.makeId,
-                          );
+                        // Draft only: the guard above has already established
+                        // there is one, and the confirmed car's make would send
+                        // the person to the model list of a different car.
+                        final makeId = notifier.draftMakeId;
+                        if (makeId != null) {
+                          context.push('/selector/model', extra: makeId);
                         } else {
                           context.push('/selector/make');
                         }
@@ -61,10 +79,30 @@ class ConfirmationPage extends ConsumerWidget {
                       label: context.l10n.generation,
                       value: generationLabel,
                       onTap: () {
-                        if (car != null) {
+                        final modelId = notifier.draftModelId;
+                        if (modelId != null) {
                           context.push(
                             '/selector/generation',
-                            extra: car.modelId,
+                            extra: modelId,
+                          );
+                        } else {
+                          context.push('/selector/make');
+                        }
+                      },
+                    ),
+                    const Divider(color: Color(0xFF3D4050)),
+                    // Same destination as the generation row: both are chosen
+                    // on that screen, and a separate step for the year would
+                    // mean leaving one to change the other.
+                    ConfirmationRow(
+                      label: context.l10n.yearLabel,
+                      value: yearLabel,
+                      onTap: () {
+                        final modelId = notifier.draftModelId;
+                        if (modelId != null) {
+                          context.push(
+                            '/selector/generation',
+                            extra: modelId,
                           );
                         } else {
                           context.push('/selector/make');
@@ -88,7 +126,10 @@ class ConfirmationPage extends ConsumerWidget {
               ),
               onPressed: () {
                 notifier.confirm();
-                context.go('/');
+                // Back to the search, not to the main screen: the car is only
+                // ever asked for on the way into the search section, so that is
+                // where the person was going.
+                context.go('/search');
               },
               child: Text(context.l10n.confirmSelection),
             ),

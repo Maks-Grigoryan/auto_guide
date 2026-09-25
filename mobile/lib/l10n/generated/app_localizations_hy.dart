@@ -68,7 +68,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get generationsLoadError => 'Չհաջողվեց բեռնել սերունդները';
 
   @override
-  String get skipGeneration => 'Բաց թողնել (սերունդը կարևոր չէ)';
+  String get skipGeneration => 'Բաց թողնել';
 
   @override
   String fromYear(int year) {
@@ -275,4 +275,194 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get english => 'English';
+
+  @override
+  String get noModelsForMake => 'Այս մակնխանիշի համար մոդելներ դեոշ չկան։';
+
+  @override
+  String get noMakesInCatalog => 'Մակնխանիշների ցանկն դատարկ է։';
+
+  @override
+  String get authTitle => 'Մուտք հավելված';
+
+  @override
+  String get authSubtitle => 'Պահեստամասեր և ավտոսերվիսներ ձեր մոտ';
+
+  @override
+  String get authSignInTab => 'Մուտք';
+
+  @override
+  String get authSignUpTab => 'Գրանցում';
+
+  @override
+  String get authIdentifierLabel => 'Հեռախոս կամ էլ. հասցե';
+
+  @override
+  String get authIdentifierInvalid => 'Սա նման չէ հեռախոսի կամ էլ. հասցեի';
+
+  @override
+  String get authPasswordLabel => 'Գաղտնաբառ';
+
+  @override
+  String get authPasswordRepeatLabel => 'Կրկնեք գաղտնաբառը';
+
+  @override
+  String get authSignInButton => 'Մուտք գործել';
+
+  @override
+  String get authSignUpButton => 'Գրանցվել';
+
+  @override
+  String get authIdentifierRequired => 'Մուտքագրեք հեռախոս կամ էլ. հասցե';
+
+  @override
+  String get authPasswordRequired => 'Մուտքագրեք գաղտնաբառը';
+
+  @override
+  String get authPasswordTooShort => 'Գաղտնաբառը պետք է լինի առնվազն 8 նիշ';
+
+  @override
+  String get authPasswordsDoNotMatch => 'Գաղտնաբառերը չեն համընկնում';
+
+  @override
+  String get authInvalidCredentials => 'Սխալ հեռախոս, էլ. հասցե կամ գաղտնաբառ';
+
+  @override
+  String get authAccountExists => 'Այդպիսի հաշիվ արդեն գոյություն ունի';
+
+  @override
+  String get authTooManyAttempts => 'Չափազանց շատ փորձեր։ Սպասեք մեկ րոպե';
+
+  @override
+  String get authNetworkError => 'Սերվերն անհասանելի է։ Ստուգեք կապը';
+
+  @override
+  String get authUnknownError => 'Չհաջողվեց մուտք գործել։ Փորձեք նորից';
+
+  @override
+  String authSignedInAs(String name) {
+    return 'Դուք մուտք եք գործել որպես $name';
+  }
+
+  @override
+  String get authAdminBadge => 'Ադմինիստրատոր';
+
+  @override
+  String get authSignOut => 'Դուրս գալ';
+
+  @override
+  String get authCodeTitle => 'Հաստատեք կոնտակտը';
+
+  @override
+  String authCodeSentTo(String target) {
+    return 'Կոդն ուղարկվել է $target';
+  }
+
+  @override
+  String get authCodeLabel => '6 նիշանոց կոդ';
+
+  @override
+  String get authConfirmButton => 'Հաստատել';
+
+  @override
+  String get authResendCode => 'Ուղարկել կոդը կրկին';
+
+  @override
+  String get authCodeResent => 'Կոդը կրկին ուղարկվեց';
+
+  @override
+  String get authChangeContact => 'Փոխել կոնտակտը';
+
+  @override
+  String get authCodeRequired => 'Մուտքագրեք 6 նիշանոց կոդը';
+
+  @override
+  String get authCodeInvalid => 'Սխալ կոդ';
+
+  @override
+  String get authCodeExpired => 'Կոդի ժամկետն անցել է։ Խնդրեք նորը';
+
+  @override
+  String get hubSectionsLabel => 'Բաժիններ';
+
+  @override
+  String get hubParts => 'Պահեստամասեր';
+
+  @override
+  String get hubPartsHint => 'Խանութներ ձեր մոտ';
+
+  @override
+  String get hubRepair => 'Վերանորոգում';
+
+  @override
+  String get hubRepairHint => 'Ավտոսերվիսներ ձեր մոտ';
+
+  @override
+  String get hubPartsRepair => 'Պահեստամասեր և վերանորոգում';
+
+  @override
+  String get hubPartsRepairHint => 'Խանութներ և ավտոսերվիսներ ձեր մոտ';
+
+  @override
+  String get hubRoadside => 'Ճանապարհային օգնություն';
+
+  @override
+  String get hubRoadsideHint => 'Էվակուատոր և օգնություն տեղում';
+
+  @override
+  String get hubComingSoon => 'Շուտով';
+
+  @override
+  String get hubComingSoonMessage => 'Բաժինը շուտով կհայտնվի';
+
+  @override
+  String get aiChatBarPrompt => 'Հարցրեք օգնականին ձեր մեքենայի մասին';
+
+  @override
+  String get aiChatTitle => 'Օգնական';
+
+  @override
+  String get aiChatInputHint => 'Նկարագրեք խնդիրը...';
+
+  @override
+  String get aiChatSend => 'Ուղարկել';
+
+  @override
+  String get aiChatGreeting => 'Ի՞նչ է պատահել մեքենային';
+
+  @override
+  String get aiChatGreetingHint =>
+      'Նկարագրեք խնդիրը ձեր բառերով — կօգնեմ հասկանալ պատճառը և գտնել անհրաժեշտ պահեստամասը ձեր մոտ։';
+
+  @override
+  String get aiChatExamplesLabel => 'Օրինակ';
+
+  @override
+  String get aiChatExampleKnock => 'Առջևից թխկթխկոց է լսվում փոսերին';
+
+  @override
+  String get aiChatExamplePads => 'Անհրաժեշտ են արգելակային կոճղակներ';
+
+  @override
+  String get aiChatExampleOil => 'Ի՞նչ յուղ լցնել';
+
+  @override
+  String get aiChatDisclaimer =>
+      'Օգնականը նշում է հավանական պատճառները և չի փոխարինում սերվիսի զննմանը։';
+
+  @override
+  String get aiChatNotConnected =>
+      'Օգնականը դեռ միացված չէ — պատրաստ է միայն ինտերֆեյսը։ Շուտով նա կկարողանա որոնել պահեստամասեր կատալոգում և պատասխանել հարցերին։';
+
+  @override
+  String get yearLabel => 'Թողարկման տարի';
+
+  @override
+  String get yearNotSpecified => 'Նշված չէ';
+
+  @override
+  String get selectYear => 'Ընտրեք տարին';
+
+  @override
+  String get yearSkip => 'Չնշել տարին';
 }

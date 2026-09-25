@@ -1,3 +1,5 @@
+import '../utils/json_value.dart';
+
 class VendorDetail {
   const VendorDetail({
     required this.id,
@@ -31,9 +33,9 @@ class VendorDetail {
       type: json['type'] as String,
       phone: json['phone'] as String?,
       address: json['address'] as String?,
-      lat: _asDouble(json['lat']),
-      lng: _asDouble(json['lng']),
-      rating: json['rating'] == null ? null : _asDouble(json['rating']),
+      lat: jsonDouble(json['lat'], field: 'vendor.lat'),
+      lng: jsonDouble(json['lng'], field: 'vendor.lng'),
+      rating: jsonNullableDouble(json['rating'], field: 'vendor.rating'),
       isVerified: json['is_verified'] as bool? ?? false,
       hours: rawHours is Map
           ? rawHours.map(
@@ -41,10 +43,5 @@ class VendorDetail {
             )
           : null,
     );
-  }
-
-  static double _asDouble(dynamic value) {
-    if (value is num) return value.toDouble();
-    return double.parse(value.toString());
   }
 }

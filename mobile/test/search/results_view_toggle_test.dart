@@ -93,28 +93,50 @@ void main() {
         ),
       );
 
-      // The SizedBox(height: 48) wrapping the SegmentedButton renders
-      // a widget of height exactly 48.
-      final sizedBox = tester.widget<SizedBox>(
-        find
-            .ancestor(
-              of: find.byType(SegmentedButton<int>),
-              matching: find.byType(SizedBox),
-            )
-            .first,
-      );
-      expect(sizedBox.height, greaterThanOrEqualTo(48.0));
+      // Measured, not read off a SizedBox: what matters is the tap target the
+      // person actually gets, whichever widget happens to produce it.
+      final size = tester.getSize(find.byType(ResultsViewToggle));
+      expect(size.height, greaterThanOrEqualTo(48.0));
     });
 
-    testWidgets(
-        'when mapAvailable=false, the SegmentedButton has null onSelectionChanged',
-        (tester) async {
+    testWidgets('with no map, neither segment does anything', (tester) async {
+      var listCalled = false;
+      var mapCalled = false;
+
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: ResultsViewToggle(
               selectedIndex: 0,
               mapAvailable: false,
+              onListSelected: () => listCalled = true,
+              onMapSelected: () => mapCalled = true,
+            ),
+          ),
+        ),
+      );
+
+      // D-04 says the whole control goes inert, not just «Карта». Stated as
+      // behaviour rather than «the button's callback is null», it keeps holding
+      // now that the control is no longer built from SegmentedButton.
+      await tester.tap(find.text('Карта'), warnIfMissed: false);
+      await tester.tap(find.text('Список'), warnIfMissed: false);
+      await tester.pump();
+
+      expect(mapCalled, isFalse);
+      expect(listCalled, isFalse);
+    });
+
+    testWidgets('the chosen segment is marked without relying on colour',
+        (tester) async {
+      final handle = tester.ensureSemantics();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ResultsViewToggle(
+              selectedIndex: 1,
+              mapAvailable: true,
               onListSelected: () {},
               onMapSelected: () {},
             ),
@@ -122,10 +144,22 @@ void main() {
         ),
       );
 
-      final btn = tester.widget<SegmentedButton<int>>(
-        find.byType(SegmentedButton<int>),
-      );
-      expect(btn.onSelectionChanged, isNull);
+      // A check mark and a semantics flag, so the selection survives both a
+      // greyscale screen and a screen reader (ACC-02).
+      expect(find.byIcon(Icons.check), findsOneWidget);
+
+      // Only the flags this test is about: matchesSemantics would demand every
+      // other flag and action be listed too, which turns an accessibility
+      // check into a transcript of Flutter's internals.
+      // isSelected is three-valued — «not selected» and «selection does not
+      // apply here» are different things — so it is compared by name rather
+      // than truth-tested. Its type is not exported from flutter/semantics.dart,
+      // and naming it would mean importing dart:ui into a widget test.
+      final flags = tester.getSemantics(find.text('Карта')).flagsCollection;
+      expect(flags.isSelected.name, 'isTrue');
+      expect(flags.isButton, isTrue);
+
+      handle.dispose();
     });
   });
 

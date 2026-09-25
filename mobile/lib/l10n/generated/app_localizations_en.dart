@@ -68,7 +68,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get generationsLoadError => 'Could not load generations';
 
   @override
-  String get skipGeneration => 'Skip (any generation)';
+  String get skipGeneration => 'Skip';
 
   @override
   String fromYear(int year) {
@@ -274,4 +274,196 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get english => 'English';
+
+  @override
+  String get noModelsForMake => 'This make has no models yet.';
+
+  @override
+  String get noMakesInCatalog => 'The make catalogue is empty.';
+
+  @override
+  String get authTitle => 'Sign in';
+
+  @override
+  String get authSubtitle => 'Car parts and workshops near you';
+
+  @override
+  String get authSignInTab => 'Sign in';
+
+  @override
+  String get authSignUpTab => 'Register';
+
+  @override
+  String get authIdentifierLabel => 'Phone or email';
+
+  @override
+  String get authIdentifierInvalid =>
+      'That does not look like a phone number or an email';
+
+  @override
+  String get authPasswordLabel => 'Password';
+
+  @override
+  String get authPasswordRepeatLabel => 'Repeat password';
+
+  @override
+  String get authSignInButton => 'Sign in';
+
+  @override
+  String get authSignUpButton => 'Create account';
+
+  @override
+  String get authIdentifierRequired => 'Enter a phone number or email';
+
+  @override
+  String get authPasswordRequired => 'Enter your password';
+
+  @override
+  String get authPasswordTooShort => 'Password must be at least 8 characters';
+
+  @override
+  String get authPasswordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get authInvalidCredentials => 'Wrong phone, email or password';
+
+  @override
+  String get authAccountExists =>
+      'An account with these details already exists';
+
+  @override
+  String get authTooManyAttempts => 'Too many attempts. Wait a minute';
+
+  @override
+  String get authNetworkError => 'Server unreachable. Check your connection';
+
+  @override
+  String get authUnknownError => 'Could not sign in. Please try again';
+
+  @override
+  String authSignedInAs(String name) {
+    return 'Signed in as $name';
+  }
+
+  @override
+  String get authAdminBadge => 'Administrator';
+
+  @override
+  String get authSignOut => 'Sign out';
+
+  @override
+  String get authCodeTitle => 'Confirm your contact';
+
+  @override
+  String authCodeSentTo(String target) {
+    return 'Code sent to $target';
+  }
+
+  @override
+  String get authCodeLabel => '6-digit code';
+
+  @override
+  String get authConfirmButton => 'Confirm';
+
+  @override
+  String get authResendCode => 'Send the code again';
+
+  @override
+  String get authCodeResent => 'Code sent again';
+
+  @override
+  String get authChangeContact => 'Change contact';
+
+  @override
+  String get authCodeRequired => 'Enter the 6-digit code';
+
+  @override
+  String get authCodeInvalid => 'Wrong code';
+
+  @override
+  String get authCodeExpired => 'The code has expired. Request a new one';
+
+  @override
+  String get hubSectionsLabel => 'Sections';
+
+  @override
+  String get hubParts => 'Parts';
+
+  @override
+  String get hubPartsHint => 'Shops near you';
+
+  @override
+  String get hubRepair => 'Repair';
+
+  @override
+  String get hubRepairHint => 'Garages near you';
+
+  @override
+  String get hubPartsRepair => 'Parts and repair';
+
+  @override
+  String get hubPartsRepairHint => 'Shops and services near you';
+
+  @override
+  String get hubRoadside => 'Roadside assistance';
+
+  @override
+  String get hubRoadsideHint => 'Towing and on-the-spot help';
+
+  @override
+  String get hubComingSoon => 'Soon';
+
+  @override
+  String get hubComingSoonMessage => 'This section is coming soon';
+
+  @override
+  String get aiChatBarPrompt => 'Ask the assistant about your car';
+
+  @override
+  String get aiChatTitle => 'Assistant';
+
+  @override
+  String get aiChatInputHint => 'Describe the problem...';
+
+  @override
+  String get aiChatSend => 'Send';
+
+  @override
+  String get aiChatGreeting => 'What happened to your car?';
+
+  @override
+  String get aiChatGreetingHint =>
+      'Describe the problem in your own words — I will help work out the cause and find the part you need nearby.';
+
+  @override
+  String get aiChatExamplesLabel => 'For example';
+
+  @override
+  String get aiChatExampleKnock => 'Knocking at the front over bumps';
+
+  @override
+  String get aiChatExamplePads => 'I need brake pads';
+
+  @override
+  String get aiChatExampleOil => 'Which engine oil should I use?';
+
+  @override
+  String get aiChatDisclaimer =>
+      'The assistant suggests likely causes and does not replace an inspection at a garage.';
+
+  @override
+  String get aiChatNotConnected =>
+      'The assistant is not connected yet — only the interface is ready. Soon it will search the catalogue and answer your questions.';
+
+  @override
+  String get yearLabel => 'Year of manufacture';
+
+  @override
+  String get yearNotSpecified => 'Not specified';
+
+  @override
+  String get selectYear => 'Select a year';
+
+  @override
+  String get yearSkip => 'Leave the year unset';
 }

@@ -7,6 +7,7 @@ import '../../core/map/map_config.dart';
 import '../../l10n/l10n.dart';
 import '../search/providers/parts_search_provider.dart';
 import '../search/providers/sorted_filtered_provider.dart';
+import 'widgets/map_empty_notice.dart';
 import 'widgets/map_unavailable_notice.dart';
 import 'widgets/results_map_view.dart';
 import 'widgets/results_view_toggle.dart';
@@ -174,22 +175,18 @@ class _PartsResultsPageState extends ConsumerState<PartsResultsPage> {
 
   Widget _buildMapView(List<dynamic> results) {
     if (results.isEmpty) {
-      // Map-view empty: show Yerevan-centred map with overlay notice (UI-SPEC).
+      // The map stays whole even with nothing to show: it is the point of the
+      // tab, and the user still wants to see the area being searched. The
+      // notice sits in a band at the top rather than centred across the map,
+      // which covered exactly the part worth looking at.
       return Stack(
         children: [
           const ResultsMapView(vendors: []),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                context.l10n.nothingNearby,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Color(0xFFE0E0E0),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: MapEmptyNotice(text: context.l10n.nothingNearby),
           ),
         ],
       );

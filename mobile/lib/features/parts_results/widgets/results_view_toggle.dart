@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/widgets/segmented_toggle.dart';
 import '../../../l10n/l10n.dart';
 
 /// List⇄map segmented toggle for the results screen.
@@ -31,33 +32,22 @@ class ResultsViewToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 48,
-      child: SegmentedButton<int>(
-        segments: [
-          ButtonSegment<int>(value: 0, label: Text(context.l10n.list)),
-          ButtonSegment<int>(
-            value: 1,
-            label: Text(context.l10n.map),
-            enabled: mapAvailable,
-          ),
-        ],
-        selected: {selectedIndex},
-        // D-04: null onSelectionChanged makes the entire control inert when
-        // the map is unavailable — prevents any segment from being tapped.
-        onSelectionChanged: mapAvailable
-            ? (Set<int> s) {
-                if (s.first == 0) {
-                  onListSelected();
-                } else {
-                  onMapSelected();
-                }
-              }
-            : null,
-        style: ButtonStyle(
-          minimumSize: WidgetStateProperty.all(const Size(0, 48)),
-        ),
-      ),
+    return SegmentedToggle(
+      selectedIndex: selectedIndex,
+      // D-04: with no map key the whole control is inert, and «Карта» reads as
+      // disabled rather than merely doing nothing when tapped.
+      enabled: mapAvailable,
+      segments: [
+        SegmentedToggleItem(label: context.l10n.list),
+        SegmentedToggleItem(label: context.l10n.map, enabled: mapAvailable),
+      ],
+      onSelected: (index) {
+        if (index == 0) {
+          onListSelected();
+        } else {
+          onMapSelected();
+        }
+      },
     );
   }
 }

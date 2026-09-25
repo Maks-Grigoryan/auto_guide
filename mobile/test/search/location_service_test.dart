@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:avto_app/core/location/location_service.dart';
@@ -126,6 +127,74 @@ void main() {
     // When the service is off we treat it like denied (not deniedForever)
     // so the user can toggle location on and retry.
     expect(result.status, LocationResultStatus.denied);
+    expect(result.lat, closeTo(40.1872, 0.0001));
+    expect(result.lng, closeTo(44.5152, 0.0001));
+  });
+
+  _timeoutTests();
+}
+
+// ---------------------------------------------------------------------------
+// Timeout guards
+//
+// These cover the failure that looked worst in practice: a permission prompt or
+// a GPS fix that never arrives. resolve() used to await it forever, so the
+// screen never opened — no spinner, no message, indistinguishable from a crash.
+// ---------------------------------------------------------------------------
+
+/// Never answers the permission prompt, like a browser tab whose dialog the
+/// user ignores.
+class _HangingPermissionDelegate implements LocationServiceDelegate {
+  @override
+  Future<bool> isLocationServiceEnabled() async => true;
+  @override
+  Future<LocationPermissionStatus> checkPermission() async =>
+      LocationPermissionStatus.denied;
+  @override
+  Future<LocationPermissionStatus> requestPermission() =>
+      Completer<LocationPermissionStatus>().future; // never completes
+  @override
+  Future<LatLng> getCurrentPosition() async => const LatLng(1, 2);
+}
+
+/// Grants permission but never produces a fix.
+class _HangingPositionDelegate implements LocationServiceDelegate {
+  @override
+  Future<bool> isLocationServiceEnabled() async => true;
+  @override
+  Future<LocationPermissionStatus> checkPermission() async =>
+      LocationPermissionStatus.granted;
+  @override
+  Future<LocationPermissionStatus> requestPermission() async =>
+      LocationPermissionStatus.granted;
+  @override
+  Future<LatLng> getCurrentPosition() => Completer<LatLng>().future;
+}
+
+void _timeoutTests() {
+  test('unanswered permission prompt → Yerevan fallback instead of hanging',
+      () async {
+    final service = LocationService(
+      delegate: _HangingPermissionDelegate(),
+      permissionTimeout: const Duration(milliseconds: 40),
+    );
+
+    final result = await service.resolve();
+
+    expect(result.status, LocationResultStatus.denied);
+    expect(result.lat, closeTo(40.1872, 0.0001));
+    expect(result.lng, closeTo(44.5152, 0.0001));
+  });
+
+  test('GPS fix that never arrives → Yerevan fallback instead of hanging',
+      () async {
+    final service = LocationService(
+      delegate: _HangingPositionDelegate(),
+      positionTimeout: const Duration(milliseconds: 40),
+    );
+
+    final result = await service.resolve();
+
     expect(result.lat, closeTo(40.1872, 0.0001));
     expect(result.lng, closeTo(44.5152, 0.0001));
   });

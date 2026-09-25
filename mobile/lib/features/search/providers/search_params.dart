@@ -22,6 +22,7 @@ class PartsQuery {
     this.generationId,
     this.categoryId,
     this.query,
+    this.year,
     this.sort = ResultSort.distance,
     this.availabilityOnly = false,
     this.minPrice,
@@ -36,6 +37,9 @@ class PartsQuery {
   final int? generationId;
   final int? categoryId;
   final String? query;
+
+  /// Year of manufacture. Server-side, so changing it DOES re-fetch.
+  final int? year;
 
   /// Client-side sort order (does NOT trigger a network re-fetch).
   final ResultSort sort;
@@ -62,6 +66,7 @@ class PartsQuery {
     int? generationId,
     int? categoryId,
     String? query,
+    int? year,
     ResultSort? sort,
     bool? availabilityOnly,
     double? minPrice,
@@ -78,6 +83,7 @@ class PartsQuery {
       generationId: generationId ?? this.generationId,
       categoryId: categoryId ?? this.categoryId,
       query: query ?? this.query,
+      year: year ?? this.year,
       sort: sort ?? this.sort,
       availabilityOnly: availabilityOnly ?? this.availabilityOnly,
       // Sentinel flags let null explicitly clear a price bound (CR-02):
@@ -90,7 +96,7 @@ class PartsQuery {
   @override
   String toString() => 'PartsQuery(lat: $lat, lng: $lng, radius: $radius, '
       'makeId: $makeId, modelId: $modelId, generationId: $generationId, '
-      'categoryId: $categoryId, query: $query, sort: $sort, '
+      'categoryId: $categoryId, query: $query, year: $year, sort: $sort, '
       'availabilityOnly: $availabilityOnly, minPrice: $minPrice, maxPrice: $maxPrice)';
 }
 

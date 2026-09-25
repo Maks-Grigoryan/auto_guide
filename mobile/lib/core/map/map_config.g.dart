@@ -8,12 +8,28 @@ part of 'map_config.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// Whether the Yandex MapKit SDK was successfully initialised.
+///
+/// Defaults to false (unavailable). Overridden in main() via
+/// ProviderScope.overrides after the init attempt (D-04 guard).
+/// Consumers: ResultsViewToggle (disable «Карта» segment), MapUnavailableNotice.
 
 @ProviderFor(mapAvailable)
 const mapAvailableProvider = MapAvailableProvider._();
 
+/// Whether the Yandex MapKit SDK was successfully initialised.
+///
+/// Defaults to false (unavailable). Overridden in main() via
+/// ProviderScope.overrides after the init attempt (D-04 guard).
+/// Consumers: ResultsViewToggle (disable «Карта» segment), MapUnavailableNotice.
+
 final class MapAvailableProvider extends $FunctionalProvider<bool, bool, bool>
     with $Provider<bool> {
+  /// Whether the Yandex MapKit SDK was successfully initialised.
+  ///
+  /// Defaults to false (unavailable). Overridden in main() via
+  /// ProviderScope.overrides after the init attempt (D-04 guard).
+  /// Consumers: ResultsViewToggle (disable «Карта» segment), MapUnavailableNotice.
   const MapAvailableProvider._()
       : super(
           from: null,
@@ -47,4 +63,4 @@ final class MapAvailableProvider extends $FunctionalProvider<bool, bool, bool>
   }
 }
 
-String _$mapAvailableHash() => r'a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0';
+String _$mapAvailableHash() => r'f93da15ab788d2dbb62b29eef6058582e9f82c0c';

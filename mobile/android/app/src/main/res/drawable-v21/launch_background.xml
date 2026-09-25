@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Modify this file to customize your launch splash screen -->
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="?android:colorBackground" />
+<!--
+  Launch window for API 21+.
 
-    <!-- You can insert your own image assets here -->
-    <!-- <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@mipmap/launch_image" />
-    </item> -->
+  Was `?android:colorBackground`, which follows the phone's day/night setting —
+  white on a phone in light mode. This app has only a dark theme, so the launch
+  window is pinned to the same surface colour the first Flutter frame paints.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/avto_surface" />
 </layer-list>

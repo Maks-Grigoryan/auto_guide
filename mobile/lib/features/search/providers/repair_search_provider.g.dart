@@ -8,9 +8,18 @@ part of 'repair_search_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// Returns repair search results for the current [RepairParams].
+///
+/// Returns [] immediately when params are null (no submit yet).
+/// On submit, calls SearchApi.searchRepair with the submitted RepairQuery.
 
 @ProviderFor(repairSearch)
 const repairSearchProvider = RepairSearchProvider._();
+
+/// Returns repair search results for the current [RepairParams].
+///
+/// Returns [] immediately when params are null (no submit yet).
+/// On submit, calls SearchApi.searchRepair with the submitted RepairQuery.
 
 final class RepairSearchProvider extends $FunctionalProvider<
         AsyncValue<List<VendorResult>>,
@@ -19,6 +28,10 @@ final class RepairSearchProvider extends $FunctionalProvider<
     with
         $FutureModifier<List<VendorResult>>,
         $FutureProvider<List<VendorResult>> {
+  /// Returns repair search results for the current [RepairParams].
+  ///
+  /// Returns [] immediately when params are null (no submit yet).
+  /// On submit, calls SearchApi.searchRepair with the submitted RepairQuery.
   const RepairSearchProvider._()
       : super(
           from: null,
@@ -45,4 +58,4 @@ final class RepairSearchProvider extends $FunctionalProvider<
   }
 }
 
-String _$repairSearchHash() => r'b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2';
+String _$repairSearchHash() => r'34bda881c1ff5c77f04baf8678d8656b909a7193';

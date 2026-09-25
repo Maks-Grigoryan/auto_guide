@@ -25,5 +25,6 @@ Future<List<VendorResult>> partsSearch(Ref ref) async {
     generationId: params.generationId,
     categoryId: params.categoryId,
     query: params.query,
+    year: params.year,
   );
 }

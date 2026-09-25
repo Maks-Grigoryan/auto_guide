@@ -37,7 +37,18 @@ const _car = SelectedCar(
 
 class _SelectedCarForTest extends SelectedCarNotifier {
   @override
-  SelectedCar? build() => _car;
+  SelectedCar? build() {
+    // Seed the in-progress draft as well as the confirmed car. The
+    // confirmation screen renders the draft and only the draft — reaching it
+    // without one means the wizard was never walked, so it sends the person
+    // back to the start and there would be nothing here to measure.
+    //
+    // Safe inside build(): none of these touch `state`.
+    pickMake(_car.makeId, _car.makeName);
+    pickModel(_car.modelId, _car.modelName);
+    pickGeneration(_car.generationId!, _car.generationLabel!);
+    return _car;
+  }
 
   @override
   void confirm() {}

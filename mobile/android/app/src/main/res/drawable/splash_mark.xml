@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Brand mark for the system splash screen: the same two sheared amber rules as
+  the launcher icon, so the splash and the icon read as one identity.
+
+  Drawn on the 288dp canvas Android uses for splash icons, but kept inside the
+  central ~130dp. On API 31+ the outer third of that canvas is masked away, and
+  a mark sized to the full viewport would come out with its ends clipped.
+
+  Vector rather than PNG so it stays sharp at every density and adds no weight.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="288dp"
+    android:height="288dp"
+    android:viewportWidth="288"
+    android:viewportHeight="288">
+
+    <!-- Upper rule, the dimmer of the two. -->
+    <path
+        android:fillColor="#F5B544"
+        android:pathData="M120,114.5 L220,114.5 L194,131.5 L94,131.5 Z" />
+
+    <!-- Lower rule, full accent. -->
+    <path
+        android:fillColor="#F5A623"
+        android:pathData="M120,156.5 L220,156.5 L194,173.5 L94,173.5 Z" />
+</vector>

@@ -1,3 +1,5 @@
+import '../../../core/utils/json_value.dart';
+
 /// Immutable value object representing the user's confirmed car selection.
 ///
 /// Persisted to Hive CE box 'selectedCar' via [toMap]/[fromMap] without a
@@ -11,6 +13,7 @@ class SelectedCar {
     required this.modelName,
     this.generationId,
     this.generationLabel,
+    this.year,
   });
 
   final int makeId;
@@ -22,6 +25,13 @@ class SelectedCar {
   final int? generationId;
   final String? generationLabel;
 
+  /// Year of manufacture. Nullable, and skipping it stays a first-class choice.
+  ///
+  /// Kept beside the generation rather than derived from it: most makes in this
+  /// catalogue have no generation rows at all, and for those the year is the
+  /// only thing that narrows a model down.
+  final int? year;
+
   /// Serialise to a Map for Hive storage.
   /// Persist minimal display fields only so the chip renders offline.
   Map<String, dynamic> toMap() => {
@@ -31,22 +41,30 @@ class SelectedCar {
         'modelName': modelName,
         'generationId': generationId,
         'generationLabel': generationLabel,
+        'year': year,
       };
 
   /// Deserialise from Hive's [Map<dynamic,dynamic>].
   factory SelectedCar.fromMap(Map<dynamic, dynamic> m) => SelectedCar(
-        makeId: m['makeId'] as int,
+        makeId: jsonInt(m['makeId'], field: 'selectedCar.makeId'),
         makeName: m['makeName'] as String,
-        modelId: m['modelId'] as int,
+        modelId: jsonInt(m['modelId'], field: 'selectedCar.modelId'),
         modelName: m['modelName'] as String,
-        generationId: m['generationId'] as int?,
+        generationId: jsonNullableInt(
+          m['generationId'],
+          field: 'selectedCar.generationId',
+        ),
         generationLabel: m['generationLabel'] as String?,
+        // Absent for cars confirmed before the year picker existed; those
+        // entries are read back as "year not specified" rather than rejected.
+        year: jsonNullableInt(m['year'], field: 'selectedCar.year'),
       );
 
   @override
   String toString() => 'SelectedCar(makeId: $makeId, makeName: $makeName, '
       'modelId: $modelId, modelName: $modelName, '
-      'generationId: $generationId, generationLabel: $generationLabel)';
+      'generationId: $generationId, generationLabel: $generationLabel, '
+      'year: $year)';
 
   @override
   bool operator ==(Object other) =>
@@ -57,7 +75,8 @@ class SelectedCar {
           modelId == other.modelId &&
           modelName == other.modelName &&
           generationId == other.generationId &&
-          generationLabel == other.generationLabel;
+          generationLabel == other.generationLabel &&
+          year == other.year;
 
   @override
   int get hashCode => Object.hash(
@@ -67,5 +86,6 @@ class SelectedCar {
         modelName,
         generationId,
         generationLabel,
+        year,
       );
 }

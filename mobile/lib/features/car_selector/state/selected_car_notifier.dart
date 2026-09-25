@@ -16,18 +16,34 @@ class _InProgress {
   String? modelName;
   int? generationId;
   String? generationLabel;
+  int? year;
 }
 
 // ---------------------------------------------------------------------------
 // Notifier
 // ---------------------------------------------------------------------------
 
-@riverpod
+/// Must outlive any single screen.
+///
+/// As an autoDispose provider this was torn down whenever no widget happened to
+/// be watching it between selector steps, taking the in-progress draft with it.
+/// pickModel then rebuilt an empty draft via `??=`, so the model and generation
+/// were recorded while the make was silently lost — and confirm() blew up on
+/// `makeId!`, leaving the button looking dead.
+@Riverpod(keepAlive: true)
 class SelectedCarNotifier extends _$SelectedCarNotifier {
   static const _boxName = 'selectedCar';
   static const _key = 'current';
 
   _InProgress? _inProgress;
+
+  int? get draftMakeId => _inProgress?.makeId;
+  String? get draftMakeName => _inProgress?.makeName;
+  int? get draftModelId => _inProgress?.modelId;
+  String? get draftModelName => _inProgress?.modelName;
+  int? get draftGenerationId => _inProgress?.generationId;
+  String? get draftGenerationLabel => _inProgress?.generationLabel;
+  int? get draftYear => _inProgress?.year;
 
   @override
   SelectedCar? build() {
@@ -43,12 +59,17 @@ class SelectedCarNotifier extends _$SelectedCarNotifier {
 
   /// Picks a make and cascade-resets model + generation (D-03).
   /// Re-initialises _inProgress so stale sub-selections cannot linger.
+  ///
+  /// The confirmed car is deliberately left alone. Clearing it here made the
+  /// home screen's car chip vanish the moment a make was tapped: if the wizard
+  /// was then abandoned nothing was confirmed, so the chip never came back —
+  /// while the router, which reads Hive rather than this state, still saw a car
+  /// and would not send the person back to the selector either. An edit that is
+  /// never finished must change nothing.
   void pickMake(int id, String name) {
     _inProgress = _InProgress()
       ..makeId = id
       ..makeName = name;
-    // Clear confirmed state while the user is editing (UI reacts immediately).
-    state = null;
   }
 
   /// Picks a model and clears generation (D-03 partial reset).
@@ -69,6 +90,16 @@ class SelectedCarNotifier extends _$SelectedCarNotifier {
       ..generationLabel = label;
   }
 
+  /// Sets the year of manufacture, or clears it when [year] is null.
+  ///
+  /// Independent of the generation: picking one does not change the other, and
+  /// skipping the year is a choice the flow has to carry rather than a gap to
+  /// fill in later.
+  void pickYear(int? year) {
+    _inProgress ??= _InProgress();
+    _inProgress!.year = year;
+  }
+
   /// Builds a [SelectedCar] from the current in-progress selection,
   /// persists it to Hive, and updates [state].
   void confirm() {
@@ -80,6 +111,7 @@ class SelectedCarNotifier extends _$SelectedCarNotifier {
       modelName: p.modelName!,
       generationId: p.generationId,
       generationLabel: p.generationLabel,
+      year: p.year,
     );
     Hive.box(_boxName).put(_key, car.toMap());
     state = car;

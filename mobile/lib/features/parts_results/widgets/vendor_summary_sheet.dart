@@ -158,3 +158,19 @@ class VendorSummarySheet extends StatelessWidget {
         _ => vendor.type,
       };
 }
+
+/// Shows a partial-height modal bottom sheet with [VendorSummarySheet] for the
+/// given [vendor]. The map stays visible behind the sheet (D-03).
+///
+/// Lives here rather than next to a map implementation so that both the native
+/// MapKit view and the web JS API view raise the identical sheet.
+void showVendorSheet(BuildContext context, VendorResult vendor) {
+  showModalBottomSheet<void>(
+    context: context,
+    backgroundColor: const Color(0xFF2A2D36),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+    ),
+    builder: (_) => VendorSummarySheet(vendor: vendor),
+  );
+}

@@ -43,8 +43,34 @@ void main() {
       container.read(selectedCarProvider.notifier);
   SelectedCar? state() => container.read(selectedCarProvider);
 
+  // ── Regression ────────────────────────────────────────────────────────────
+  test('an abandoned selection leaves the confirmed car untouched', () async {
+    final n = notifier();
+
+    n.pickMake(1, 'Toyota');
+    n.pickModel(3, 'Camry');
+    n.confirm();
+
+    // Walk into the wizard again and leave without confirming — which is what
+    // happens every time someone taps the car chip, changes their mind, and
+    // presses back. The reported symptom was the chip disappearing here and
+    // never returning.
+    n.pickMake(2, 'BMW');
+    n.pickModel(5, 'X5');
+
+    expect(state()!.makeName, 'Toyota');
+    expect(state()!.modelName, 'Camry');
+
+    // And the two sources of truth must still agree. They did not before: the
+    // provider went null while Hive kept the car, so the screen showed no chip
+    // while the router saw a car and refused to reopen the selector.
+    final stored = Hive.box('selectedCar').get('current') as Map;
+    expect(stored['makeName'], 'Toyota');
+    expect(stored['makeName'], state()!.makeName);
+  });
+
   // ── Test 1 ────────────────────────────────────────────────────────────────
-  test('pickMake clears model and generation after a full selection', () {
+  test('pickMake starts a fresh draft and keeps the confirmed car', () {
     final n = notifier();
 
     n.pickMake(1, 'Toyota');
@@ -53,12 +79,23 @@ void main() {
     n.confirm();
     expect(state(), isNotNull);
 
-    // Pick a new make — confirmed state resets to null until confirm()
+    // Starting a new selection must not disturb the confirmed one. This used
+    // to null it, which made the home screen's car chip disappear the moment a
+    // make was tapped — and stay gone if the wizard was then abandoned.
     n.pickMake(2, 'BMW');
-    expect(state(), isNull);
+    expect(state()!.makeName, 'Toyota');
+    expect(state()!.modelName, 'Camry');
+
+    // …while the draft has moved on, with model and generation cascade-reset.
+    expect(n.draftMakeId, 2);
+    expect(n.draftMakeName, 'BMW');
+    expect(n.draftModelId, isNull);
+    expect(n.draftGenerationId, isNull);
 
     // _inProgress should only have make fields — confirm without generation works
     n.pickModel(5, 'X5');
+    expect(n.draftModelId, 5);
+    expect(n.draftModelName, 'X5');
     n.confirm();
 
     final s = state()!;

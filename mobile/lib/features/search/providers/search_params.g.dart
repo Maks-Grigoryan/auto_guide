@@ -41,7 +41,7 @@ final class SearchParamsProvider
   }
 }
 
-String _$searchParamsHash() => r'c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2';
+String _$searchParamsHash() => r'a1c01101a3eb45543ac0048d983006291c071775';
 
 abstract class _$SearchParams extends $Notifier<PartsQuery?> {
   PartsQuery? build();

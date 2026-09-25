@@ -1,3 +1,5 @@
+import '../utils/json_value.dart';
+
 /// Part category as returned by GET /catalog/part-categories.
 ///
 /// Maps [{ id: int, name: string, parent_id: int|null }] from the backend.
@@ -14,10 +16,12 @@ class PartCategory {
 
   factory PartCategory.fromJson(Map<String, dynamic> json) {
     return PartCategory(
-      id: (json['id'] as num).toInt(),
+      id: jsonInt(json['id'], field: 'partCategory.id'),
       name: json['name'] as String,
-      parentId:
-          json['parent_id'] == null ? null : (json['parent_id'] as num).toInt(),
+      parentId: jsonNullableInt(
+        json['parent_id'],
+        field: 'partCategory.parent_id',
+      ),
     );
   }
 

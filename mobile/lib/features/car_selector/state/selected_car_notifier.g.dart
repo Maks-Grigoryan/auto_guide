@@ -8,19 +8,40 @@ part of 'selected_car_notifier.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// Must outlive any single screen.
+///
+/// As an autoDispose provider this was torn down whenever no widget happened to
+/// be watching it between selector steps, taking the in-progress draft with it.
+/// pickModel then rebuilt an empty draft via `??=`, so the model and generation
+/// were recorded while the make was silently lost — and confirm() blew up on
+/// `makeId!`, leaving the button looking dead.
 
 @ProviderFor(SelectedCarNotifier)
 const selectedCarProvider = SelectedCarNotifierProvider._();
 
+/// Must outlive any single screen.
+///
+/// As an autoDispose provider this was torn down whenever no widget happened to
+/// be watching it between selector steps, taking the in-progress draft with it.
+/// pickModel then rebuilt an empty draft via `??=`, so the model and generation
+/// were recorded while the make was silently lost — and confirm() blew up on
+/// `makeId!`, leaving the button looking dead.
 final class SelectedCarNotifierProvider
     extends $NotifierProvider<SelectedCarNotifier, SelectedCar?> {
+  /// Must outlive any single screen.
+  ///
+  /// As an autoDispose provider this was torn down whenever no widget happened to
+  /// be watching it between selector steps, taking the in-progress draft with it.
+  /// pickModel then rebuilt an empty draft via `??=`, so the model and generation
+  /// were recorded while the make was silently lost — and confirm() blew up on
+  /// `makeId!`, leaving the button looking dead.
   const SelectedCarNotifierProvider._()
       : super(
           from: null,
           argument: null,
           retry: null,
           name: r'selectedCarProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -42,7 +63,15 @@ final class SelectedCarNotifierProvider
 }
 
 String _$selectedCarNotifierHash() =>
-    r'2551c2f7bf8b9ba357498601d718a06f91ef7195';
+    r'bff2e1a23656af5b68c61420b2b3fbe3fd8bead5';
+
+/// Must outlive any single screen.
+///
+/// As an autoDispose provider this was torn down whenever no widget happened to
+/// be watching it between selector steps, taking the in-progress draft with it.
+/// pickModel then rebuilt an empty draft via `??=`, so the model and generation
+/// were recorded while the make was silently lost — and confirm() blew up on
+/// `makeId!`, leaving the button looking dead.
 
 abstract class _$SelectedCarNotifier extends $Notifier<SelectedCar?> {
   SelectedCar? build();

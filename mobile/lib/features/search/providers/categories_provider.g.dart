@@ -39,7 +39,7 @@ final class SearchApiProvider
     return searchApi(ref);
   }
 
-  /// {@macro riverpid.override_with_value}
+  /// {@macro riverpod.override_with_value}
   Override overrideWithValue(SearchApi value) {
     return $ProviderOverride(
       origin: this,
@@ -48,10 +48,22 @@ final class SearchApiProvider
   }
 }
 
-String _$searchApiHash() => r'c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0';
+String _$searchApiHash() => r'ee8aba8b3f852a75f5be590e08fb9202a0a530d4';
+
+/// Fetches the flat list of part categories from GET /catalog/part-categories.
+///
+/// Watches the locale rather than reading it once: category names come from
+/// the server, so switching language has to re-fetch them. Without the watch,
+/// the chrome changed language and the list underneath stayed in Russian.
 
 @ProviderFor(categories)
 const categoriesProvider = CategoriesProvider._();
+
+/// Fetches the flat list of part categories from GET /catalog/part-categories.
+///
+/// Watches the locale rather than reading it once: category names come from
+/// the server, so switching language has to re-fetch them. Without the watch,
+/// the chrome changed language and the list underneath stayed in Russian.
 
 final class CategoriesProvider extends $FunctionalProvider<
         AsyncValue<List<PartCategory>>,
@@ -60,6 +72,11 @@ final class CategoriesProvider extends $FunctionalProvider<
     with
         $FutureModifier<List<PartCategory>>,
         $FutureProvider<List<PartCategory>> {
+  /// Fetches the flat list of part categories from GET /catalog/part-categories.
+  ///
+  /// Watches the locale rather than reading it once: category names come from
+  /// the server, so switching language has to re-fetch them. Without the watch,
+  /// the chrome changed language and the list underneath stayed in Russian.
   const CategoriesProvider._()
       : super(
           from: null,
@@ -86,4 +103,4 @@ final class CategoriesProvider extends $FunctionalProvider<
   }
 }
 
-String _$categoriesHash() => r'd1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0';
+String _$categoriesHash() => r'1195b0db1e6f2c9619e86ea5e3b1f6ce54dfab72';

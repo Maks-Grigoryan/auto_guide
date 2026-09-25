@@ -240,7 +240,7 @@ final class GenerationsProvider extends $FunctionalProvider<
   }
 }
 
-String _$generationsHash() => r'342d5e75b59101979b6942955912f578306397c0';
+String _$generationsHash() => r'af6c7d9de98ee182f9c87a3f0d5dca20d4c7e49c';
 
 /// Fetches generations for a given [modelId] from GET /catalog/generations?modelId=...
 

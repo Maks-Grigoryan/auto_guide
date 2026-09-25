@@ -68,7 +68,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get generationsLoadError => 'Не удалось загрузить поколения';
 
   @override
-  String get skipGeneration => 'Пропустить (поколение не важно)';
+  String get skipGeneration => 'Пропустить';
 
   @override
   String fromYear(int year) {
@@ -280,4 +280,195 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get english => 'English';
+
+  @override
+  String get noModelsForMake => 'Для этой марки пока нет моделей.';
+
+  @override
+  String get noMakesInCatalog => 'Каталог марок пуст.';
+
+  @override
+  String get authTitle => 'Вход в приложение';
+
+  @override
+  String get authSubtitle => 'Запчасти и автосервисы рядом с вами';
+
+  @override
+  String get authSignInTab => 'Вход';
+
+  @override
+  String get authSignUpTab => 'Регистрация';
+
+  @override
+  String get authIdentifierLabel => 'Телефон или e-mail';
+
+  @override
+  String get authIdentifierInvalid => 'Это не похоже на телефон или e-mail';
+
+  @override
+  String get authPasswordLabel => 'Пароль';
+
+  @override
+  String get authPasswordRepeatLabel => 'Повторите пароль';
+
+  @override
+  String get authSignInButton => 'Войти';
+
+  @override
+  String get authSignUpButton => 'Зарегистрироваться';
+
+  @override
+  String get authIdentifierRequired => 'Введите телефон или e-mail';
+
+  @override
+  String get authPasswordRequired => 'Введите пароль';
+
+  @override
+  String get authPasswordTooShort => 'Пароль должен быть не короче 8 символов';
+
+  @override
+  String get authPasswordsDoNotMatch => 'Пароли не совпадают';
+
+  @override
+  String get authInvalidCredentials => 'Неверный телефон, e-mail или пароль';
+
+  @override
+  String get authAccountExists => 'Аккаунт с такими данными уже существует';
+
+  @override
+  String get authTooManyAttempts => 'Слишком много попыток. Подождите минуту';
+
+  @override
+  String get authNetworkError => 'Сервер недоступен. Проверьте соединение';
+
+  @override
+  String get authUnknownError =>
+      'Не удалось выполнить вход. Попробуйте ещё раз';
+
+  @override
+  String authSignedInAs(String name) {
+    return 'Вы вошли как $name';
+  }
+
+  @override
+  String get authAdminBadge => 'Администратор';
+
+  @override
+  String get authSignOut => 'Выйти';
+
+  @override
+  String get authCodeTitle => 'Подтвердите контакт';
+
+  @override
+  String authCodeSentTo(String target) {
+    return 'Код отправлен на $target';
+  }
+
+  @override
+  String get authCodeLabel => 'Код из 6 цифр';
+
+  @override
+  String get authConfirmButton => 'Подтвердить';
+
+  @override
+  String get authResendCode => 'Отправить код ещё раз';
+
+  @override
+  String get authCodeResent => 'Код отправлен повторно';
+
+  @override
+  String get authChangeContact => 'Изменить контакт';
+
+  @override
+  String get authCodeRequired => 'Введите код из 6 цифр';
+
+  @override
+  String get authCodeInvalid => 'Неверный код';
+
+  @override
+  String get authCodeExpired => 'Код устарел. Запросите новый';
+
+  @override
+  String get hubSectionsLabel => 'Разделы';
+
+  @override
+  String get hubParts => 'Запчасти';
+
+  @override
+  String get hubPartsHint => 'Магазины рядом с вами';
+
+  @override
+  String get hubRepair => 'Ремонт';
+
+  @override
+  String get hubRepairHint => 'Автосервисы рядом с вами';
+
+  @override
+  String get hubPartsRepair => 'Запчасти и ремонт';
+
+  @override
+  String get hubPartsRepairHint => 'Магазины и автосервисы рядом с вами';
+
+  @override
+  String get hubRoadside => 'Помощь на дороге';
+
+  @override
+  String get hubRoadsideHint => 'Эвакуатор и помощь на месте';
+
+  @override
+  String get hubComingSoon => 'Скоро';
+
+  @override
+  String get hubComingSoonMessage => 'Раздел скоро появится';
+
+  @override
+  String get aiChatBarPrompt => 'Спросите помощника о машине';
+
+  @override
+  String get aiChatTitle => 'Помощник';
+
+  @override
+  String get aiChatInputHint => 'Опишите проблему...';
+
+  @override
+  String get aiChatSend => 'Отправить';
+
+  @override
+  String get aiChatGreeting => 'Что случилось с машиной?';
+
+  @override
+  String get aiChatGreetingHint =>
+      'Опишите проблему своими словами — помогу понять причину и найти нужную деталь рядом с вами.';
+
+  @override
+  String get aiChatExamplesLabel => 'Например';
+
+  @override
+  String get aiChatExampleKnock => 'Стучит спереди на кочках';
+
+  @override
+  String get aiChatExamplePads => 'Нужны тормозные колодки';
+
+  @override
+  String get aiChatExampleOil => 'Какое масло заливать?';
+
+  @override
+  String get aiChatDisclaimer =>
+      'Помощник называет вероятные причины и не заменяет осмотр на сервисе.';
+
+  @override
+  String get aiChatNotConnected =>
+      'Помощник пока не подключён — готов только интерфейс. Скоро он сможет искать детали в каталоге и отвечать на вопросы.';
+
+  @override
+  String get yearLabel => 'Год выпуска';
+
+  @override
+  String get yearNotSpecified => 'Не указан';
+
+  @override
+  String get selectYear => 'Выберите год';
+
+  @override
+  String get yearSkip => 'Не указывать год';
 }

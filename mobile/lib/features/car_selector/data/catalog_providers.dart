@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../l10n/locale_provider.dart';
+
 part 'catalog_providers.g.dart';
 
 // ---------------------------------------------------------------------------
@@ -42,9 +44,14 @@ Future<List<Map<String, dynamic>>> models(Ref ref, int makeId) async {
 @riverpod
 Future<List<Map<String, dynamic>>> generations(Ref ref, int modelId) async {
   final client = ref.watch(dioProvider);
+  // Generation labels are server data too — the seed named them «I поколение»
+  // rather than with factory codes, so they need translating like the
+  // categories do. Makes and models are left alone on purpose: «Toyota» and
+  // «Camry» are proper nouns and read the same in every locale.
+  final locale = ref.watch(appLocaleProvider);
   final response = await client.get<List<dynamic>>(
     '/catalog/generations',
-    queryParameters: {'modelId': modelId},
+    queryParameters: {'modelId': modelId, 'lang': locale.languageCode},
   );
   return (response.data as List).cast<Map<String, dynamic>>();
 }

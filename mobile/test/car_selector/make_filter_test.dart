@@ -9,10 +9,11 @@ import 'package:avto_app/features/car_selector/ui/make_list_page.dart';
 // Stub makes data: mix of Latin and Cyrillic brands (SEL-01, SEL-04).
 // ---------------------------------------------------------------------------
 const _stubMakes = [
-  {'id': 1, 'name': 'Toyota'},
-  {'id': 2, 'name': 'Tesla'},
-  {'id': 3, 'name': 'Lada'},
-  {'id': 4, 'name': 'BMW'},
+  // PostgreSQL bigint IDs arrive as strings through the Node `pg` driver.
+  {'id': '1', 'name': 'Toyota'},
+  {'id': '2', 'name': 'Tesla'},
+  {'id': '3', 'name': 'Lada'},
+  {'id': '4', 'name': 'BMW'},
 ];
 
 /// Builds MakeListPage under a ProviderScope that overrides [makesProvider]
