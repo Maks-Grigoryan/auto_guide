@@ -27,6 +27,10 @@ jobs:
           --health-retries 20
     env:
       DATABASE_URL: postgres://autoapp:autoapp@localhost:5432/autoapp
+      # Exercises the ai_readonly role path in migration 015. Not a real
+      # secret — CI databases are throwaway. Locally, leaving AI_DB_PASSWORD
+      # unset makes 015 a no-op instead of failing.
+      AI_DB_PASSWORD: ci-test-password-0123456789abcdef
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
