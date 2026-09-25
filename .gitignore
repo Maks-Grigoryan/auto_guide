@@ -4,6 +4,14 @@
 # Environment secrets — never commit real .env
 .env
 
+# Flutter --dart-define-from-file payloads: hold the real Yandex map key
+mobile/dart_define.json
+mobile/dart_define.*.json
+
+# Same key, exposed to the intro which runs before Flutter boots and therefore
+# cannot read a --dart-define value.
+mobile/web/map_key.js
+
 # Node
 node_modules/
 dist/
@@ -21,6 +29,9 @@ avto/.obsidian/
 # Grill/plan-review workflow artifacts — not project files
 PLAN.md
 PLAN-REVIEW-LOG.md
+
+# Local assistant plugins/config — not project files
+.claude/
 
 # Belt-and-suspenders Flutter/Android/iOS artifacts (mobile/.gitignore is primary)
 mobile/build/

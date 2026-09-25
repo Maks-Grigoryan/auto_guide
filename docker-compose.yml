@@ -23,6 +23,9 @@ services:
       target: migrator
     environment:
       DATABASE_URL: postgres://autoapp:${POSTGRES_PASSWORD:-autoapp}@db:5432/autoapp
+      # Empty is allowed: without it migration 015 succeeds as a no-op and the
+      # assistant stays unmounted (it also needs LLM_API_KEY).
+      AI_DB_PASSWORD: ${AI_DB_PASSWORD:-}
     depends_on:
       db:
         condition: service_healthy
@@ -36,6 +39,20 @@ services:
       DATABASE_URL: postgres://autoapp:${POSTGRES_PASSWORD:-autoapp}@db:5432/autoapp
       PORT: "3000"
       CORS_ORIGINS: ${CORS_ORIGINS:-}
+      # No default on purpose: compose refuses to start the API rather than
+      # bring it up with a secret anyone could read out of this file.
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env (32+ characters)}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-30d}
+      # The assistant's read-only connection. Host is `db`, not localhost:
+      # inside the network the database is a service name.
+      AI_DATABASE_URL: postgres://ai_readonly:${AI_DB_PASSWORD:-}@db:5432/autoapp
+      # Language model. Left empty on purpose — with no LLM_API_KEY the
+      # assistant is not mounted and the rest of the API comes up as usual.
+      LLM_BASE_URL: ${LLM_BASE_URL:-}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_MODEL: ${LLM_MODEL:-}
+      LLM_CLASSIFIER_MODEL: ${LLM_CLASSIFIER_MODEL:-}
+      AI_DAILY_MESSAGE_LIMIT: ${AI_DAILY_MESSAGE_LIMIT:-50}
     ports:
       - "3000:3000"
     depends_on:
